@@ -5,6 +5,7 @@
 backup/
 dist/
 log/
+migrations/curent.sql
 node_modules/
 test/database.sqlite
 transfer/*.csv
