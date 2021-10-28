@@ -50,6 +50,7 @@ export type OnKeyDown = (event: React.KeyboardEvent<HTMLElement>) => void;
 export type HandleAction = () => void; // Synonym for OnAction
 export type HandleBoolean = (newBoolean: boolean) => void;
 export type HandleIndex = (newIndex: number) => void;
+export type HandleMonth = (month: string) => void;
 export type HandleResults = () => Promise<object>;
 export type HandleValue = (newValue: string) => void;
 
