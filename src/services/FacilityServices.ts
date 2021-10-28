@@ -9,10 +9,12 @@ import {FindOptions, Op} from "sequelize";
 // Internal Modules ----------------------------------------------------------
 
 import BaseParentServices from "./BaseParentServices";
+import CategoryServices from "./CategoryServices";
 import Category from "../models/Category";
 import Facility from "../models/Facility";
 import {appendPaginationOptions} from "../util/QueryParameters";
 import * as SortOrder from "../util/SortOrder";
+import {NotFound} from "../util/HttpErrors";
 
 // Public Classes ------------------------------------------------------------
 
@@ -33,6 +35,28 @@ class FacilityServices extends BaseParentServices<Facility> {
     }
 
     // Model-Specific Methods ------------------------------------------------
+
+    public async categories(facilityId: number, query?: any): Promise<Category[]> {
+        const facility = await this.read("FacilityServices.categories", facilityId);
+        const options: FindOptions = CategoryServices.appendMatchOptions({
+            order: SortOrder.CATEGORIES,
+        }, query);
+        return await facility.$get("categories", options);
+    }
+
+    public async exact(name: string, query?: any): Promise<Facility> {
+        const options: FindOptions = this.appendIncludeOptions({
+            where: { name: name }
+        }, query);
+        const result = await Facility.findOne(options);
+        if (result) {
+            return result;
+        } else {
+            throw new NotFound(
+                `name: Missing Facility '${name}'`,
+                "FacilityServices.exact");
+        }
+    }
 
     // Public Helpers --------------------------------------------------------
 

@@ -2,6 +2,7 @@
 .nyc_output
 .idea/
 .migraterc*
+*.pem
 backup/
 dist/
 log/

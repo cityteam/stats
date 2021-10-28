@@ -74,14 +74,12 @@ class Facility extends Model<Facility> {
     // Second line of Facility address
     address2?: string;
 
-/*
     @HasMany(() => Category, {
         onDelete: "CASCADE",
         onUpdate: "CASCADE"
     })
     // Defined Categories for this Facility
-    category!: Category[];
-*/
+    categories!: Category[];
 
     @Column({
         allowNull: true,

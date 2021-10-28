@@ -8,11 +8,11 @@ import {Router} from "express";
 
 // Internal Modules ----------------------------------------------------------
 
-//import CategoryRouter from "./CategoryRouter";
-//import ClientRouter from "./ClientRouter";
-//import DetailRouter from "./DetailRouter";
-//import FacilityRouter from "./FacilityRouter";
-//import UserRouter from "./UserRouter";
+import CategoryRouter from "./CategoryRouter";
+import ClientRouter from "./ClientRouter";
+import DetailRouter from "./DetailRouter";
+import FacilityRouter from "./FacilityRouter";
+import UserRouter from "./UserRouter";
 
 // Public Objects ------------------------------------------------------------
 
@@ -24,8 +24,8 @@ export default ApiRouter;
 
 // Model Specific Routers ----------------------------------------------------
 
-//ApiRouter.use("/categories", CategoryRouter);
-//ApiRouter.use("/client", ClientRouter);
-//ApiRouter.use("/details", DetailRouter);
-//ApiRouter.use("/facilities", FacilityRouter);
-//ApiRouter.use("/users", UserRouter);
+ApiRouter.use("/categories", CategoryRouter);
+ApiRouter.use("/client", ClientRouter);
+ApiRouter.use("/details", DetailRouter);
+ApiRouter.use("/facilities", FacilityRouter);
+ApiRouter.use("/users", UserRouter);
