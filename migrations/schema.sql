@@ -66,7 +66,8 @@ CREATE TABLE public.categories (
     service text NOT NULL,
     scope text,
     slug text,
-    type text NOT NULL
+    type text NOT NULL,
+    active boolean DEFAULT true NOT NULL
 );
 
 

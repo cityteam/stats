@@ -1,0 +1,86 @@
+// FacilityServices ----------------------------------------------------------
+
+// Services implementation for Facility models.
+
+// External Modules ----------------------------------------------------------
+
+import {FindOptions, Op} from "sequelize";
+
+// Internal Modules ----------------------------------------------------------
+
+import BaseParentServices from "./BaseParentServices";
+import Category from "../models/Category";
+import Facility from "../models/Facility";
+import {appendPaginationOptions} from "../util/QueryParameters";
+import * as SortOrder from "../util/SortOrder";
+
+// Public Classes ------------------------------------------------------------
+
+class FacilityServices extends BaseParentServices<Facility> {
+
+    constructor () {
+        super(Facility, SortOrder.FACILITIES, [
+            "active",
+            "address1",
+            "address2",
+            "city",
+            "email",
+            "phone",
+            "scope",
+            "state",
+            "zipCode",
+        ]);
+    }
+
+    // Model-Specific Methods ------------------------------------------------
+
+    // Public Helpers --------------------------------------------------------
+
+    /**
+     * Supported include query parameters:
+     * * withCategories                 Include child Categories
+     */
+    public appendIncludeOptions(options: FindOptions, query?: any): FindOptions {
+        if (!query) {
+            return options;
+        }
+        options = appendPaginationOptions(options, query);
+        const include: any = options.include ? options.include : [];
+        if ("" === query.withCategories) {
+            include.push(Category);
+        }
+        if (include.length > 0) {
+            options.include = include;
+        };
+        return options;
+    }
+
+    /**
+     * Support match query parameters:
+     * * active                         Select active Facilities
+     * * name={wildcard}                Select Facilities with name matching {wildcard}
+     * * scope={scope}                  Select Facilities with scope equalling {scope}
+     */
+    public appendMatchOptions(options: FindOptions, query?: any): FindOptions {
+        options = this.appendIncludeOptions(options, query);
+        if (!query) {
+            return options;
+        }
+        const where: any = options.where ? options.where : {};
+        if ("" === query.active) {
+            where.active = true
+        }
+        if (query.name) {
+            where.name = { [Op.iLike]: `%${query.name}'`};
+        }
+        if (query.scope) {
+            where.scope = query.scope;
+        }
+        if (Object.keys(where).length > 0) {
+            options.where = where;
+        }
+        return options;
+    }
+}
+
+export default new FacilityServices();
