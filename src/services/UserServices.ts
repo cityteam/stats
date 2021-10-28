@@ -14,7 +14,8 @@ import RefreshToken from "../models/RefreshToken";
 import User from "../models/User";
 import AccessTokenServices from "./AccessTokenServices";
 import RefreshTokenServices from "./RefreshTokenServices";
-import {NotFound} from "../util/HttpErrors";
+import {hashPassword} from "../oauth/OAuthUtils";
+import {BadRequest, NotFound} from "../util/HttpErrors";
 import {appendPaginationOptions} from "../util/QueryParameters";
 import * as SortOrder from "../util/SortOrder";
 
@@ -34,7 +35,8 @@ class UserServices extends BaseParentServices<User> {
 
     // Standard CRUD Operations ----------------------------------------------
 
-    // NOTE: Overrides to redact password in all returned values
+    // NOTE: Overrides to redact password in all returned values, and encrypt
+    // on insert and (if present) update operations.
 
     public async all(query?: object): Promise<User[]> {
         const results = await super.all(query);
@@ -51,6 +53,13 @@ class UserServices extends BaseParentServices<User> {
     }
 
     public async insert(user: Partial<User>): Promise<User> {
+        if (!user.password) {
+            throw new BadRequest(
+                `password: Is required`,
+                "UserServices.insert"
+            );
+        }
+        user.password = await hashPassword(user.password); // TODO - leaked back to caller
         const result = await super.insert(user);
         result.password = "";
         return result;
@@ -63,6 +72,11 @@ class UserServices extends BaseParentServices<User> {
     }
 
     public async update(userId: number, user: Partial<User>): Promise<User> {
+        if (user.password && (user.password.length > 0)) {
+            user.password = await hashPassword(user.password); // TODO - leaked back to caller
+        } else {
+            delete user.password;
+        }
         const result = await super.update(userId, user);
         result.password = "";
         return result;
