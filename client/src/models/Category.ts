@@ -11,6 +11,8 @@ import {toDetails, toFacility} from "../util/ToModelTypes";
 
 // Public Objects ------------------------------------------------------------
 
+export const CATEGORIES_BASE = "/categories";
+
 class Category {
 
     constructor(data: any = {}) {
@@ -18,6 +20,7 @@ class Category {
         this.id = data.id ? data.id : -1;
 
         this.active = (data.active !== undefined) ? data.active : true;
+        this.description = data.description ? data.description : null;
         this.facilityId = data.facilityId ? data.facilityId : -1;
         this.notes = data.notes ? data.notes : null;
         this.ordinal = data.ordinal ? data.ordinal : 0;
@@ -34,6 +37,7 @@ class Category {
     id!: number;
 
     active!: boolean;
+    description?: string;
     facilityId!: number;
     notes?: string;
     ordinal!: number;

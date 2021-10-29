@@ -15,11 +15,26 @@
 // Internal Modules ----------------------------------------------------------
 
 import Api from "../clients/Api";
+import Category, {CATEGORIES_BASE} from "../models/Category";
 import Facility, {FACILITIES_BASE} from "../models/Facility";
 import User, {USERS_BASE} from "../models/User";
 import {queryParameters} from "./QueryParameters";
 
 // Public Objects ------------------------------------------------------------
+
+export const validateCategoryOrdinalUnique = async (category: Category): Promise<boolean> => {
+    if (category && category.ordinal) {
+        try {
+            const result = (await Api.get(CATEGORIES_BASE
+                + `/${category.facilityId}/exact/${category.ordinal}`)).data;
+            return (result.id === category.id);
+        } catch (error) {
+            return true; // Definitely unique
+        }
+    } else {
+        return true;
+    }
+}
 
 export const validateFacilityNameUnique = async (facility: Facility): Promise<boolean> => {
     if (facility && facility.name) {

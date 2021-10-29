@@ -15,6 +15,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 // Internal Modules ----------------------------------------------------------
 
+import CategoriesView from "./components/categories/CategoriesView";
 import FacilitiesView from "./components/facilities/FacilitiesView";
 import HomeView from "./components/general/HomeView";
 import LoggedInUser from "./components/login/LoggedInUser";
@@ -82,11 +83,9 @@ function App() {
                           <FacilitySelector/>
                       </Navbar>
                       <Switch>
-{/*
                           <Route exact path="/admin-categories">
                               <CategoriesView/>
                           </Route>
-*/}
 {/*
                           <Route exact path="/admin-database">
                               <DatabaseView/>

@@ -23,7 +23,7 @@ import DetailServices from "./DetailServices";
 class CategoryServices extends BaseChildServices<Category, Facility> {
 
     constructor () {
-        super(Facility, Category, SortOrder.FACILITIES, [
+        super(Facility, Category, SortOrder.CATEGORIES, [
             "active",
             "description",
             "facilityId",

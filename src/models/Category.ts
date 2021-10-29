@@ -130,14 +130,9 @@ class Category extends Model<Category> {
     service!: string;
 
     @Column({
-        allowNull: false,
+        allowNull: true,
         field: "slug",
         type: DataType.TEXT,
-        validate: {
-            notNull: {
-                msg: "slug: Is required",
-            },
-        },
     })
     // Abbreviated category description suitable for small input devices
     slug!: string;
