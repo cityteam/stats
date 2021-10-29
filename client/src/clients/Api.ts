@@ -9,8 +9,7 @@ import axios, {AxiosInstance} from "axios";
 
 // Internal Modules ----------------------------------------------------------
 
-// TODO - need LoginContext for auth stuff
-//import {LOGIN_DATA} from "../components/contexts/LoginContext";
+import {LOGIN_DATA} from "../components/login/LoginContext";
 
 // Public Objects ------------------------------------------------------------
 
@@ -21,16 +20,16 @@ const Api: AxiosInstance = axios.create({
     },
 });
 
-/*
 Api.interceptors.request.use(function (config) {
     if (LOGIN_DATA.accessToken) {
+        // @ts-ignore
         config.headers["Authorization"] = `Bearer ${LOGIN_DATA.accessToken}`;
     }
     if (LOGIN_DATA.username) {
+        // @ts-ignore
         config.headers["X-CT-Username"] = LOGIN_DATA.username;
     }
     return config;
 })
-*/
 
 export default Api;

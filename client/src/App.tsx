@@ -15,6 +15,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 // Internal Modules ----------------------------------------------------------
 
+import FacilitiesView from "./components/facilities/FacilitiesView";
 import HomeView from "./components/general/HomeView";
 import LoggedInUser from "./components/login/LoggedInUser";
 import {FacilityContextProvider} from "./components/facilities/FacilityContext";
@@ -95,11 +96,9 @@ function App() {
                               <EntryView/>
                           </Route>
 */}
-{/*
                           <Route exact path="/admin-facilities">
                               <FacilitiesView/>
                           </Route>
-*/}
 {/*
                           <Route exact path="/admin-users">
                               <UsersView/>

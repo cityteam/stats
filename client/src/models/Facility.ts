@@ -4,9 +4,8 @@
 
 // Internal Modules ----------------------------------------------------------
 
-import AccessToken from "./AccessToken";
-import RefreshToken from "./RefreshToken";
-import {toAccessTokens, toRefreshTokens} from "../util/ToModelTypes";
+import Category from "./Category";
+import {toCategories} from "../util/ToModelTypes";
 
 // Public Objects ------------------------------------------------------------
 
@@ -29,8 +28,7 @@ class Facility {
         this.state = data.state ? data.state : null;
         this.zipCode = data.zipCode ? data.zipCode : null;
 
-        this.accessTokens = data.accessTokens ? toAccessTokens(data.accessTokens) : undefined;
-        this.refreshTokens = data.refreshTokens ? toRefreshTokens(data.refreshTokens) : undefined;
+        this.categories = data.categories ? toCategories(data.categories) : undefined;
 
     }
 
@@ -47,8 +45,7 @@ class Facility {
     state?: string;
     zipCode?: string;
 
-    accessTokens?: AccessToken[];
-    refreshTokens?: RefreshToken[];
+    categories?: Category[];
 
 }
 

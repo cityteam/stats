@@ -11,7 +11,7 @@ import React, {createContext, useContext, useEffect, useState} from "react";
 
 import LoginContext from "../login/LoginContext";
 import {HandleAction, HandleFacility} from "../../types";
-//import useFetchFacilities from "../../hooks/useFetchFacilities";
+import useFetchFacilities from "../../hooks/useFetchFacilities";
 import Facility from "../../models/Facility";
 import * as Abridgers from "../../util/Abridgers";
 import logger from "../../util/ClientLogger";
@@ -44,19 +44,16 @@ export const FacilityContextProvider = (props: any) => {
     const [availables, setAvailables] = useState<Facility[]>([]);
     const [facility, setFacility] = useState<Facility>(UNSELECTED_FACILITY);
 
-/*
     const fetchFacilities = useFetchFacilities({
         active: active,
         currentPage: 1,
         pageSize: 1000,
     })
-*/
 
     useEffect(() => {
 
         // Offer only those Facilities available to the logged-in User
         const theAvailables: Facility[] = [];
-/*
         if (loginContext.data.loggedIn) {
             fetchFacilities.facilities.forEach(theAvailable => {
                 if (loginContext.validateFacility(theAvailable)) {
@@ -64,11 +61,10 @@ export const FacilityContextProvider = (props: any) => {
                 }
             });
         }
-*/
         logger.debug({
             context: "FacilityContext.useEffect",
             loggedIn: loginContext.data.loggedIn,
-//            facilities: Abridgers.FACILITIES(fetchFacilities.facilities),
+            facilities: Abridgers.FACILITIES(fetchFacilities.facilities),
             availables: Abridgers.FACILITIES(theAvailables),
         });
         setAvailables(theAvailables);
@@ -96,7 +92,7 @@ export const FacilityContextProvider = (props: any) => {
             setFacility(found);
         }
 
-    }, [active, facility.id, /* fetchFacilities.facilities, */
+    }, [active, facility.id, fetchFacilities.facilities,
         loginContext, loginContext.data.loggedIn]);
 
     const handleRefresh: HandleAction = () => {
