@@ -18,6 +18,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import FacilitiesView from "./components/facilities/FacilitiesView";
 import HomeView from "./components/general/HomeView";
 import LoggedInUser from "./components/login/LoggedInUser";
+import UsersView from "./components/users/UsersView";
 import {FacilityContextProvider} from "./components/facilities/FacilityContext";
 import FacilitySelector from "./components/facilities/FacilitySelector";
 import {LoginContextProvider} from "./components/login/LoginContext";
@@ -99,11 +100,9 @@ function App() {
                           <Route exact path="/admin-facilities">
                               <FacilitiesView/>
                           </Route>
-{/*
                           <Route exact path="/admin-users">
                               <UsersView/>
                           </Route>
-*/}
                           <Route path="/">
                               <HomeView/>
                           </Route>

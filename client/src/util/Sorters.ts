@@ -4,10 +4,24 @@
 
 // Internal Modules ----------------------------------------------------------
 
+import AccessToken from "../models/AccessToken";
 import Category from "../models/Category";
 import Facility from "../models/Facility";
+import RefreshToken from "../models/RefreshToken";
 
 // Public Objects ------------------------------------------------------------
+
+export const ACCESS_TOKENS = (accessTokens: AccessToken[]): AccessToken[] => {
+    return accessTokens.sort(function (a, b) {
+        if (a.expires > b.expires) {
+            return 1;
+        } else if (a.expires < b.expires) {
+            return -1;
+        } else {
+            return 0;
+        }
+    })
+}
 
 export const CATEGORIES = (categories: Category[]): Category[] => {
     return categories.sort(function (a, b) {
@@ -31,5 +45,17 @@ export const FACILITIES = (facilities: Facility[]): Facility[] => {
             return 0;
         }
     });
+}
+
+export const REFRESH_TOKENS = (refreshTokens: RefreshToken[]): RefreshToken[] => {
+    return refreshTokens.sort(function (a, b) {
+        if (a.expires > b.expires) {
+            return 1;
+        } else if (a.expires < b.expires) {
+            return -1;
+        } else {
+            return 0;
+        }
+    })
 }
 
