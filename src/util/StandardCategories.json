@@ -1,0 +1,128 @@
+[
+  {
+    "ordinal": 1000,
+    "type": "Header",
+    "service": "MEALS SERVED",
+    "slug": "MEALS SERVED",
+  },
+  {
+    "ordinal": 1020,
+    "type": "Detail",
+    "service": "Meals Served",
+    "description": "Connect",
+    "notes": "Include ALL single meals served",
+    "slug": "Meals / Connect"
+  },
+  {
+    "ordinal": 1040,
+    "type": "Detail",
+    "service": "Meals Served",
+    "description": "Renew",
+    "notes": "Include ALL single meals served",
+    "slug": "Meals / Renew"
+  },
+  {
+    "ordinal": 1060,
+    "type": "Detail",
+    "service": "Meals Served",
+    "description": "Post Graduate",
+    "notes": "Include ALL single meals served",
+    "slug": "Meals / PostGrad"
+  },
+  {
+    "ordinal": 2000,
+    "type": "Header",
+    "service": "GROCERIES",
+    "slug": "GROCERIES"
+  },
+  {
+    "ordinal": 2020,
+    "type": "Detail",
+    "service": "Food Boxes",
+    "description": "CTN",
+    "notes": "Standard",
+    "slug": "Groceries / Standard Boxes"
+  },
+  {
+    "ordinal": 2040,
+    "type": "Detail",
+    "service": "Food Boxes",
+    "description": "CTN",
+    "notes": "Holiday",
+    "slug": "Groceries / Holiday Boxes"
+  },
+  {
+    "ordinal": 2060,
+    "type": "Detail",
+    "service": "LBS of Meat",
+    "description": "CTN",
+    "notes": "Given to other agencies",
+    "slug": "Meat LBS"
+  },
+  {
+    "ordinal": 2080,
+    "type": "Detail",
+    "service": "LBS of Other Food",
+    "description": "CTN",
+    "notes": "Given to other agencies",
+    "slug": "Other LBS"
+  },
+  {
+    "ordinal": 3000,
+    "type": "Header",
+    "service": "CLOTHING",
+    "slug": "CLOTHING",
+  },
+  {
+    "ordinal": 3020,
+    "type": "Detail",
+    "service": "Clothing Provided",
+    "description": "Connect (Men)",
+    "note": "People reported",
+    "slug": "Clothing / Men"
+  },
+  {
+    "ordinal": 3040,
+    "type": "Detail",
+    "service": "Clothing Provided",
+    "description": "Connect (Women)",
+    "note": "People reported",
+    "slug": "Clothing / Women"
+  },
+  {
+    "ordinal": 3060,
+    "type": "Detail",
+    "service": "Clothing Provided",
+    "description": "Renew",
+    "note": "People reported",
+    "slug": "Clothing / Renew"
+  },
+  {
+    "ordinal": 3080,
+    "type": "Detail",
+    "service": "Clothing Provided",
+    "description": "Large Bags",
+    "note": "Bags reported",
+    "slug": "Clothing / Bags"
+  },
+  {
+    "ordinal": 4000,
+    "type": "Header",
+    "service": "EVENTS",
+    "slug": "EVENTS"
+  },
+  {
+    "ordinal": 4020,
+    "type": "Detail",
+    "service": "Toys",
+    "description": "CTN",
+    "slug": "Events / Toys"
+  },
+  {
+    "ordinal": 4040,
+    "type": "Detail",
+    "service": "Backpacks",
+    "description": "CTN",
+    "slug": "Events / Backpacks"
+  }
+]

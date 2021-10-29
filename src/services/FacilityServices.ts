@@ -15,6 +15,7 @@ import Facility from "../models/Facility";
 import {appendPaginationOptions} from "../util/QueryParameters";
 import * as SortOrder from "../util/SortOrder";
 import {NotFound} from "../util/HttpErrors";
+import StandardCategories from "../util/StandardCategories.json";
 
 // Public Classes ------------------------------------------------------------
 
@@ -56,6 +57,16 @@ class FacilityServices extends BaseParentServices<Facility> {
                 `name: Missing Facility '${name}'`,
                 "FacilityServices.exact");
         }
+    }
+
+    // Populate Categories for this Facility (MUST have none first)
+    public async populate(facilityId: number): Promise<Category[]> {
+        StandardCategories.forEach(standardCategory => {
+            // @ts-ignore
+            standardCategory.facilityId = facilityId;
+        });
+        const results = await Category.bulkCreate(StandardCategories as Category[]);
+        return results;
     }
 
     // Public Helpers --------------------------------------------------------
