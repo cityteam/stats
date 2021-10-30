@@ -59,15 +59,14 @@ ALTER SEQUENCE public.access_tokens_id_seq OWNED BY public.access_tokens.id;
 
 CREATE TABLE public.categories (
     id integer NOT NULL,
+    accumulated boolean DEFAULT true NOT NULL,
+    active boolean DEFAULT true NOT NULL,
     description text,
-    facility_id integer NOT NULL,
     notes text,
     ordinal integer NOT NULL,
+    section_id integer NOT NULL,
     service text NOT NULL,
-    scope text,
-    slug text,
-    type text NOT NULL,
-    active boolean DEFAULT true NOT NULL
+    slug text NOT NULL
 );
 
 
@@ -197,6 +196,42 @@ ALTER SEQUENCE public.refresh_tokens_id_seq OWNED BY public.refresh_tokens.id;
 
 
 --
+-- Name: sections; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.sections (
+    id integer NOT NULL,
+    active boolean DEFAULT true NOT NULL,
+    facility_id integer NOT NULL,
+    notes text,
+    ordinal integer NOT NULL,
+    scope text DEFAULT 'regular'::text NOT NULL,
+    slug text NOT NULL,
+    title text NOT NULL
+);
+
+
+--
+-- Name: sections_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.sections_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: sections_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.sections_id_seq OWNED BY public.sections.id;
+
+
+--
 -- Name: users; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -266,6 +301,13 @@ ALTER TABLE ONLY public.refresh_tokens ALTER COLUMN id SET DEFAULT nextval('publ
 
 
 --
+-- Name: sections id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sections ALTER COLUMN id SET DEFAULT nextval('public.sections_id_seq'::regclass);
+
+
+--
 -- Name: users id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -313,6 +355,14 @@ ALTER TABLE ONLY public.refresh_tokens
 
 
 --
+-- Name: sections sections_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sections
+    ADD CONSTRAINT sections_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -328,17 +378,10 @@ CREATE UNIQUE INDEX access_tokens_token_key ON public.access_tokens USING btree 
 
 
 --
--- Name: categories_facility_id_ordinal; Type: INDEX; Schema: public; Owner: -
+-- Name: categories_section_id_ordinal; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX categories_facility_id_ordinal ON public.categories USING btree (facility_id, ordinal);
-
-
---
--- Name: categories_facility_id_scope; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX categories_facility_id_scope ON public.categories USING btree (facility_id, scope);
+CREATE UNIQUE INDEX categories_section_id_ordinal ON public.categories USING btree (section_id, ordinal);
 
 
 --
@@ -370,6 +413,13 @@ CREATE UNIQUE INDEX refresh_tokens_token_key ON public.refresh_tokens USING btre
 
 
 --
+-- Name: sections_facility_id_ordinal; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX sections_facility_id_ordinal ON public.sections USING btree (facility_id, ordinal);
+
+
+--
 -- Name: users_username_key; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -385,11 +435,11 @@ ALTER TABLE ONLY public.access_tokens
 
 
 --
--- Name: categories categories_facility_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: categories categories_section_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.categories
-    ADD CONSTRAINT categories_facility_id_fkey FOREIGN KEY (facility_id) REFERENCES public.facilities(id) ON UPDATE CASCADE ON DELETE CASCADE;
+    ADD CONSTRAINT categories_section_id_fkey FOREIGN KEY (section_id) REFERENCES public.sections(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -406,6 +456,14 @@ ALTER TABLE ONLY public.details
 
 ALTER TABLE ONLY public.refresh_tokens
     ADD CONSTRAINT refresh_tokens_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: sections sections_facility_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sections
+    ADD CONSTRAINT sections_facility_id_fkey FOREIGN KEY (facility_id) REFERENCES public.facilities(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --

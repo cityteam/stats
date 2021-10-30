@@ -14,6 +14,7 @@ import Category from "./Category";
 import Detail from "./Detail";
 import Facility from "./Facility";
 import RefreshToken from "./RefreshToken";
+import Section from "./Section";
 import User from "./User";
 import logger from "../util/ServerLogger";
 
@@ -33,6 +34,7 @@ export const Database = new Sequelize(DATABASE_URL, {
 
 Database.addModels([
     Facility,
+    Section,
     Category,
     Detail,
     User,

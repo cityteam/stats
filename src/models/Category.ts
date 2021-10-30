@@ -1,18 +1,18 @@
 // Category ------------------------------------------------------------------
 
-// Category ("Header" or "Detail") defining a row of statistics for the
-// specified Facility, and (for detail rows) the specified Date.
+// Definition of a statistical category for which daily values will be accumulated.
 
 // External Modules ----------------------------------------------------------
 
-import {BelongsTo, Column, DataType, ForeignKey, HasMany, Model, Table} from "sequelize-typescript";
+import {BelongsTo, Column, DataType, ForeignKey, Model, Table} from "sequelize-typescript";
 
 // Internal Modules ----------------------------------------------------------
 
-import Detail from "./Detail";
-import Facility from "./Facility";
-import {validateCategoryType} from "../util/ApplicationValidators";
-import {validateCategoryOrdinalUnique, validateFacilityId} from "../util/AsyncValidators";
+import Section from "./Section";
+import {
+    validateSectionId,
+    validateSectionOrdinalUnique
+} from "../util/AsyncValidators";
 import {BadRequest} from "../util/HttpErrors";
 
 // Public Objects ------------------------------------------------------------
@@ -21,16 +21,16 @@ import {BadRequest} from "../util/HttpErrors";
     tableName: "categories",
     timestamps: false,
     validate: {
-        isFacilityIdValid: async function (this: Category): Promise<void> {
-            if (!(await validateFacilityId(this.facilityId))) {
+        isSectionIdValid: async function (this: Category): Promise<void> {
+            if (!(await validateSectionId(this.sectionId))) {
                 throw new BadRequest
-                    (`facilityId: Missing Facility ${this.facilityId}`);
+                    (`sectionId: Missing Section ${this.sectionId}`);
             }
         },
-        isOrdinalUnique: async function(this: Category): Promise<void> {
-            if (!(await validateCategoryOrdinalUnique(this))) {
+        isOrdinalUnique: async function(this: Section): Promise<void> {
+            if (!(await validateSectionOrdinalUnique(this))) {
                 throw new BadRequest
-                    (`Ordinal: Ordinal '${this.ordinal}' is already in use in this Facility`);
+                    (`Ordinal: Ordinal '${this.ordinal}' is already in use in this Section`);
             }
         }
     },
@@ -54,6 +54,20 @@ class Category extends Model<Category> {
         type: DataType.BOOLEAN,
         validate: {
             notNull: {
+                msg: "accumulated: Is required"
+            }
+        }
+    })
+    // Should daily values be accumulated on weekly/monthly/annual reports?
+    // If false, only the final value will be reported
+    accumulated!: boolean;
+
+    @Column({
+        allowNull: false,
+        defaultValue: true,
+        type: DataType.BOOLEAN,
+        validate: {
+            notNull: {
                 msg: "active: Is required"
             }
         }
@@ -66,33 +80,8 @@ class Category extends Model<Category> {
         field: "description",
         type: DataType.TEXT,
     })
-    // Description of this Category (required when type === "Detail")
+    // Description of this Category
     description?: string;
-
-    @HasMany(() => Detail)
-    details!: Detail[];
-
-    @BelongsTo(() => Facility, {
-        onDelete: "CASCADE",
-        onUpdate: "CASCADE",
-    })
-    // Facility this Category belongs to
-    facility!: Facility;
-
-    @ForeignKey(() => Facility)
-    @Column({
-        allowNull: false,
-        field: "facility_id",
-        type: DataType.INTEGER,
-        unique: "uniqueOrdinalWithinFacility",
-        validate: {
-            notNull: {
-                msg: "facilityId: Is required",
-            },
-        },
-    })
-    // ID of the Facility that owns this Category
-    facilityId!: number;
 
     @Column({
         allowNull: true,
@@ -106,7 +95,7 @@ class Category extends Model<Category> {
         allowNull: false,
         field: "ordinal",
         type: DataType.INTEGER,
-        unique: "uniqueOrdinalWithinFacility",
+        unique: "uniqueOrdinalWithinSection",
         validate: {
             notNull: {
                 msg: "ordinal: Is required",
@@ -115,6 +104,28 @@ class Category extends Model<Category> {
     })
     // Sort ordering for reports (presented in ascending order)
     ordinal!: number;
+
+    @BelongsTo(() => Section, {
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
+    })
+    // Section this Category belongs to
+    section!: Section;
+
+    @ForeignKey(() => Section)
+    @Column({
+        allowNull: false,
+        field: "section_id",
+        type: DataType.INTEGER,
+        unique: "uniqueOrdinalWithinSection",
+        validate: {
+            notNull: {
+                msg: "sectionId: Is required",
+            },
+        },
+    })
+    // ID of the Section that owns this Category
+    sectionId!: number;
 
     @Column({
         allowNull: false,
@@ -126,34 +137,21 @@ class Category extends Model<Category> {
             },
         },
     })
-    // Header (for type==="Header") or service description (for type==="Detail")
+    // Service name for this Category
     service!: string;
 
     @Column({
-        allowNull: true,
+        allowNull: false,
         field: "slug",
         type: DataType.TEXT,
-    })
-    // Abbreviated category description suitable for small input devices
-    slug!: string;
-
-    @Column({
-        allowNull: false,
-        field: "type",
-        type: DataType.TEXT,
         validate: {
-            isValidType: function (value: string): void {
-                if (!validateCategoryType(value)) {
-                    throw new BadRequest(`type: Invalid type '${value}'`);
-                }
-            },
             notNull: {
-                msg: "type: Is required",
+                msg: "slug: Is required",
             },
         },
     })
-    // Category row type ("Header" or "Detail")
-    type!: string;
+    // Abbreviated category description suitable for small input devices
+    slug!: string;
 
 }
 

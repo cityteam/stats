@@ -15,6 +15,7 @@ import AccessToken from "../models/AccessToken";
 import Category from "../models/Category";
 import Facility from "../models/Facility";
 import RefreshToken from "../models/RefreshToken";
+import Section from "../models/Section";
 import User from "../models/User";
 
 // Public Objects ------------------------------------------------------------
@@ -50,11 +51,11 @@ export const validateCategoryId = async (categoryId: number): Promise<Boolean> =
 export const validateCategoryOrdinalUnique
     = async (category: Category): Promise<boolean> =>
 {
-    if (category && category.facilityId && category.ordinal) {
+    if (category && category.sectionId && category.ordinal) {
         let options: any = {
             where: {
-                facilityId: category.facilityId,
                 ordinal: category.ordinal,
+                sectionId: category.sectionId,
             }
         }
         if (category.id && (category.id > 0)) {
@@ -127,6 +128,35 @@ export const validateRefreshTokenTokenUnique
             options.where.id = { [Op.ne]: refreshToken.id }
         }
         const results = await RefreshToken.findAll(options);
+        return (results.length === 0);
+    } else {
+        return true;
+    }
+}
+
+export const validateSectionId = async (sectionId: number): Promise<Boolean> => {
+    if (sectionId) {
+        const section = await Section.findByPk(sectionId);
+        return (section !== null);
+    } else {
+        return true;
+    }
+}
+
+export const validateSectionOrdinalUnique
+    = async (section: Section): Promise<boolean> =>
+{
+    if (section && section.facilityId && section.ordinal) {
+        let options: any = {
+            where: {
+                facilityId: section.facilityId,
+                ordinal: section.ordinal,
+            }
+        }
+        if (section.id && (section.id > 0)) {
+            options.where.id = { [Op.ne]: section.id }
+        }
+        const results = await Section.findAll(options);
         return (results.length === 0);
     } else {
         return true;

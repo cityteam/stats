@@ -9,7 +9,8 @@ import {Column, DataType, HasMany, Model, Table}
 
 // Internal Modules ----------------------------------------------------------
 
-import Category from "./Category";
+//import Category from "./Category";
+import Section from "./Section";
 import {
     validateFacilityNameUnique,
     validateFacilityScopeUnique
@@ -74,13 +75,6 @@ class Facility extends Model<Facility> {
     // Second line of Facility address
     address2?: string;
 
-    @HasMany(() => Category, {
-        onDelete: "CASCADE",
-        onUpdate: "CASCADE"
-    })
-    // Defined Categories for this Facility
-    categories!: Category[];
-
     @Column({
         allowNull: true,
         type: DataType.TEXT,
@@ -124,6 +118,10 @@ class Facility extends Model<Facility> {
     })
     // Permission scope prefix for this Facility
     scope!: string;
+
+    @HasMany(() => Section)
+    // Sections that are reported for this Facility
+    sections!: Section[];
 
     @Column({
         allowNull: true,

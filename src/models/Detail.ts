@@ -1,7 +1,7 @@
 // Detail --------------------------------------------------------------------
 
-// Detail statistic for a specific Category (and its associated Facility)
-// on a specific date.
+// Detail statistic for a specific Category (and its associated Section
+// and Facility) on a specific date.
 
 // External Modules ---------------------------------------------------------
 
