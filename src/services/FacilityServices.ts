@@ -64,6 +64,7 @@ class FacilityServices extends BaseParentServices<Facility> {
         StandardCategories.forEach(standardCategory => {
             // @ts-ignore
             standardCategory.facilityId = facilityId;
+            standardCategory.type = standardCategory.type ? standardCategory.type : "Detail";
         });
         const results = await Category.bulkCreate(StandardCategories as Category[]);
         return results;

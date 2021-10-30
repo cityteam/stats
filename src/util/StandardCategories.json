@@ -3,11 +3,10 @@
     "ordinal": 1000,
     "type": "Header",
     "service": "MEALS SERVED",
-    "slug": "MEALS SERVED",
+    "slug": "MEALS SERVED"
   },
   {
     "ordinal": 1020,
-    "type": "Detail",
     "service": "Meals Served",
     "description": "Connect",
     "notes": "Include ALL single meals served",
@@ -15,7 +14,6 @@
   },
   {
     "ordinal": 1040,
-    "type": "Detail",
     "service": "Meals Served",
     "description": "Renew",
     "notes": "Include ALL single meals served",
@@ -23,7 +21,6 @@
   },
   {
     "ordinal": 1060,
-    "type": "Detail",
     "service": "Meals Served",
     "description": "Post Graduate",
     "notes": "Include ALL single meals served",
@@ -37,7 +34,6 @@
   },
   {
     "ordinal": 2020,
-    "type": "Detail",
     "service": "Food Boxes",
     "description": "CTN",
     "notes": "Standard",
@@ -45,7 +41,6 @@
   },
   {
     "ordinal": 2040,
-    "type": "Detail",
     "service": "Food Boxes",
     "description": "CTN",
     "notes": "Holiday",
@@ -53,29 +48,26 @@
   },
   {
     "ordinal": 2060,
-    "type": "Detail",
     "service": "LBS of Meat",
     "description": "CTN",
     "notes": "Given to other agencies",
-    "slug": "Meat LBS"
+    "slug": "Groceries / Meat LBS"
   },
   {
     "ordinal": 2080,
-    "type": "Detail",
     "service": "LBS of Other Food",
     "description": "CTN",
     "notes": "Given to other agencies",
-    "slug": "Other LBS"
+    "slug": "Groceries / Other LBS"
   },
   {
     "ordinal": 3000,
     "type": "Header",
     "service": "CLOTHING",
-    "slug": "CLOTHING",
+    "slug": "CLOTHING"
   },
   {
     "ordinal": 3020,
-    "type": "Detail",
     "service": "Clothing Provided",
     "description": "Connect (Men)",
     "note": "People reported",
@@ -83,7 +75,6 @@
   },
   {
     "ordinal": 3040,
-    "type": "Detail",
     "service": "Clothing Provided",
     "description": "Connect (Women)",
     "note": "People reported",
@@ -91,7 +82,6 @@
   },
   {
     "ordinal": 3060,
-    "type": "Detail",
     "service": "Clothing Provided",
     "description": "Renew",
     "note": "People reported",
@@ -99,7 +89,6 @@
   },
   {
     "ordinal": 3080,
-    "type": "Detail",
     "service": "Clothing Provided",
     "description": "Large Bags",
     "note": "Bags reported",
@@ -113,16 +102,195 @@
   },
   {
     "ordinal": 4020,
-    "type": "Detail",
     "service": "Toys",
     "description": "CTN",
     "slug": "Events / Toys"
   },
   {
     "ordinal": 4040,
-    "type": "Detail",
     "service": "Backpacks",
     "description": "CTN",
     "slug": "Events / Backpacks"
+  },
+  {
+    "ordinal": 5000,
+    "type": "Header",
+    "service": "CLIENTS - RENEW",
+    "slug": "CLIENTS - RENEW"
+  },
+  {
+    "ordinal": 5020,
+    "service": "Residents",
+    "description": "Renew",
+    "notes": "Total at end-of-month",
+    "slug": "Renew / Total EOM"
+  },
+  {
+    "ordinal": 5040,
+    "service": "Additions",
+    "description": "Renew",
+    "notes": "New Clients",
+    "slug": "Renew / New"
+  },
+  {
+    "ordinal": 5060,
+    "service": "Exits",
+    "description": "Renew",
+    "notes": "Exited Clients",
+    "slug": "Renew / Exits"
+  },
+  {
+    "ordinal": 5080,
+    "service": "Graduates",
+    "description": "Renew",
+    "notes": "Graduated Clients",
+    "slug": "Renew / Graduates"
+  },
+  {
+    "ordinal": 5220,
+    "service": "Case Management Hours",
+    "description": "Renew",
+    "slug": "Renew / Case Mgt Hours"
+  },
+  {
+    "ordinal": 5240,
+    "service": "Nights of Shelter",
+    "description": "Renew",
+    "notes": "Clients x Days",
+    "slug": "Renew / Nights"
+  },
+  {
+    "ordinal": 5260,
+    "service": "Showers Provided",
+    "description": "Renew",
+    "notes": "Clients x Days x Showers",
+    "slug": "Renew / Showers"
+  },
+  {
+    "ordinal": 6000,
+    "type": "Header",
+    "service": "CLIENTS - YOUTH COLLECTIVE",
+    "slug": "CLIENTS - YOUTH COLLECTIVE"
+  },
+  {
+    "ordinal": 6020,
+    "service": "Residents",
+    "description": "Youth Collective",
+    "notes": "Total at end-of-month",
+    "slug": "Youth / Total EOM"
+  },
+  {
+    "ordinal": 6040,
+    "service": "Additions",
+    "description": "Youth Collective",
+    "notes": "New Clients",
+    "slug": "Youth / New"
+  },
+  {
+    "ordinal": 6060,
+    "service": "Exits",
+    "description": "Youth Collective",
+    "notes": "Exited Clients",
+    "slug": "Youth / Exits"
+  },
+  {
+    "ordinal": 6080,
+    "service": "Graduates",
+    "description": "Youth Collective",
+    "notes": "Graduated Clients",
+    "slug": "Youth / Graduates"
+  },
+  {
+    "ordinal": 6220,
+    "service": "Case Management Hours",
+    "description": "Youth Collective",
+    "slug": "Youth / Case Mgt Hours"
+  },
+  {
+    "ordinal": 6240,
+    "service": "Nights of Shelter",
+    "description": "Youth Collective",
+    "notes": "Clients x Days",
+    "slug": "Youth / Nights"
+  },
+  {
+    "ordinal": 6260,
+    "service": "Showers Provided",
+    "description": "Youth Collective",
+    "notes": "Clients x Days x Showers",
+    "slug": "Youth / Showers"
+  },
+  {
+    "ordinal": 7000,
+    "type": "Header",
+    "service": "CLIENTS - POSTGRAD",
+    "slug": "CLIENTS - POSTGRAD"
+  },
+  {
+    "ordinal": 7240,
+    "service": "Nights of Shelter",
+    "description": "Post Graduate",
+    "notes": "Clients x Days",
+    "slug": "PostGrad / Nights"
+  },
+  {
+    "ordinal": 7260,
+    "service": "Showers Provided",
+    "description": "Post Graduate",
+    "notes": "Clients x Days x Showers",
+    "slug": "PostGrad / Showers"
+  },
+  {
+    "ordinal": 8000,
+    "type": "Header",
+    "service": "CLIENTS - CONNECT (MEN)",
+    "slug": "CLIENTS - CONNECT (MEN)"
+  },
+  {
+    "ordinal": 8240,
+    "service": "Nights of Shelter",
+    "description": "Connect (Men)",
+    "notes": "Clients x Days",
+    "slug": "Connect / Men / Nights"
+  },
+  {
+    "ordinal": 8260,
+    "service": "Showers Provided",
+    "description": "Connect (Men)",
+    "notes": "Clients x Days x Showers",
+    "slug": "Connect / Men / Showers"
+  },
+  {
+    "ordinal": 9000,
+    "type": "Header",
+    "service": "CLIENTS - CONNECT (WOMEN)",
+    "slug": "CLIENTS - CONNECT (WOMEN)"
+  },
+  {
+    "ordinal": 9240,
+    "service": "Nights of Shelter",
+    "description": "Connect (Women)",
+    "notes": "Clients x Days",
+    "slug": "Connect / Women / Nights"
+  },
+  {
+    "ordinal": 9260,
+    "service": "Showers Provided",
+    "description": "Connect (Women)",
+    "notes": "Clients x Days x Showers",
+    "slug": "Connect / Women / Showers"
+  },
+  {
+    "ordinal": 99000,
+    "type": "Header",
+    "service": "OTHER SERVICES",
+    "slug": "OTHER SERVICES"
+  },
+  {
+    "ordinal": 99020,
+    "service": "Hygiene Bags",
+    "description": "Other",
+    "notes": "Hygiene Bags Distributed",
+    "slug": "Other / Hygiene Bags"
   }
 ]
