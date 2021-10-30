@@ -14,7 +14,7 @@ export const ACCESS_TOKENS: Order = [
 ];
 
 export const CATEGORIES: Order = [
-    [ "facilityId", "ASC" ],
+    [ "sectionId", "ASC" ],
     [ "ordinal", "ASC" ],
 ];
 
@@ -30,6 +30,11 @@ export const FACILITIES: Order = [
 export const REFRESH_TOKENS: Order = [
     [ "userId", "ASC" ],
     [ "expires", "DESC" ],
+];
+
+export const SECTIONS: Order = [
+    [ "facilityId", "ASC" ],
+    [ "ordinal", "ASC" ],
 ];
 
 export const USERS: Order = [

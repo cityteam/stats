@@ -85,20 +85,19 @@ FacilityRouter.put("/:facilityId",
 
 // Model-Specific Routes (with facilityId) -----------------------------------
 
-FacilityRouter.get("/:facilityId/categories",
+FacilityRouter.get("/:facilityId/sections",
     requireRegular,
     async (req: Request, res: Response) => {
-        res.send(await FacilityServices.categories(
+        res.send(await FacilityServices.sections(
             parseInt(req.params.facilityId, 10),
             req.query
         ));
     });
 
-FacilityRouter.post("/:facilityId/categories",
+FacilityRouter.post("/:facilityId/sections",
     requireSuperuser,
     async (req: Request, res: Response) => {
         res.send(await FacilityServices.populate(
-            parseInt(req.params.facilityId)
+            parseInt(req.params.facilityId, 10)
         ));
     });
-

@@ -16,6 +16,7 @@ import {appendPaginationOptions} from "../util/QueryParameters";
 import * as SortOrder from "../util/SortOrder";
 import {NotFound} from "../util/HttpErrors";
 import StandardCategories from "../util/StandardCategories.json";
+import Section from "../models/Section";
 
 // Public Classes ------------------------------------------------------------
 
@@ -28,6 +29,7 @@ class FacilityServices extends BaseParentServices<Facility> {
             "address2",
             "city",
             "email",
+            "name",
             "phone",
             "scope",
             "state",
@@ -36,14 +38,6 @@ class FacilityServices extends BaseParentServices<Facility> {
     }
 
     // Model-Specific Methods ------------------------------------------------
-
-    public async categories(facilityId: number, query?: any): Promise<Category[]> {
-        const facility = await this.read("FacilityServices.categories", facilityId);
-        const options: FindOptions = CategoryServices.appendMatchOptions({
-            order: SortOrder.CATEGORIES,
-        }, query);
-        return await facility.$get("categories", options);
-    }
 
     public async exact(name: string, query?: any): Promise<Facility> {
         const options: FindOptions = this.appendIncludeOptions({
@@ -60,6 +54,7 @@ class FacilityServices extends BaseParentServices<Facility> {
     }
 
     // Populate Categories for this Facility (MUST have none first)
+    // TODO - revise for new sections/categories split
     public async populate(facilityId: number): Promise<Category[]> {
         StandardCategories.forEach(standardCategory => {
             // @ts-ignore
@@ -70,11 +65,19 @@ class FacilityServices extends BaseParentServices<Facility> {
         return results;
     }
 
+    public async sections(facilityId: number, query?: any): Promise<Section[]> {
+        const facility = await this.read("FacilityServices.sections", facilityId);
+        const options: FindOptions = CategoryServices.appendMatchOptions({
+            order: SortOrder.SECTIONS,
+        }, query);
+        return await facility.$get("sections", options);
+    }
+
     // Public Helpers --------------------------------------------------------
 
     /**
      * Supported include query parameters:
-     * * withCategories                 Include child Categories
+     * * withSections                   Include child Sections
      */
     public appendIncludeOptions(options: FindOptions, query?: any): FindOptions {
         if (!query) {
@@ -82,8 +85,8 @@ class FacilityServices extends BaseParentServices<Facility> {
         }
         options = appendPaginationOptions(options, query);
         const include: any = options.include ? options.include : [];
-        if ("" === query.withCategories) {
-            include.push(Category);
+        if ("" === query.withSections) {
+            include.push(Section);
         }
         if (include.length > 0) {
             options.include = include;

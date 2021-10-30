@@ -1,6 +1,6 @@
-// CategoryServices ----------------------------------------------------------
+// SectionServices ----------------------------------------------------------
 
-// Services implementation for Category models.
+// Services implementation for Section models.
 
 // External Modules ----------------------------------------------------------
 
@@ -9,68 +9,63 @@ import {FindOptions, Op} from "sequelize";
 // Internal Modules ----------------------------------------------------------
 
 import BaseChildServices from "./BaseChildServices";
+import CategoryServices from "./CategoryServices";
+import FacilityServices from "./FacilityServices";
 import Category from "../models/Category";
-import Detail from "../models/Detail";
+import Facility from "../models/Facility";
 import Section from "../models/Section";
 import {appendPaginationOptions} from "../util/QueryParameters";
 import * as SortOrder from "../util/SortOrder";
-//import DetailServices from "./DetailServices";
-import SectionServices from "./SectionServices";
 import {NotFound} from "../util/HttpErrors";
-import FacilityServices from "./FacilityServices";
-import DetailServices from "./DetailServices";
 
 // Public Classes ------------------------------------------------------------
 
-class CategoryServices extends BaseChildServices<Category, Section> {
+class SectionServices extends BaseChildServices<Section, Facility> {
 
     constructor () {
-        super(Section, Category, SortOrder.CATEGORIES, [
-            "accumulated",
+        super(Facility, Section, SortOrder.SECTIONS, [
             "active",
-            "description",
+            "facilityId",
             "notes",
             "ordinal",
-            "sectionId",
-            "service",
+            "scope",
             "slug",
+            "title",
         ]);
     }
 
     // Model-Specific Methods ------------------------------------------------
 
-    public async details(facilityId: number, sectionId: number, categoryId: number, query?: any): Promise<Detail[]> {
-        const facility = await FacilityServices.read("CategoryServices.details", facilityId);
-        const section = await SectionServices.read("CategoryServices.details", facilityId, sectionId);
-        const category = await this.read("CategoryServices.details", sectionId, categoryId);
-        const options: FindOptions = DetailServices.appendMatchOptions({
-            order: SortOrder.DETAILS,
+    public async categories(facilityId: number, sectionId: number, query?: any): Promise<Category[]> {
+        const facility = await FacilityServices.read("SectionServices.categories", facilityId);
+        const section = await this.read("SectionServices.sections", facilityId, sectionId);
+        const options: FindOptions = CategoryServices.appendMatchOptions({
+            order: SortOrder.CATEGORIES,
         }, query);
-        return await category.$get("details", options);
+        return await section.$get("categories", options);
     }
 
-    public async exact(facilityId: number, sectionId: number, ordinal: number, query?: any): Promise<Category> {
-        const section = await SectionServices.read("CategoryServices.exact", facilityId, sectionId);
+    public async exact(facilityId: number, ordinal: number, query?: any): Promise<Section> {
+        const facility = await FacilityServices.read("SectionServices.exact", facilityId);
         const options: FindOptions = this.appendIncludeOptions({
-            where: { ordinal: ordinal }
-        }, query);
-        const results = await section.$get("categories", options);
+            where: { ordinal : ordinal },
+        });
+        const results = await facility.$get("sections", options);
         if (results.length !== 1) {
             throw new NotFound(
-                `ordinal: Missing Category '${ordinal}'`,
-                "CategoryServices.exact"
+                `ordinal: Missing Section ${ordinal}`,
+                "SectionServices.exact",
             );
         }
         return results[0];
     }
 
-
     // Public Helpers --------------------------------------------------------
 
     /**
      * Supported include query parameters:
-     * * withDetails                    Include child Details
-     * * withSection                    Include owning Section
+     * * withCategories                 Include child Categories
+     * * withFacility                   Include owning Facility
      */
     public appendIncludeOptions(options: FindOptions, query?: any): FindOptions {
         if (!query) {
@@ -78,11 +73,11 @@ class CategoryServices extends BaseChildServices<Category, Section> {
         }
         options = appendPaginationOptions(options, query);
         const include: any = options.include ? options.include : [];
-        if ("" === query.withDetails) {
-            include.push(Detail);
+        if ("" === query.withCategories) {
+            include.push(Category);
         }
-        if ("" === query.withSection) {
-            include.push(Section);
+        if ("" === query.withFacility) {
+            include.push(Facility);
         }
         if (include.length > 0) {
             options.include = include;
@@ -92,8 +87,8 @@ class CategoryServices extends BaseChildServices<Category, Section> {
 
     /**
      * Support match query parameters:
-     * * active                         Select active Categories
-     * * ordinal={ordinal}              Select Category with matching ordinal
+     * * active                         Select active Sections
+     * * ordinal={ordinal}              Select Section with matching ordinal
      */
     public appendMatchOptions(options: FindOptions, query?: any): FindOptions {
         options = this.appendIncludeOptions(options, query);
@@ -112,4 +107,4 @@ class CategoryServices extends BaseChildServices<Category, Section> {
 
 }
 
-export default new CategoryServices();
+export default new SectionServices();
