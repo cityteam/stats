@@ -1,5 +1,5 @@
---! Previous: sha1:ba4956a9942ca0354519919ec67a4e3d7a7139f4
---! Hash: sha1:ad84f014748af13397dfa92dba6f3d7cc25dad94
+--! Previous: sha1:c6b398b4ba13a8bb86387ad079e66497bfc37d37
+--! Hash: sha1:e0b31f13d939aa397e1f3af06063d822c41119d7
 --! Message: create-details
 
 -- Create details table
