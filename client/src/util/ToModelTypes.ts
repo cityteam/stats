@@ -9,6 +9,7 @@ import Category from "../models/Category";
 import Detail from "../models/Detail";
 import Facility from "../models/Facility";
 import RefreshToken from "../models/RefreshToken";
+import Section from "../models/Section";
 import User from "../models/User";
 
 // Public Objects ------------------------------------------------------------
@@ -69,6 +70,18 @@ export const toRefreshTokens = (values: any[]): RefreshToken[] => {
     const results: RefreshToken[] = [];
     values.forEach(value => {
         results.push(new RefreshToken(value));
+    });
+    return results;
+}
+
+export const toSection = (value: any): Section => {
+    return new Section(value);
+}
+
+export const toSections = (values: any[]): Section[] => {
+    const results: Section[] = [];
+    values.forEach(value => {
+        results.push(new Section(value));
     });
     return results;
 }

@@ -78,9 +78,11 @@ class CategoryServices extends BaseChildServices<Category, Section> {
         }
         options = appendPaginationOptions(options, query);
         const include: any = options.include ? options.include : [];
+/* TODO - probably need details with date range and so on
         if ("" === query.withDetails) {
             include.push(Detail);
         }
+*/
         if ("" === query.withSection) {
             include.push(Section);
         }

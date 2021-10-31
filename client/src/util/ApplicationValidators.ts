@@ -9,8 +9,6 @@
 
 // Internal Modules ----------------------------------------------------------
 
-import {Type} from "../types";
-
 // Public Objects ------------------------------------------------------------
 
 export const validateCategoryOrdinal = (ordinal: number | undefined): boolean => {
@@ -21,9 +19,9 @@ export const validateCategoryOrdinal = (ordinal: number | undefined): boolean =>
     }
 }
 
-export const validateCategoryType = (type: string | undefined): boolean => {
-    if (type) {
-        return Object.values<string>(Type).includes(type);
+export const validateSectionOrdinal = (ordinal: number | undefined): boolean => {
+    if (ordinal) {
+        return (ordinal > 0);
     } else {
         return true;
     }

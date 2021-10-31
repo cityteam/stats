@@ -94,7 +94,7 @@ FacilityRouter.get("/:facilityId/sections",
         ));
     });
 
-FacilityRouter.post("/:facilityId/sections",
+FacilityRouter.post("/:facilityId/categories",
     requireSuperuser,
     async (req: Request, res: Response) => {
         res.send(await FacilityServices.populate(

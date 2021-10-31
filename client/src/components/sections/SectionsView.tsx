@@ -1,6 +1,6 @@
-// CategoriesView -------------------------------------------------------------
+// SectionsView -------------------------------------------------------------
 
-// Top-level view for managing Category objects.
+// Top-level view for managing Section objects.
 
 // External Modules ----------------------------------------------------------
 
@@ -12,19 +12,18 @@ import Row from "react-bootstrap/Row";
 
 // Internal Modules ----------------------------------------------------------
 
-import CategoryForm from "./CategoryForm";
-import CategoriesList from "./CategoriesList";
+import SectionForm from "./SectionForm";
+import SectionsList from "./SectionsList";
 import FacilityContext from "../facilities/FacilityContext";
 import LoginContext from "../login/LoginContext";
-import {HandleCategory, HandleSection, OnAction, Scope} from "../../types";
-import useMutateCategory from "../../hooks/useMutateCategory";
-import Category from "../../models/Category";
+import {HandleSection, OnAction, Scope} from "../../types";
+import useMutateSection from "../../hooks/useMutateSection";
 import Section from "../../models/Section";
 import logger from "../../util/ClientLogger";
 
 // Component Details ---------------------------------------------------------
 
-const CategoriesView = () => {
+const SectionsView = () => {
 
     const facilityContext = useContext(FacilityContext);
     const loginContext = useContext(LoginContext);
@@ -32,17 +31,14 @@ const CategoriesView = () => {
     const [canInsert, setCanInsert] = useState<boolean>(false);
     const [canRemove, setCanRemove] = useState<boolean>(false);
     const [canUpdate, setCanUpdate] = useState<boolean>(false);
-    const [category, setCategory] = useState<Category | null>(null);
-    const [section, setSection] = useState<Section>(new Section());
+    const [section, setSection] = useState<Section | null>(null);
 
-    const mutateCategory = useMutateCategory({
-        section: section,
-    });
+    const mutateSection = useMutateSection({});
 
     useEffect(() => {
 
         logger.debug({
-            context: "CategoriesView.useEffect",
+            context: "SectionsView.useEffect",
         });
 
         const isAdmin = loginContext.validateFacility(facilityContext.facility, Scope.ADMIN);
@@ -54,64 +50,58 @@ const CategoriesView = () => {
     }, [facilityContext.facility, loginContext]);
 
     const handleAdd: OnAction = () => {
-        setCategory(new Category({
+        setSection(new Section({
             active: true,
-            description: null,
             facilityId: facilityContext.facility.id,
             notes: null,
             ordinal: 0,
             service: null,
-            scope: null,
+            scope: "regular",
             slug: null,
-            type: "Detail",
+            title: null,
         }));
     }
 
-    const handleCategory: HandleCategory = (theCategory) => {
-        setCategory(theCategory);
+    const handleInsert: HandleSection = async (theSection) => {
+        /*const inserted = */await mutateSection.insert(theSection);
+        setSection(null);
     }
 
-    const handleInsert: HandleCategory = async (theCategory) => {
-        /*const inserted = */await mutateCategory.insert(theCategory);
-        setCategory(null);
+    const handleRemove: HandleSection = async (theSection) => {
+        /*const removed = */await mutateSection.remove(theSection);
+        setSection(null);
     }
 
-    const handleRemove: HandleCategory = async (theCategory) => {
-        /*const removed = */await mutateCategory.remove(theCategory);
-        setCategory(null);
-    }
-
-    const handleSection: HandleSection = (theSection) => {
+    const handleSelect: HandleSection = (theSection) => {
         setSection(theSection);
     }
 
-    const handleUpdate: HandleCategory = async (theCategory) => {
-        /*const updated = */await mutateCategory.update(theCategory);
-        setCategory(null);
+    const handleUpdate: HandleSection = async (theSection) => {
+        /*const updated = */await mutateSection.update(theSection);
+        setSection(null);
     }
 
     return (
-        <Container fluid id="CategoriesView">
+        <Container fluid id="SectionsView">
 
             {/* List View */}
-            {(!category) ? (
+            {(!section) ? (
                 <>
 
                     <Row className="mb-3 ml-1 mr-1">
                         <Col className="text-left">
-                            <span><strong>Select or Create Categories for Facility&nbsp;</strong></span>
+                            <span><strong>Select or Create Sections for Facility&nbsp;</strong></span>
                             <span className="text-info"><strong>{facilityContext.facility.name}</strong></span>
                         </Col>
                     </Row>
 
                     <Row className="mb-3 ml-1 mr-1">
-                        <CategoriesList
+                        <SectionsList
                             canInsert={canInsert}
                             canRemove={canRemove}
                             canUpdate={canUpdate}
                             handleAdd={handleAdd}
-                            handleCategory={handleCategory}
-                            handleSection={handleSection}
+                            handleSelect={handleSelect}
                         />
                     </Row>
 
@@ -119,22 +109,22 @@ const CategoriesView = () => {
             ) : null }
 
             {/* Detail View */}
-            {(category) ? (
+            {(section) ? (
                 <>
 
                     <Row className="mb-3 ml-1 mr-1">
                         <Col className="text-left">
-                            {(category.id > 0) ? (
+                            {(section.id > 0) ? (
                                 <span><strong>Edit Existing</strong></span>
                             ) : (
                                 <span><strong>Add New</strong></span>
                             )}
-                            <span><strong>&nbsp;Category for Facility&nbsp;</strong></span>
+                            <span><strong>&nbsp;Section for Facility&nbsp;</strong></span>
                             <span className="text-info"><strong>{facilityContext.facility.name}</strong></span>
                         </Col>
                         <Col className="text-right">
                             <Button
-                                onClick={() => setCategory(null)}
+                                onClick={() => setSection(null)}
                                 size="sm"
                                 type="button"
                                 variant="secondary"
@@ -143,14 +133,14 @@ const CategoriesView = () => {
                     </Row>
 
                     <Row className="mb-3 ml-1 mr-1">
-                        <CategoryForm
+                        <SectionForm
                             autoFocus={true}
                             canRemove={canRemove}
                             canSave={canInsert || canUpdate}
                             handleInsert={handleInsert}
                             handleRemove={handleRemove}
                             handleUpdate={handleUpdate}
-                            category={category}
+                            section={section}
                         />
                     </Row>
 
@@ -163,4 +153,4 @@ const CategoriesView = () => {
 
 }
 
-export default CategoriesView;
+export default SectionsView;

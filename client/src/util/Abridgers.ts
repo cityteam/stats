@@ -7,6 +7,7 @@
 import Category from "../models/Category";
 import Detail from "../models/Detail";
 import Facility from "../models/Facility";
+import Section from "../models/Section";
 import User from "../models/User";
 
 // Public Objects ------------------------------------------------------------
@@ -18,6 +19,8 @@ export const ANY = (model: object): object => {
         return DETAIL(model);
     } else if (model instanceof Facility) {
         return FACILITY(model);
+    } else if (model instanceof Section) {
+        return SECTION(model);
     } else if (model instanceof User) {
         return USER(model);
     } else {
@@ -70,6 +73,23 @@ export const FACILITIES = (facilities: Facility[]): object[] => {
     const results: object[] = [];
     facilities.forEach(facility => {
         results.push(FACILITY(facility));
+    });
+    return results;
+}
+
+export const SECTION = (section: Section): object => {
+    return {
+        id: section.id,
+        facilityId: section.facilityId,
+        ordinal: section.ordinal,
+        slug: section.slug,
+    };
+}
+
+export const SECTIONS = (sections: Section[]): object[] => {
+    const results: object[] = [];
+    sections.forEach(section => {
+        results.push(SECTION(section));
     });
     return results;
 }

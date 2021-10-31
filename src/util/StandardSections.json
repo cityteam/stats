@@ -1,0 +1,62 @@
+[
+  {
+    "ordinal": 1000,
+    "scope": "regular",
+    "slug": "MEALS",
+    "title": "MEALS SERVED"
+  },
+  {
+    "ordinal": 2000,
+    "scope": "regular",
+    "slug": "GROCERIES",
+    "title": "GROCERIES"
+  },
+  {
+    "ordinal": 3000,
+    "scope": "regular",
+    "slug": "CLOTHING",
+    "title": "CLOTHING"
+  },
+  {
+    "ordinal": 4000,
+    "scope": "regular",
+    "slug": "EVENTS",
+    "title": "EVENTS"
+  },
+  {
+    "ordinal": 5000,
+    "scope": "regular",
+    "slug": "CLIENTS - RENEW",
+    "title": "CLIENTS - RENEW"
+  },
+  {
+    "ordinal": 6000,
+    "scope": "regular",
+    "slug": "CLIENTS - YOUTH",
+    "title": "CLIENTS - YOUTH COLLECTIVE"
+  },
+  {
+    "ordinal": 7000,
+    "scope": "regular",
+    "slug": "CLIENTS - POSTGRAD",
+    "title": "CLIENTS - POST GRADUATE"
+  },
+  {
+    "ordinal": 8000,
+    "scope": "regular",
+    "slug": "CLIENTS - CONNECT (MEN)",
+    "title": "CLIENTS - CONNECT (MEN)"
+  },
+  {
+    "ordinal": 9000,
+    "scope": "regular",
+    "slug": "CLIENTS - CONNECT (WOMEN)",
+    "title": "CLIENTS - CONNECT (WOMEN)"
+  },
+  {
+    "ordinal": 99000,
+    "scope": "regular",
+    "slug": "OTHER",
+    "title": "OTHER SERVICES"
+  }
+]

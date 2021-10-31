@@ -19,6 +19,7 @@ import CategoriesView from "./components/categories/CategoriesView";
 import FacilitiesView from "./components/facilities/FacilitiesView";
 import HomeView from "./components/general/HomeView";
 import LoggedInUser from "./components/login/LoggedInUser";
+import SectionsView from "./components/sections/SectionsView";
 import UsersView from "./components/users/UsersView";
 import {FacilityContextProvider} from "./components/facilities/FacilityContext";
 import FacilitySelector from "./components/facilities/FacilitySelector";
@@ -72,6 +73,9 @@ function App() {
                                       <LinkContainer to="/admin-facilities">
                                           <NavDropdown.Item>Facilities</NavDropdown.Item>
                                       </LinkContainer>
+                                      <LinkContainer to="/admin-sections">
+                                          <NavDropdown.Item>Sections</NavDropdown.Item>
+                                      </LinkContainer>
                                       <LinkContainer to="/admin-users">
                                           <NavDropdown.Item>Users</NavDropdown.Item>
                                       </LinkContainer>
@@ -98,6 +102,9 @@ function App() {
 */}
                           <Route exact path="/admin-facilities">
                               <FacilitiesView/>
+                          </Route>
+                          <Route exact path="/admin-sections">
+                              <SectionsView/>
                           </Route>
                           <Route exact path="/admin-users">
                               <UsersView/>

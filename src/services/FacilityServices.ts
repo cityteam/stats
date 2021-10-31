@@ -12,11 +12,12 @@ import BaseParentServices from "./BaseParentServices";
 import CategoryServices from "./CategoryServices";
 import Category from "../models/Category";
 import Facility from "../models/Facility";
+import Section from "../models/Section";
 import {appendPaginationOptions} from "../util/QueryParameters";
 import * as SortOrder from "../util/SortOrder";
 import {NotFound} from "../util/HttpErrors";
 import StandardCategories from "../util/StandardCategories.json";
-import Section from "../models/Section";
+import StandardSections from "../util/StandardSections.json";
 
 // Public Classes ------------------------------------------------------------
 
@@ -53,16 +54,34 @@ class FacilityServices extends BaseParentServices<Facility> {
         }
     }
 
-    // Populate Categories for this Facility (MUST have none first)
-    // TODO - revise for new sections/categories split
+    // Populate Sections and Categories for this Facility (MUST have none first)
     public async populate(facilityId: number): Promise<Category[]> {
-        StandardCategories.forEach(standardCategory => {
-            // @ts-ignore
-            standardCategory.facilityId = facilityId;
-            standardCategory.type = standardCategory.type ? standardCategory.type : "Detail";
+
+        // Populate Sections and save Section IDs
+        const sectionsIn: Partial<Section>[] = [];
+        StandardSections.forEach(standardSection => {
+            sectionsIn.push({
+                ...standardSection,
+                facilityId: facilityId,
+            });
         });
-        const results = await Category.bulkCreate(StandardCategories as Category[]);
-        return results;
+        const sectionsOut = await Section.bulkCreate(sectionsIn as Section[]);
+        const sectionIds: Map<number, number> = new Map<number, number>(); // ordinal->id
+        sectionsOut.forEach(section => {
+            sectionIds.set(section.ordinal, section.id);
+        });
+
+        // Populate Categories and set Section IDs
+        const categoriesIn: Partial<Category>[] = [];
+        StandardCategories.forEach(standardCategory => {
+            categoriesIn.push({
+                ...standardCategory,
+                sectionId: sectionIds.get(standardCategory.sectionId)
+            });
+        });
+        const categoriesOut = await Category.bulkCreate(categoriesIn as Category[]);
+        return categoriesOut;
+
     }
 
     public async sections(facilityId: number, query?: any): Promise<Section[]> {

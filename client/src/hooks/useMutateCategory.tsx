@@ -12,6 +12,7 @@ import {HandleCategory} from "../types";
 import Api from "../clients/Api";
 import FacilityContext from "../components/facilities/FacilityContext";
 import Category, {CATEGORIES_BASE} from "../models/Category";
+import Section from "../models/Section";
 import * as Abridgers from "../util/Abridgers";
 import logger from "../util/ClientLogger";
 import ReportError from "../util/ReportError";
@@ -19,6 +20,7 @@ import ReportError from "../util/ReportError";
 // Incoming Properties and Outgoing State ------------------------------------
 
 export interface Props {
+    section: Section;                   // Section for which to mutate Categories
 }
 
 export interface State {
@@ -52,16 +54,18 @@ const useMutateCategory = (props: Props): State => {
 
         try {
             inserted = (await Api.post(CATEGORIES_BASE
-                + `/${facilityContext.facility.id}`, theCategory)).data;
+                + `/${facilityContext.facility.id}/${props.section.id}`, theCategory)).data;
             logger.debug({
                 context: "useMutateCategory.insert",
                 facility: Abridgers.FACILITY(facilityContext.facility),
+                section: Abridgers.SECTION(props.section),
                 category: Abridgers.CATEGORY(inserted),
             });
         } catch (error) {
             setError(error as Error);
             ReportError("useMutateCategory.insert", error, {
                 facility: Abridgers.FACILITY(facilityContext.facility),
+                section: Abridgers.SECTION(props.section),
                 category: theCategory,
             });
         }
@@ -79,16 +83,18 @@ const useMutateCategory = (props: Props): State => {
 
         try {
             removed = (await Api.delete(CATEGORIES_BASE
-                + `/${facilityContext.facility.id}/${theCategory.id}`)).data;
+                + `/${facilityContext.facility.id}/${props.section.id}/${theCategory.id}`)).data;
             logger.debug({
                 context: "useMutateCategory.remove",
                 facility: Abridgers.FACILITY(facilityContext.facility),
+                section: Abridgers.SECTION(props.section),
                 category: Abridgers.CATEGORY(removed),
             });
         } catch (error) {
             setError(error as Error);
             ReportError("useMutateCategory.remove", error, {
                 facility: Abridgers.FACILITY(facilityContext.facility),
+                section: Abridgers.SECTION(props.section),
                 category: theCategory,
             });
         }
@@ -106,16 +112,18 @@ const useMutateCategory = (props: Props): State => {
 
         try {
             updated = (await Api.put(CATEGORIES_BASE
-                + `/${facilityContext.facility.id}/${theCategory.id}`, theCategory)).data;
+                + `/${facilityContext.facility.id}/${props.section.id}/${theCategory.id}`, theCategory)).data;
             logger.debug({
                 context: "useMutateCategory.update",
                 facility: Abridgers.FACILITY(facilityContext.facility),
+                section: Abridgers.SECTION(props.section),
                 category: Abridgers.CATEGORY(updated),
             });
         } catch (error) {
             setError(error as Error);
             ReportError("useMutateCategory.update", error, {
                 facility: Abridgers.FACILITY(facilityContext.facility),
+                section: Abridgers.SECTION(props.section),
                 category: theCategory,
             })
         }

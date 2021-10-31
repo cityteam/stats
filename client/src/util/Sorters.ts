@@ -8,6 +8,7 @@ import AccessToken from "../models/AccessToken";
 import Category from "../models/Category";
 import Facility from "../models/Facility";
 import RefreshToken from "../models/RefreshToken";
+import Section from "../models/Section";
 
 // Public Objects ------------------------------------------------------------
 
@@ -57,5 +58,17 @@ export const REFRESH_TOKENS = (refreshTokens: RefreshToken[]): RefreshToken[] =>
             return 0;
         }
     })
+}
+
+export const SECTIONS = (sections: Section[]): Section[] => {
+    return sections.sort(function (a, b) {
+        if (a.ordinal > b.ordinal) {
+            return 1;
+        } else if (a.ordinal < b.ordinal) {
+            return -1;
+        } else {
+            return 0;
+        }
+    });
 }
 

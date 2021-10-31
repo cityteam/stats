@@ -1,7 +1,7 @@
-// CategoriesList -------------------------------------------------------------
+// SectionsList -------------------------------------------------------------
 
-// List Categories that match search criteria, offering callbacks for adding,
-// editing, and removing Categories.
+// List Sections that match search criteria, offering callbacks for adding,
+// editing, and removing Sections.
 
 // External Modules ----------------------------------------------------------
 
@@ -15,66 +15,73 @@ import Table from "react-bootstrap/Table";
 // Internal Modules ----------------------------------------------------------
 
 import CheckBox from "../general/CheckBox";
-import SectionSelector from "../sections/SectionSelector";
-import {HandleBoolean, HandleCategory, HandleSection, OnAction} from "../../types";
-import useFetchCategories from "../../hooks/useFetchCategories";
-import Section from "../../models/Section";
-import * as Abridgers from "../../util/Abridgers";
+import Pagination from "../general/Pagination";
+import SearchBar from "../general/SearchBar";
+import {HandleBoolean, HandleSection, HandleValue, OnAction} from "../../types";
+import useFetchSections from "../../hooks/useFetchSections";
 import logger from "../../util/ClientLogger";
 import {listValue} from "../../util/Transformations";
 
 // Incoming Properties -------------------------------------------------------
 
 export interface Props {
-    canInsert: boolean;                 // Can this user add Categories?
-    canRemove: boolean;                 // Can this user remove Categories?
-    canUpdate: boolean;                 // Can this user update Categories?
-    handleAdd: OnAction;                // Handle request to add a Category
-    handleCategory: HandleCategory;     // Handle request to select a Category
-    handleSection: HandleSection;       // Handle request to select a Section
+    canInsert: boolean;                 // Can this user add Sections?
+    canRemove: boolean;                 // Can this user remove Sections?
+    canUpdate: boolean;                 // Can this user update Sections?
+    handleAdd: OnAction;                // Handle request to add a Section
+    handleSelect: HandleSection;        // Handle request to select a Section
 }
 
 // Component Details ---------------------------------------------------------
 
-const CategoriesList = (props: Props) => {
+const SectionsList = (props: Props) => {
 
     const [active, setActive] = useState<boolean>(false);
-    const [section, setSection] = useState<Section>(new Section());
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [pageSize] = useState<number>(100);
+    const [searchText, setSearchText] = useState<string>("");
 
-    const fetchCategories = useFetchCategories({
+    const fetchSections = useFetchSections({
         active: active,
-        section: section,
+        currentPage: currentPage,
+        ordinal: (searchText.length > 0) ? Number(searchText) : undefined,
+        pageSize: pageSize,
     });
 
     useEffect(() => {
-        logger.info({
-            context: "CategoriesList.useEffect",
-            section: Abridgers.SECTION(section),
+
+        logger.debug({
+            context: "SectionsList.useEffect"
         });
-    }, [fetchCategories.categories, section]);
+
+    }, [fetchSections.sections]);
 
     const handleActive: HandleBoolean = (theActive) => {
         setActive(theActive);
     }
 
-    const handleSection: HandleSection = (theSection) => {
-        logger.debug({
-            context: "CategoriesList.handleSection",
-            section: Abridgers.SECTION(theSection),
-        })
-        setSection(theSection);
-        props.handleSection(theSection);
+    const handleChange: HandleValue = (theSearchText) => {
+        setSearchText(theSearchText);
+    }
+
+    const onNext: OnAction = () => {
+        setCurrentPage(currentPage + 1);
+    }
+
+    const onPrevious: OnAction = () => {
+        setCurrentPage(currentPage - 1);
     }
 
     return (
-        <Container fluid id="CategoriesList">
+        <Container fluid id="SectionsList">
 
             <Row className="mb-3 ml-1 mr-1">
                 <Col className="col-6">
-                    <SectionSelector
-                        active={active}
-                        handleSection={handleSection}
-                        label="Categories for Section:"
+                    <SearchBar
+                        autoFocus
+                        handleChange={handleChange}
+                        label="Search For Sections:"
+                        placeholder="Search by all or part of ordinal"
                     />
                 </Col>
                 <Col>
@@ -82,7 +89,17 @@ const CategoriesList = (props: Props) => {
                         handleChange={handleActive}
                         id="activeOnly"
                         initialValue={active}
-                        label="Active Categories Only?"
+                        label="Active Sections Only?"
+                    />
+                </Col>
+                <Col className="text-right">
+                    <Pagination
+                        currentPage={currentPage}
+                        lastPage={(fetchSections.sections.length === 0) ||
+                        (fetchSections.sections.length < pageSize)}
+                        onNext={onNext}
+                        onPrevious={onPrevious}
+                        variant="secondary"
                     />
                 </Col>
                 <Col className="text-right">
@@ -107,41 +124,37 @@ const CategoriesList = (props: Props) => {
                     <tr className="table-secondary">
                         <th scope="col">Ordinal</th>
                         <th scope="col">Active</th>
-                        <th scope="col">Accumulated</th>
-                        <th scope="col">Service</th>
-                        <th scope="col">Description</th>
+                        <th scope="col">Title</th>
                         <th scope="col">Notes</th>
+                        <th scope="col">Scope</th>
                         <th scope="col">Slug</th>
                     </tr>
                     </thead>
 
                     <tbody>
-                    {fetchCategories.categories.map((category, rowIndex) => (
+                    {fetchSections.sections.map((section, rowIndex) => (
                         <tr
                             className="table-default"
                             key={1000 + (rowIndex * 100)}
-                            onClick={() => props.handleCategory(category)}
+                            onClick={() => props.handleSelect(section)}
                         >
                             <td key={1000 + (rowIndex * 100) + 1}>
-                                {category.ordinal}
+                                {section.ordinal}
                             </td>
                             <td key={1000 + (rowIndex * 100) + 2}>
-                                {listValue(category.active)}
+                                {listValue(section.active)}
                             </td>
                             <td key={1000 + (rowIndex * 100) + 3}>
-                                {listValue(category.accumulated)}
+                                {section.title}
                             </td>
                             <td key={1000 + (rowIndex * 100) + 4}>
-                                {category.service}
+                                {section.notes}
                             </td>
                             <td key={1000 + (rowIndex * 100) + 5}>
-                                {category.description}
+                                {section.scope}
                             </td>
                             <td key={1000 + (rowIndex * 100) + 6}>
-                                {category.notes}
-                            </td>
-                            <td key={1000 + (rowIndex * 100) + 7}>
-                                {category.slug}
+                                {section.slug}
                             </td>
                         </tr>
                     ))}
@@ -155,4 +168,4 @@ const CategoriesList = (props: Props) => {
 
 }
 
-export default CategoriesList;
+export default SectionsList;

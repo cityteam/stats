@@ -11,6 +11,7 @@ import React from "react";
 import Category from "./models/Category";
 import Detail from "./models/Detail";
 import Facility from "./models/Facility";
+import Section from "./models/Section";
 import User from "./models/User";
 
 // Enumerations --------------------------------------------------------------
@@ -33,12 +34,6 @@ export enum Scope {
     SUPERUSER = "superuser",
 }
 
-// Category types
-export enum Type {
-    DETAIL = "Detail",
-    HEADER = "Header",
-}
-
 // HTML Event Handlers -------------------------------------------------------
 
 export type OnAction = () => void; // Nothing to pass, just trigger action
@@ -54,15 +49,16 @@ export type OnKeyDown = (event: React.KeyboardEvent<HTMLElement>) => void;
 
 export type HandleAction = () => void; // Synonym for OnAction
 export type HandleBoolean = (newBoolean: boolean) => void;
+export type HandleDate = (date: string) => void;
 export type HandleIndex = (newIndex: number) => void;
+export type HandleMonth = (month: string) => void;
 export type HandleResults = () => Promise<object>;
 export type HandleValue = (newValue: string) => void;
 
 // Model Object Handlers -----------------------------------------------------
 
 export type HandleCategory = (category: Category) => void;
-export type HandleDate = (date: string) => void;
 export type HandleDetail = (detail: Detail) => void;
 export type HandleFacility = (facility: Facility) => void;
-export type HandleMonth = (month: string) => void;
+export type HandleSection = (section: Section) => void;
 export type HandleUser = (user: User) => void;

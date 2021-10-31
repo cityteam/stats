@@ -17,6 +17,7 @@
 import Api from "../clients/Api";
 import Category, {CATEGORIES_BASE} from "../models/Category";
 import Facility, {FACILITIES_BASE} from "../models/Facility";
+import Section, {SECTIONS_BASE} from "../models/Section";
 import User, {USERS_BASE} from "../models/User";
 import {queryParameters} from "./QueryParameters";
 
@@ -59,6 +60,20 @@ export const validateFacilityScopeUnique = async (facility: Facility): Promise<b
             const results = (await Api.get(FACILITIES_BASE
                 + `${queryParameters(parameters)}`)).data;
             return (results.length === 0) || (results[0].id === facility.id);
+        } catch (error) {
+            return true; // Definitely unique
+        }
+    } else {
+        return true;
+    }
+}
+
+export const validateSectionOrdinalUnique = async (section: Section): Promise<boolean> => {
+    if (section && section.ordinal) {
+        try {
+            const result = (await Api.get(SECTIONS_BASE
+                + `/${section.facilityId}/exact/${section.ordinal}`)).data;
+            return (result.id === section.id);
         } catch (error) {
             return true; // Definitely unique
         }

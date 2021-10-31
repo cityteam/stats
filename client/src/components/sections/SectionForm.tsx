@@ -1,6 +1,6 @@
-// CategoryForm --------------------------------------------------------------
+// SectionForm --------------------------------------------------------------
 
-// Detail editing form for Category objects.
+// Detail editing form for Section objects.
 
 // External Modules ----------------------------------------------------------
 
@@ -16,13 +16,13 @@ import * as Yup from "yup";
 
 // Internal Modules ----------------------------------------------------------
 
-import {HandleCategory} from "../../types";
-import Category from "../../models/Category";
+import {HandleSection} from "../../types";
+import Section from "../../models/Section";
 import logger from "../../util/ClientLogger";
-import {toCategory} from "../../util/ToModelTypes";
+import {toSection} from "../../util/ToModelTypes";
+import {validateSectionOrdinal} from "../../util/ApplicationValidators";
+import {validateSectionOrdinalUnique} from "../../util/AsyncValidators";
 import {toEmptyStrings, toNullValues} from "../../util/Transformations";
-import {validateCategoryOrdinal} from "../../util/ApplicationValidators";
-import {validateCategoryOrdinalUnique} from "../../util/AsyncValidators";
 
 // Incoming Properties -------------------------------------------------------
 
@@ -30,38 +30,38 @@ export interface Props {
     autoFocus?: boolean;                // First element receive autoFocus? [false]
     canRemove: boolean;                 // Can remove be performed? [false]
     canSave: boolean;                   // Can save be performed? [false]
-    handleInsert: HandleCategory;       // Handle Category insert request
-    handleRemove: HandleCategory;       // Handle Category remove request
-    handleUpdate: HandleCategory;       // Handle Category update request
-    category: Category;                 // Initial values (id < 0 for adding)
+    handleInsert: HandleSection;        // Handle Section insert request
+    handleRemove: HandleSection;        // Handle Section remove request
+    handleUpdate: HandleSection;        // Handle Section update request
+    section: Section;                   // Initial values (id < 0 for adding)
 }
 
 // Component Details ---------------------------------------------------------
 
-const CategoryForm = (props: Props) => {
+const SectionForm = (props: Props) => {
 
-    const [adding] = useState<boolean>(props.category.id < 0);
-    const [initialValues] = useState(toEmptyStrings(props.category));
+    const [adding] = useState<boolean>(props.section.id < 0);
+    const [initialValues] = useState(toEmptyStrings(props.section));
     const [showConfirm, setShowConfirm] = useState<boolean>(false);
 
     useEffect(() => {
         logger.debug({
-            context: "CategoryForm.useEffect",
-            category: props.category,
+            context: "SectionForm.useEffect",
+            category: props.section,
             values: initialValues,
         });
-    }, [props.category, initialValues]);
+    }, [props.section, initialValues]);
 
     const handleSubmit = (values: FormikValues, actions: FormikHelpers<FormikValues>): void => {
         logger.debug({
-            context: "CategoryForm.handleSubmit",
-            category: toCategory(toNullValues(values)),
+            context: "SectionForm.handleSubmit",
+            category: toSection(toNullValues(values)),
             values: values,
         });
         if (adding) {
-            props.handleInsert(toCategory(toNullValues(values)));
+            props.handleInsert(toSection(toNullValues(values)));
         } else {
-            props.handleUpdate(toCategory(toNullValues(values)));
+            props.handleUpdate(toSection(toNullValues(values)));
         }
     }
 
@@ -75,29 +75,29 @@ const CategoryForm = (props: Props) => {
 
     const onConfirmPositive = (): void => {
         setShowConfirm(false);
-        props.handleRemove(props.category);
+        props.handleRemove(props.section);
     }
 
     const validationSchema = () => {
         return Yup.object().shape({
-            accumulated: Yup.boolean(),
             active: Yup.boolean(),
-            description: Yup.string(),
             notes: Yup.string(),
             ordinal: Yup.number()
                 .required("Ordinal is required")
                 .test("unique-ordinal",
                     "That ordinal is already in use within this Facility",
                     async function (this) {
-                        if (!validateCategoryOrdinal(this.parent.ordinal)) {
+                        if (!validateSectionOrdinal(this.parent.ordinal)) {
                             return false;
                         }
-                        return await validateCategoryOrdinalUnique(toCategory(this.parent));
+                        return await validateSectionOrdinalUnique(toSection(this.parent));
                     }),
-            service: Yup.string()
-                .required("Service is required"),
+            scope: Yup.string()
+                .required("Scope is required"),
             slug: Yup.string()
-                .required("Slug is required")
+                .required("Slug is required"),
+            title: Yup.string()
+                .required("Title is required")
         });
     }
 
@@ -106,7 +106,7 @@ const CategoryForm = (props: Props) => {
         <>
 
             {/* Details Form */}
-            <Container id="CategoryForm">
+            <Container id="SectionForm">
 
                 <Formik
                     initialValues={initialValues}
@@ -130,12 +130,12 @@ const CategoryForm = (props: Props) => {
                        }) => (
 
                         <Form
-                            id="CategoryForm"
+                            id="SectionForm"
                             noValidate
                             onSubmit={handleSubmit}
                         >
 
-                            <Form.Row id="ordinalServiceRow">
+                            <Form.Row id="ordinalTitleRow">
                                 <Form.Group as={Col} className="col-4" controlId="ordinal" id="ordinalGroup">
                                     <Form.Label>Ordinal:</Form.Label>
                                     <Form.Control
@@ -150,53 +150,34 @@ const CategoryForm = (props: Props) => {
                                         value={values.ordinal}
                                     />
                                     <Form.Control.Feedback type="valid">
-                                        Unique number that determines the sort order for Categories.
+                                        Unique number that determines the sort order for sections.
                                     </Form.Control.Feedback>
                                     <Form.Control.Feedback type="invalid">
                                         {errors.ordinal}
                                     </Form.Control.Feedback>
                                 </Form.Group>
-                                <Form.Group as={Col} controlId="service" id="serviceGroup">
-                                    <Form.Label>Service:</Form.Label>
+                                <Form.Group as={Col} controlId="type" id="titleGroup">
+                                    <Form.Label>Title Type:</Form.Label>
                                     <Form.Control
-                                        isInvalid={touched.service && !!errors.service}
-                                        isValid={!errors.service}
-                                        name="service"
+                                        isInvalid={touched.title && !!errors.title}
+                                        isValid={!errors.title}
+                                        name="title"
                                         onBlur={handleBlur}
                                         onChange={handleChange}
                                         size="sm"
                                         type="text"
-                                        value={values.service}
+                                        value={values.title}
                                     />
                                     <Form.Control.Feedback type="valid">
-                                        General service category.
+                                        Report title for this section.
                                     </Form.Control.Feedback>
                                     <Form.Control.Feedback type="invalid">
-                                        {errors.service}
+                                        {errors.title}
                                     </Form.Control.Feedback>
                                 </Form.Group>
                             </Form.Row>
 
-                            <Form.Row id="descriptionNotesRow">
-                                <Form.Group as={Col} controlId="description" id="descriptionGroup">
-                                    <Form.Label>Description:</Form.Label>
-                                    <Form.Control
-                                        isInvalid={touched.description && !!errors.description}
-                                        isValid={!errors.description}
-                                        name="description"
-                                        onBlur={handleBlur}
-                                        onChange={handleChange}
-                                        size="sm"
-                                        type="text"
-                                        value={values.description}
-                                    />
-                                    <Form.Control.Feedback type="valid">
-                                        Where or by whom was this service provided.
-                                    </Form.Control.Feedback>
-                                    <Form.Control.Feedback type="invalid">
-                                        {errors.description}
-                                    </Form.Control.Feedback>
-                                </Form.Group>
+                            <Form.Row id="notesRow">
                                 <Form.Group as={Col} controlId="notes" id="notesGroup">
                                     <Form.Label>Notes:</Form.Label>
                                     <Form.Control
@@ -210,7 +191,7 @@ const CategoryForm = (props: Props) => {
                                         value={values.notes}
                                     />
                                     <Form.Control.Feedback type="valid">
-                                        Notes about how this service is measured.
+                                        Notes about this section.
                                     </Form.Control.Feedback>
                                     <Form.Control.Feedback type="invalid">
                                         {errors.notes}
@@ -218,8 +199,27 @@ const CategoryForm = (props: Props) => {
                                 </Form.Group>
                             </Form.Row>
 
-                            <Form.Row id="slugActiveAccumulatedRow">
-                                <Form.Group as={Col} className="col-6" controlId="slug" id="slugGroup">
+                            <Form.Row id="scopeSlugRow">
+                                <Form.Group as={Col} controlId="scope" id="scopeGroup">
+                                    <Form.Label>Scope:</Form.Label>
+                                    <Form.Control
+                                        isInvalid={touched.scope && !!errors.scope}
+                                        isValid={!errors.scope}
+                                        name="scope"
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        size="sm"
+                                        type="text"
+                                        value={values.scope}
+                                    />
+                                    <Form.Control.Feedback type="valid">
+                                        Permission scope required to enter data in this Section.
+                                    </Form.Control.Feedback>
+                                    <Form.Control.Feedback type="invalid">
+                                        {errors.scope}
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+                                <Form.Group as={Col} controlId="slug" id="slugGroup">
                                     <Form.Label>Slug:</Form.Label>
                                     <Form.Control
                                         isInvalid={touched.slug && !!errors.slug}
@@ -238,6 +238,9 @@ const CategoryForm = (props: Props) => {
                                         {errors.slug}
                                     </Form.Control.Feedback>
                                 </Form.Group>
+                            </Form.Row>
+
+                            <Form.Row id="activeRow">
                                 <Form.Group as={Col} controlId="active" id="activeGroup">
                                     <Form.Check
                                         feedback={errors.active}
@@ -245,17 +248,6 @@ const CategoryForm = (props: Props) => {
                                         id="active"
                                         label="Active?"
                                         name="active"
-                                        onBlur={handleBlur}
-                                        onChange={handleChange}
-                                    />
-                                </Form.Group>
-                                <Form.Group as={Col} controlId="accumulated" id="accumulatedGroup">
-                                    <Form.Check
-                                        feedback={errors.accumulated}
-                                        defaultChecked={values.accumulated}
-                                        id="accumulated"
-                                        label="Accumulated?"
-                                        name="accumulated"
                                         onBlur={handleBlur}
                                         onChange={handleChange}
                                     />
@@ -309,12 +301,12 @@ const CategoryForm = (props: Props) => {
                 </Modal.Header>
                 <Modal.Body>
                     <p>
-                        Removing this Category is not reversible, and
+                        Removing this Section is not reversible, and
                         <strong>
                             &nbsp;will also remove ALL related information.
                         </strong>.
                     </p>
-                    <p>Consider marking this Category as inactive instead.</p>
+                    <p>Consider marking this Section as inactive instead.</p>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button
@@ -342,4 +334,4 @@ const CategoryForm = (props: Props) => {
 
 }
 
-export default CategoryForm;
+export default SectionForm;
