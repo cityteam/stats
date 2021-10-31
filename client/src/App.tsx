@@ -16,6 +16,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 // Internal Modules ----------------------------------------------------------
 
 import CategoriesView from "./components/categories/CategoriesView";
+import EntriesView from "./components/entries/EntriesView";
 import FacilitiesView from "./components/facilities/FacilitiesView";
 import HomeView from "./components/general/HomeView";
 import LoggedInUser from "./components/login/LoggedInUser";
@@ -52,8 +53,8 @@ function App() {
                                   <LinkContainer to="/">
                                       <NavItem className="nav-link">Home</NavItem>
                                   </LinkContainer>
-                                  <LinkContainer to="/entry">
-                                      <NavItem className="nav-link">Entry</NavItem>
+                                  <LinkContainer to="/entries">
+                                      <NavItem className="nav-link">Entries</NavItem>
                                   </LinkContainer>
                                   <NavDropdown id="reports" title="Reports">
                                       <LinkContainer to="/report-month">
@@ -95,11 +96,9 @@ function App() {
                               <DatabaseView/>
                           </Route>
 */}
-{/*
-                          <Route exact path="/entry">
-                              <EntryView/>
+                          <Route exact path="/entries">
+                              <EntriesView/>
                           </Route>
-*/}
                           <Route exact path="/admin-facilities">
                               <FacilitiesView/>
                           </Route>
