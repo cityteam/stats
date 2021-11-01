@@ -100,7 +100,11 @@ const SectionEntries = (props: Props) => {
                         </>
                     )}
                     <td key={1000 + (rowIndex * 100) + 99}>
-                        <input type="text"/> {/* TODO - need to point somewhere! */}
+                        <input
+                            inputMode="numeric"
+                            pattern="[0-9]*"
+                            type="number"/>
+                            {/* TODO - need to point somewhere! */}
                     </td>
                 </tr>
             ))}
