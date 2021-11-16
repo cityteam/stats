@@ -45,7 +45,7 @@ const EntriesView = () => {
     const loginContext = useContext(LoginContext);
 
     const [entriesDate, setEntriesDate] = useState<string>(todayDate());
-    const [style, setStyle] = useState<string>("");
+    const [style, setStyle] = useState<string>(MULTI_COLUMN_NARROW);
 
     const fetchSections = useFetchSections({
         active: true,
@@ -79,11 +79,12 @@ const EntriesView = () => {
         <Container fluid id="EntriesView">
 
             {/* Title and Entries Date Selector are always visible */}
-            <Row className="mb-3 ml-1 mr-1">
+            <Row className="mb-4 ml-1 mr-1">
                 <Col className="text-left">
-                    <span><strong>Data Entry for Facility&nbsp;</strong></span>
+                    <span><strong>Data Entry for Facility:&nbsp;</strong></span>
                     <span className="text-info"><strong>{facilityContext.facility.name}</strong></span>
                 </Col>
+{/*
                 <Col className="text-center">
                     <ValueSelector
                         handleValue={handleStyle}
@@ -92,11 +93,12 @@ const EntriesView = () => {
                         values={STYLES}
                     />
                 </Col>
-                <Col className="text-right">
+*/}
+                <Col className="col-3 text-right">
                     <DateSelector
                         autoFocus
                         handleDate={handleDate}
-                        label="Data Entries For:"
+                        label="Data Entries For Date:"
                         required
                         value={entriesDate}
                     />

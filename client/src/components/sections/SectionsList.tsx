@@ -125,7 +125,7 @@ const SectionsList = (props: Props) => {
                         <th scope="col">Ordinal</th>
                         <th scope="col">Active</th>
                         <th scope="col">Title</th>
-                        <th scope="col">Notes</th>
+                        {/*<th scope="col">Notes</th>*/}
                         <th scope="col">Scope</th>
                         <th scope="col">Slug</th>
                     </tr>
@@ -147,9 +147,11 @@ const SectionsList = (props: Props) => {
                             <td key={1000 + (rowIndex * 100) + 3}>
                                 {section.title}
                             </td>
+{/*
                             <td key={1000 + (rowIndex * 100) + 4}>
                                 {section.notes}
                             </td>
+*/}
                             <td key={1000 + (rowIndex * 100) + 5}>
                                 {section.scope}
                             </td>

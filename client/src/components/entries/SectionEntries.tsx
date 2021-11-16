@@ -26,15 +26,23 @@ export interface Props {
 
 const SectionEntries = (props: Props) => {
 
-    const [categories] = useState<Category[]>
-        (props.section.categories ? props.section.categories : []);
+    const [categories, setCategories] = useState<Category[]>([]);
 
     useEffect(() => {
         logger.debug({
             context: "SectionEntries.useEffect",
             narrow: props.narrow,
             section: Abridgers.SECTION(props.section),
-        })
+        });
+        const theCategories: Category[] = [];
+        if (props.section.categories) {
+            props.section.categories.forEach(category => {
+                if (category.active) {
+                    theCategories.push(category);
+                }
+            });
+        }
+        setCategories(theCategories);
     }, [props.narrow, props.section]);
 
     // @ts-ignore

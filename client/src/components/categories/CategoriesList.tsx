@@ -109,8 +109,10 @@ const CategoriesList = (props: Props) => {
                         <th scope="col">Active</th>
                         <th scope="col">Accumulated</th>
                         <th scope="col">Service</th>
+{/*
                         <th scope="col">Description</th>
                         <th scope="col">Notes</th>
+*/}
                         <th scope="col">Slug</th>
                     </tr>
                     </thead>
@@ -134,12 +136,14 @@ const CategoriesList = (props: Props) => {
                             <td key={1000 + (rowIndex * 100) + 4}>
                                 {category.service}
                             </td>
+{/*
                             <td key={1000 + (rowIndex * 100) + 5}>
                                 {category.description}
                             </td>
                             <td key={1000 + (rowIndex * 100) + 6}>
                                 {category.notes}
                             </td>
+*/}
                             <td key={1000 + (rowIndex * 100) + 7}>
                                 {category.slug}
                             </td>
