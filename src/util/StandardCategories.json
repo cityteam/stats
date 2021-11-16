@@ -2,270 +2,249 @@
   {
     "ordinal": 20,
     "sectionId": 1000,
-    "service": "Meals Served",
-    "description": "Connect",
-    "notes": "Include ALL single meals served",
-    "slug": "Meals / Connect"
+    "service": "Meals - Breakfasts",
+    "slug": "Breakfasts"
   },
   {
     "ordinal": 40,
     "sectionId": 1000,
-    "service": "Meals Served",
-    "description": "Renew",
-    "notes": "Include ALL single meals served",
-    "slug": "Meals / Renew"
+    "service": "Meals - Lunches",
+    "slug": "Lunches"
   },
   {
     "ordinal": 60,
     "sectionId": 1000,
-    "service": "Meals Served",
-    "description": "Post Graduate",
-    "notes": "Include ALL single meals served",
-    "slug": "Meals / PostGrad"
+    "service": "Meals - Dinners",
+    "slug": "Dinners"
   },
   {
     "ordinal": 20,
     "sectionId": 2000,
-    "service": "Food Boxes",
-    "description": "CTN",
-    "notes": "Standard",
-    "slug": "Groceries / Standard Boxes"
+    "service": "Standard Food Boxes",
+    "slug": "Food Boxes - Standard"
   },
   {
     "ordinal": 40,
     "sectionId": 2000,
-    "service": "Food Boxes",
-    "description": "CTN",
-    "notes": "Holiday",
-    "slug": "Groceries / Holiday Boxes"
+    "service": "Holiday Food Boxes",
+    "slug": "Food Boxes - Holiday"
   },
   {
     "ordinal": 60,
     "sectionId": 2000,
-    "service": "LBS of Meat",
-    "description": "CTN",
-    "notes": "Given to other agencies",
-    "slug": "Groceries / Meat LBS"
+    "service": "LBS of Outbound Meat",
+    "slug": "Outbound Meat (LBS)"
   },
   {
     "ordinal": 80,
     "sectionId": 2000,
-    "service": "LBS of Other Food",
-    "description": "CTN",
-    "notes": "Given to other agencies",
-    "slug": "Groceries / Other LBS"
+    "service": "LBS of Outbound Other Food",
+    "slug": "Outbound Other (LBS)"
   },
   {
     "ordinal": 20,
     "sectionId": 3000,
-    "service": "Clothing Provided",
-    "description": "Connect (Men)",
-    "note": "People reported",
-    "slug": "Clothing / Men"
+    "service": "Clothing - Connect - Men",
+    "slug": "Connect - Men"
   },
   {
     "ordinal": 40,
     "sectionId": 3000,
-    "service": "Clothing Provided",
-    "description": "Connect (Women)",
-    "note": "People reported",
-    "slug": "Clothing / Women"
+    "service": "Clothing - Connect - Women",
+    "slug": "Connect - Women"
   },
   {
     "ordinal": 60,
     "sectionId": 3000,
-    "service": "Clothing Provided",
-    "description": "Renew",
-    "note": "People reported",
-    "slug": "Clothing / Renew"
+    "service": "Clothing - Renew - Men",
+    "slug": "Renew - Men"
   },
   {
     "ordinal": 80,
     "sectionId": 3000,
-    "service": "Clothing Provided",
-    "description": "Large Bags",
-    "note": "Bags reported",
-    "slug": "Clothing / Bags"
+    "service": "Clothing - Renew - Women",
+    "slug": "Renew - Men"
+  },
+  {
+    "ordinal": 900,
+    "sectionId": 3000,
+    "service": "Clothing - Donated Bags",
+    "slug": "Donated Bags"
   },
   {
     "ordinal": 20,
     "sectionId": 4000,
-    "service": "Toys",
-    "description": "CTN",
-    "slug": "Events / Toys"
+    "service": "Events - Toys",
+    "slug": "Toys"
   },
   {
     "ordinal": 40,
     "sectionId": 4000,
-    "service": "Backpacks",
-    "description": "CTN",
-    "slug": "Events / Backpacks"
+    "service": "Events - Backpacks",
+    "slug": "Backpacks"
   },
   {
     "ordinal": 20,
     "sectionId": 5000,
-    "service": "Residents",
-    "description": "Renew",
-    "notes": "Enter for each day",
-    "slug": "Renew / Total EOM"
+    "service": "Renew Residents",
+    "slug": "Total Residents"
   },
   {
     "ordinal": 40,
     "sectionId": 5000,
-    "service": "Additions",
-    "description": "Renew",
-    "notes": "New Clients",
-    "slug": "Renew / New"
+    "service": "Renew Additions",
+    "slug": "New Additions"
   },
   {
     "ordinal": 60,
     "sectionId": 5000,
-    "service": "Exits",
-    "description": "Renew",
-    "notes": "Exited Clients",
-    "slug": "Renew / Exits"
+    "service": "Renew Exits",
+    "slug": "Exits"
   },
   {
     "ordinal": 80,
     "sectionId": 5000,
-    "service": "Graduates",
-    "description": "Renew",
-    "notes": "Graduated Clients",
-    "slug": "Renew / Graduates"
+    "service": "Renew Graduates",
+    "slug": "Graduates"
   },
   {
     "ordinal": 220,
     "sectionId": 5000,
-    "service": "Case Management Hours",
-    "description": "Renew",
-    "slug": "Renew / Case Mgt Hours"
+    "service": "Renew Case Management Hours",
+    "slug": "Case Mgt Hours"
   },
   {
     "ordinal": 240,
     "sectionId": 5000,
-    "service": "Nights of Shelter",
-    "description": "Renew",
-    "notes": "Enter for each day",
-    "slug": "Renew / Nights"
+    "service": "Renew Shelter Nights",
+    "slug": "Shelter Nights"
   },
   {
     "ordinal": 260,
     "sectionId": 5000,
-    "service": "Showers Provided",
-    "description": "Renew",
-    "notes": "Enter for each day",
-    "slug": "Renew / Showers"
+    "service": "Renew Showers Provided",
+    "slug": "Showers"
   },
   {
     "ordinal": 20,
     "sectionId": 6000,
-    "service": "Residents",
-    "description": "Youth Collective",
-    "notes": "Enter for each day",
-    "slug": "Youth / Total EOM"
+    "service": "Youth Residents",
+    "slug": "Total Residents"
   },
   {
     "ordinal": 40,
     "sectionId": 6000,
-    "service": "Additions",
-    "description": "Youth Collective",
-    "notes": "New Clients",
-    "slug": "Youth / New"
+    "service": "Youth Additions",
+    "slug": "New Additions"
   },
   {
     "ordinal": 60,
     "sectionId": 6000,
-    "service": "Exits",
-    "description": "Youth Collective",
-    "notes": "Exited Clients",
-    "slug": "Youth / Exits"
+    "service": "Youth Exits",
+    "slug": "Exits"
   },
   {
     "ordinal": 80,
     "sectionId": 6000,
-    "service": "Graduates",
-    "description": "Youth Collective",
-    "notes": "Graduated Clients",
-    "slug": "Youth / Graduates"
+    "service": "Youth Graduates",
+    "slug": "Graduates"
   },
   {
     "ordinal": 220,
     "sectionId": 6000,
-    "service": "Case Management Hours",
-    "description": "Youth Collective",
-    "slug": "Youth / Case Mgt Hours"
+    "service": "Youth Case Management Hours",
+    "slug": "Case Mgt Hours"
   },
   {
     "ordinal": 240,
     "sectionId": 6000,
-    "service": "Nights of Shelter",
-    "description": "Youth Collective",
-    "notes": "Enter for each day",
-    "slug": "Youth / Nights"
+    "service": "Youth Shelter Nights",
+    "slug": "Shelter Nights"
   },
   {
     "ordinal": 260,
     "sectionId": 6000,
-    "service": "Showers Provided",
-    "description": "Youth Collective",
-    "notes": "Enter for each day",
-    "slug": "Youth / Showers"
+    "service": "Youth Showers Provided",
+    "slug": "Showers"
   },
   {
+    "active": false,
+    "ordinal": 20,
+    "sectionId": 7000,
+    "service": "Postgrad Residents",
+    "slug": "Total Residents"
+  },
+  {
+    "active": false,
+    "ordinal": 40,
+    "sectionId": 7000,
+    "service": "Postgrad Additions",
+    "slug": "New Additions"
+  },
+  {
+    "active": false,
+    "ordinal": 60,
+    "sectionId": 7000,
+    "service": "Postgrad Exits",
+    "slug": "Exits"
+  },
+  {
+    "active": false,
+    "ordinal": 80,
+    "sectionId": 7000,
+    "service": "Postgrad Graduates",
+    "slug": "Graduates"
+  },
+  {
+    "active": false,
+    "ordinal": 220,
+    "sectionId": 7000,
+    "service": "Postgrad Case Management Hours",
+    "slug": "Case Mgt Hours"
+  },
+  {
+    "active": true,
     "ordinal": 240,
     "sectionId": 7000,
-    "service": "Nights of Shelter",
-    "description": "Post Graduate",
-    "notes": "Enter for each day",
-    "slug": "PostGrad / Nights"
+    "service": "Postgrad Shelter Nights",
+    "slug": "Shelter Nights"
   },
   {
+    "active": true,
     "ordinal": 260,
     "sectionId": 7000,
-    "service": "Showers Provided",
-    "description": "Post Graduate",
-    "notes": "Enter for each day",
-    "slug": "PostGrad / Showers"
+    "service": "Postgrad Showers Provided",
+    "slug": "Showers"
   },
   {
     "ordinal": 240,
     "sectionId": 8000,
-    "service": "Nights of Shelter",
-    "description": "Connect (Men)",
-    "notes": "Enter for each day",
-    "slug": "Connect / Men / Nights"
+    "service": "Connect Men Shelter Nights",
+    "slug": "Shelter Nights"
   },
   {
     "ordinal": 260,
     "sectionId": 8000,
-    "service": "Showers Provided",
-    "description": "Connect (Men)",
-    "notes": "Enter for each day",
-    "slug": "Connect / Men / Showers"
+    "service": "Connect Men Showers Provided",
+    "slug": "Showers"
   },
   {
     "ordinal": 240,
     "active": false,
     "sectionId": 9000,
-    "service": "Nights of Shelter",
-    "description": "Connect (Women)",
-    "notes": "Enter for each day",
-    "slug": "Connect / Women / Nights"
+    "service": "Connect Women Shelter Nights",
+    "slug": "Shelter Nights"
   },
   {
     "ordinal": 260,
     "sectionId": 9000,
-    "service": "Showers Provided",
-    "description": "Connect (Women)",
-    "notes": "Enter for each day",
-    "slug": "Connect / Women / Showers"
+    "service": "Connect Women Showers Provided",
+    "slug": "Showers"
   },
   {
     "ordinal": 20,
     "sectionId": 99000,
-    "service": "Hygiene Bags",
-    "description": "Other",
-    "notes": "Hygiene Bags Distributed",
-    "slug": "Other / Hygiene Bags"
+    "service": "Other / Hygiene Bags",
+    "slug": "Hygiene Bags"
   }
 ]
