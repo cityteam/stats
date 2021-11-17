@@ -98,7 +98,7 @@ const EntriesView = () => {
                     />
                 </Col>
 */}
-                <Col className="col-3 text-right">
+                <Col className="col-5 text-right">
                     <DateSelector
                         autoFocus
                         handleDate={handleDate}

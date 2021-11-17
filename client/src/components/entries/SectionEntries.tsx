@@ -88,26 +88,26 @@ const SectionEntries = (props: Props) => {
             {categories.map((category, rowIndex) => (
                 <tr
                     className="table-default"
-                    key={1000 + (rowIndex * 100)}
+                    key={(1000 + props.section.ordinal) + (rowIndex * 100)}
                 >
                     {(props.narrow) ? (
-                        <td key={1000 + (rowIndex * 100) + 1}>
+                        <td key={(1000 + props.section.ordinal) + (rowIndex * 100) + 1}>
                             {category.slug}
                         </td>
                     ) : (
                         <>
-                        <td key={1000 + (rowIndex * 100) + 11}>
+                        <td key={(1000 + props.section.ordinal) + (rowIndex * 100) + 11}>
                             {category.service}
                         </td>
-                        <td key={1000 + (rowIndex * 100) + 12}>
+                        <td key={(1000 + props.section.ordinal) + (rowIndex * 100) + 12}>
                             {category.description}
                         </td>
-                        <td key={1000 + (rowIndex * 100) + 13}>
+                        <td key={(1000 + props.section.ordinal) + (rowIndex * 100) + 13}>
                             {category.notes}
                         </td>
                         </>
                     )}
-                    <td key={1000 + (rowIndex * 100) + 99}>
+                    <td key={(1000 + props.section.ordinal) + (rowIndex * 100) + 99}>
                         <input
                             inputMode="numeric"
                             pattern="[0-9]*"
