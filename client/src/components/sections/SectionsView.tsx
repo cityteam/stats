@@ -55,7 +55,6 @@ const SectionsView = () => {
             facilityId: facilityContext.facility.id,
             notes: null,
             ordinal: 0,
-            service: null,
             scope: "regular",
             slug: null,
             title: null,

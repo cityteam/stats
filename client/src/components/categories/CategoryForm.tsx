@@ -4,7 +4,7 @@
 
 // External Modules ----------------------------------------------------------
 
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {Formik,FormikHelpers,FormikValues} from "formik";
 import Button from "react-bootstrap/button";
 import Col from "react-bootstrap/Col";
@@ -16,6 +16,7 @@ import * as Yup from "yup";
 
 // Internal Modules ----------------------------------------------------------
 
+import FacilityContext from "../facilities/FacilityContext";
 import {HandleCategory} from "../../types";
 import Category from "../../models/Category";
 import logger from "../../util/ClientLogger";
@@ -39,6 +40,8 @@ export interface Props {
 // Component Details ---------------------------------------------------------
 
 const CategoryForm = (props: Props) => {
+
+    const facilityContext = useContext(FacilityContext);
 
     const [adding] = useState<boolean>(props.category.id < 0);
     const [initialValues] = useState(toEmptyStrings(props.category));
@@ -80,19 +83,19 @@ const CategoryForm = (props: Props) => {
 
     const validationSchema = () => {
         return Yup.object().shape({
-            accumulated: Yup.boolean(),
+//            accumulated: Yup.boolean(),
             active: Yup.boolean(),
-            description: Yup.string(),
-            notes: Yup.string(),
+//            description: Yup.string(),
+//            notes: Yup.string(),
             ordinal: Yup.number()
                 .required("Ordinal is required")
                 .test("unique-ordinal",
-                    "That ordinal is already in use within this Facility",
+                    "That ordinal is already in use within this Section",
                     async function (this) {
                         if (!validateCategoryOrdinal(this.parent.ordinal)) {
                             return false;
                         }
-                        return await validateCategoryOrdinalUnique(toCategory(this.parent));
+                        return await validateCategoryOrdinalUnique(facilityContext.facility, toCategory(this.parent));
                     }),
             service: Yup.string()
                 .required("Service is required"),
@@ -177,6 +180,7 @@ const CategoryForm = (props: Props) => {
                                 </Form.Group>
                             </Form.Row>
 
+{/*
                             <Form.Row id="descriptionNotesRow">
                                 <Form.Group as={Col} controlId="description" id="descriptionGroup">
                                     <Form.Label>Description:</Form.Label>
@@ -217,6 +221,7 @@ const CategoryForm = (props: Props) => {
                                     </Form.Control.Feedback>
                                 </Form.Group>
                             </Form.Row>
+*/}
 
                             <Form.Row id="slugActiveAccumulatedRow">
                                 <Form.Group as={Col} className="col-6" controlId="slug" id="slugGroup">
@@ -249,6 +254,7 @@ const CategoryForm = (props: Props) => {
                                         onChange={handleChange}
                                     />
                                 </Form.Group>
+{/*
                                 <Form.Group as={Col} controlId="accumulated" id="accumulatedGroup">
                                     <Form.Check
                                         feedback={errors.accumulated}
@@ -260,6 +266,7 @@ const CategoryForm = (props: Props) => {
                                         onChange={handleChange}
                                     />
                                 </Form.Group>
+*/}
                             </Form.Row>
 
                             <Row className="mb-3">

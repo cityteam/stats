@@ -32,7 +32,7 @@ export interface State {
     data: Data;
     handleLogin: (username: string, tokenResponse: TokenResponse) => void;
     handleLogout: () => void;
-    validateFacility: (facility: Facility, scope?: Scope) => boolean;
+    validateFacility: (facility: Facility, scope?: string) => boolean;
     // Can the logged in User access this Facility?
     validateScope: (scope: string) => boolean;
     // Does the logged in User have the specified scope?
@@ -49,7 +49,7 @@ export const LoginContext = createContext<State>({
     },
     handleLogin: (username, tokenResponse): void => {},
     handleLogout: (): void => {},
-    validateFacility: (facility: Facility): boolean => { return false },
+    validateFacility: (facility: Facility, scope?: string): boolean => { return false },
     validateScope: (scope: string): boolean => { return false },
 });
 
@@ -90,22 +90,27 @@ export const LoginContextProvider = (props: any) => {
         });
 
         // Save allowed scope(s) and set logging level
-        let found = false;
+        let logLevel = LOG_DEFAULT;
         if (tokenResponse.scope) {
             const theAlloweds = tokenResponse.scope.split(" ");
             setAlloweds(theAlloweds);
             theAlloweds.forEach(allowed => {
                 if (allowed.startsWith(LOG_PREFIX)) {
-                    setLevel(allowed.substr(LOG_PREFIX.length));
-                    found = true;
+                    logLevel = allowed.substr(LOG_PREFIX.length);
                 }
-            })
+            });
         } else {
             setAlloweds([]);
         }
-        if (!found) {
-            setLevel(LOG_DEFAULT);
-        }
+        setLevel(logLevel);
+
+        // Document this login
+        logger.info({
+            context: "LoginContext.handleLogin",
+            username: username,
+            scope: tokenResponse.scope,
+            logLevel: logLevel,
+        });
 
         // Prepare the data that will be visible to components and statically
         const theData: Data = {
@@ -158,9 +163,10 @@ export const LoginContextProvider = (props: any) => {
     }
 
     // Does the currently logged in User possess access to the specified Facility?
-    const validateFacility = (facility: Facility, scope?: Scope): boolean => {
+    const validateFacility = (facility: Facility, scope?: string): boolean => {
         if (scope) {
-            return validateScope(`${facility.scope}:${scope}`);
+            return validateScope(`${facility.scope}:${Scope.ADMIN}`)
+                || validateScope(`${facility.scope}:${scope}`);
         } else {
             return validateScope(`${facility.scope}:${Scope.ADMIN}`)
                 || validateScope(`${facility.scope}:${Scope.REGULAR}`);

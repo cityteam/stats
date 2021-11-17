@@ -39,18 +39,11 @@ const SectionSelector = (props: Props) => {
     });
 
     useEffect(() => {
-        let theIndex: number;
-        if (fetchSections.sections.length > 0) {
-            theIndex = 0;
-        } else {
-            theIndex = -1;
-        }
-        setIndex(theIndex);
-        logger.debug({
+        logger.info({
             context: "SectionSelector.useEffect",
-            index: theIndex
+            index: index
         })
-    }, [fetchSections.sections]);
+    }, [index, fetchSections.sections]);
 
     const onChange: OnChangeSelect = (event) => {
         const theIndex = parseInt(event.target.value, 10);

@@ -6,7 +6,7 @@
 // External Modules ----------------------------------------------------------
 
 import React, {useContext, useEffect, useState} from "react";
-import Button from "react-bootstrap/Button";
+//import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -16,13 +16,13 @@ import Row from "react-bootstrap/Row";
 import SectionEntries from "./SectionEntries";
 import FacilityContext from "../facilities/FacilityContext";
 import DateSelector from "../general/DateSelector";
-import ValueSelector from "../general/ValueSelector";
-import LoginContext from "../login/LoginContext";
+//import ValueSelector from "../general/ValueSelector";
+//import LoginContext from "../login/LoginContext";
 import useFetchSections from "../../hooks/useFetchSections";
 import * as Abridgers from "../../util/Abridgers";
 import logger from "../../util/ClientLogger";
 import {todayDate} from "../../util/Dates";
-import {HandleDate, HandleValue} from "../../types";
+import {HandleDate/*, HandleValue*/} from "../../types";
 
 // Component Details --------------------------------------------------------
 
@@ -32,20 +32,22 @@ const SINGLE_COLUMN_WIDE = "Single Column Wide";
 const MULTI_COLUMN_NARROW = "Multiple Column Narrow";
 const MULTI_COLUMN_WIDE = "Multiple Column Wide";
 
+/*
 const STYLES: string[] = [
     SINGLE_COLUMN_NARROW,
     SINGLE_COLUMN_WIDE,
     MULTI_COLUMN_NARROW,
     MULTI_COLUMN_WIDE,
 ];
+*/
 
 const EntriesView = () => {
 
     const facilityContext = useContext(FacilityContext);
-    const loginContext = useContext(LoginContext);
+//    const loginContext = useContext(LoginContext);
 
     const [entriesDate, setEntriesDate] = useState<string>(todayDate());
-    const [style, setStyle] = useState<string>(MULTI_COLUMN_NARROW);
+    const [style/*, setStyle*/] = useState<string>(MULTI_COLUMN_NARROW);
 
     const fetchSections = useFetchSections({
         active: true,
@@ -67,6 +69,7 @@ const EntriesView = () => {
         setEntriesDate(theDate);
     }
 
+/*
     const handleStyle: HandleValue = (theStyle) => {
         logger.trace({
             context: "EntriesView.handleStyle",
@@ -74,6 +77,7 @@ const EntriesView = () => {
         });
         setStyle(theStyle);
     }
+*/
 
     return (
         <Container fluid id="EntriesView">
@@ -81,7 +85,7 @@ const EntriesView = () => {
             {/* Title and Entries Date Selector are always visible */}
             <Row className="mb-4 ml-1 mr-1">
                 <Col className="text-left">
-                    <span><strong>Data Entry for Facility:&nbsp;</strong></span>
+                    <span><strong>Data Entries for Facility:&nbsp;</strong></span>
                     <span className="text-info"><strong>{facilityContext.facility.name}</strong></span>
                 </Col>
 {/*

@@ -10,6 +10,7 @@ import {useContext, useEffect, useState} from "react";
 
 import Api from "../clients/Api";
 import FacilityContext from "../components/facilities/FacilityContext";
+import LoginContext from "../components/login/LoginContext";
 import Section, {SECTIONS_BASE} from "../models/Section";
 import * as Abridgers from "../util/Abridgers";
 import logger from "../util/ClientLogger";
@@ -40,6 +41,7 @@ export interface State {
 const useFetchSections = (props: Props): State => {
 
     const facilityContext = useContext(FacilityContext);
+    const loginContext = useContext(LoginContext);
 
     const [sections, setSections] = useState<Section[]>([]);
     const [error, setError] = useState<Error | null>(null);
@@ -66,17 +68,18 @@ const useFetchSections = (props: Props): State => {
 
             try {
                 if (facilityContext.facility.id > 0) {
-                    theSections = toSections((await Api.get(SECTIONS_BASE
+                    const allSections = toSections((await Api.get(SECTIONS_BASE
                         + `/${facilityContext.facility.id}${queryParameters(parameters)}`))
                         .data);
-                    if (props.withCategories) {
-                        theSections.forEach(theSection => {
-                            if (theSection.categories && (theSection.categories.length > 1)) {
-                                theSection.categories = Sorters.CATEGORIES(theSection.categories);
+                    allSections.forEach(allSection => {
+                        if (loginContext.validateFacility(facilityContext.facility, allSection.scope)) {
+                            if (allSection.categories && (allSection.categories.length > 1)) {
+                                allSection.categories = Sorters.CATEGORIES(allSection.categories);
                             }
-                        })
-                    }
-                    logger.debug({
+                            theSections.push(allSection);
+                        }
+                    });
+                    logger.info({
                         context: "useFetchSections.fetchSections",
                         facility: Abridgers.FACILITY(facilityContext.facility),
                         parameters: parameters,
@@ -98,8 +101,9 @@ const useFetchSections = (props: Props): State => {
 
         fetchSections();
 
-    }, [facilityContext.facility, props.active, props.currentPage,
-        props.ordinal, props.pageSize, props.withCategories, props.withFacility]);
+    }, [facilityContext.facility, loginContext,
+        props.active, props.currentPage, props.ordinal,
+        props.pageSize, props.withCategories, props.withFacility]);
 
     return {
         sections: sections,

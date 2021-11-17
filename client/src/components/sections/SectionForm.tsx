@@ -81,7 +81,7 @@ const SectionForm = (props: Props) => {
     const validationSchema = () => {
         return Yup.object().shape({
             active: Yup.boolean(),
-            notes: Yup.string(),
+//            notes: Yup.string(),
             ordinal: Yup.number()
                 .required("Ordinal is required")
                 .test("unique-ordinal",
@@ -177,6 +177,7 @@ const SectionForm = (props: Props) => {
                                 </Form.Group>
                             </Form.Row>
 
+{/*
                             <Form.Row id="notesRow">
                                 <Form.Group as={Col} controlId="notes" id="notesGroup">
                                     <Form.Label>Notes:</Form.Label>
@@ -198,27 +199,9 @@ const SectionForm = (props: Props) => {
                                     </Form.Control.Feedback>
                                 </Form.Group>
                             </Form.Row>
+*/}
 
-                            <Form.Row id="scopeSlugRow">
-                                <Form.Group as={Col} controlId="scope" id="scopeGroup">
-                                    <Form.Label>Scope:</Form.Label>
-                                    <Form.Control
-                                        isInvalid={touched.scope && !!errors.scope}
-                                        isValid={!errors.scope}
-                                        name="scope"
-                                        onBlur={handleBlur}
-                                        onChange={handleChange}
-                                        size="sm"
-                                        type="text"
-                                        value={values.scope}
-                                    />
-                                    <Form.Control.Feedback type="valid">
-                                        Permission scope required to enter data in this Section.
-                                    </Form.Control.Feedback>
-                                    <Form.Control.Feedback type="invalid">
-                                        {errors.scope}
-                                    </Form.Control.Feedback>
-                                </Form.Group>
+                            <Form.Row id="slugScopeRow">
                                 <Form.Group as={Col} controlId="slug" id="slugGroup">
                                     <Form.Label>Slug:</Form.Label>
                                     <Form.Control
@@ -236,6 +219,25 @@ const SectionForm = (props: Props) => {
                                     </Form.Control.Feedback>
                                     <Form.Control.Feedback type="invalid">
                                         {errors.slug}
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+                                <Form.Group as={Col} controlId="scope" id="scopeGroup">
+                                    <Form.Label>Scope:</Form.Label>
+                                    <Form.Control
+                                        isInvalid={touched.scope && !!errors.scope}
+                                        isValid={!errors.scope}
+                                        name="scope"
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        size="sm"
+                                        type="text"
+                                        value={values.scope}
+                                    />
+                                    <Form.Control.Feedback type="valid">
+                                        Permission scope required to enter data in this Section.
+                                    </Form.Control.Feedback>
+                                    <Form.Control.Feedback type="invalid">
+                                        {errors.scope}
                                     </Form.Control.Feedback>
                                 </Form.Group>
                             </Form.Row>

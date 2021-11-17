@@ -58,7 +58,7 @@ const CategoriesList = (props: Props) => {
     }
 
     const handleSection: HandleSection = (theSection) => {
-        logger.debug({
+        logger.info({
             context: "CategoriesList.handleSection",
             section: Abridgers.SECTION(theSection),
         })
@@ -107,7 +107,9 @@ const CategoriesList = (props: Props) => {
                     <tr className="table-secondary">
                         <th scope="col">Ordinal</th>
                         <th scope="col">Active</th>
+{/*
                         <th scope="col">Accumulated</th>
+*/}
                         <th scope="col">Service</th>
 {/*
                         <th scope="col">Description</th>
@@ -130,9 +132,11 @@ const CategoriesList = (props: Props) => {
                             <td key={1000 + (rowIndex * 100) + 2}>
                                 {listValue(category.active)}
                             </td>
+{/*
                             <td key={1000 + (rowIndex * 100) + 3}>
                                 {listValue(category.accumulated)}
                             </td>
+*/}
                             <td key={1000 + (rowIndex * 100) + 4}>
                                 {category.service}
                             </td>

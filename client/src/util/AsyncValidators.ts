@@ -23,11 +23,11 @@ import {queryParameters} from "./QueryParameters";
 
 // Public Objects ------------------------------------------------------------
 
-export const validateCategoryOrdinalUnique = async (category: Category): Promise<boolean> => {
+export const validateCategoryOrdinalUnique = async (facility: Facility, category: Category): Promise<boolean> => {
     if (category && category.ordinal) {
         try {
             const result = (await Api.get(CATEGORIES_BASE
-                + `/${category.facilityId}/exact/${category.ordinal}`)).data;
+                + `/${facility.id}/${category.sectionId}/exact/${category.ordinal}`)).data;
             return (result.id === category.id);
         } catch (error) {
             return true; // Definitely unique

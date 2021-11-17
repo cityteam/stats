@@ -57,7 +57,7 @@ const SectionEntries = (props: Props) => {
             <thead>
             {(props.narrow) ? (
                 <>
-                <tr className="table-dark">
+                <tr className="table-warning">
                     <th className="text-center" colSpan={2}>
                         {props.section.slug}
                     </th>

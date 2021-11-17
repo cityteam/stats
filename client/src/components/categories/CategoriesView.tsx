@@ -55,15 +55,14 @@ const CategoriesView = () => {
 
     const handleAdd: OnAction = () => {
         setCategory(new Category({
+            accumulated: true,
             active: true,
-            description: null,
-            facilityId: facilityContext.facility.id,
-            notes: null,
+//            description: null,
+//            notes: null,
             ordinal: 0,
+            sectionId: section.id,
             service: null,
-            scope: null,
             slug: null,
-            type: "Detail",
         }));
     }
 
@@ -99,7 +98,7 @@ const CategoriesView = () => {
 
                     <Row className="mb-3 ml-1 mr-1">
                         <Col className="text-left">
-                            <span><strong>Select or Create Categories for Facility&nbsp;</strong></span>
+                            <span><strong>Select or Create Categories for Facility:&nbsp;</strong></span>
                             <span className="text-info"><strong>{facilityContext.facility.name}</strong></span>
                         </Col>
                     </Row>
