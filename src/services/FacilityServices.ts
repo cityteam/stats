@@ -9,7 +9,6 @@ import {FindOptions, Op} from "sequelize";
 // Internal Modules ----------------------------------------------------------
 
 import BaseParentServices from "./BaseParentServices";
-import CategoryServices from "./CategoryServices";
 import Category from "../models/Category";
 import Facility from "../models/Facility";
 import Section from "../models/Section";
@@ -18,6 +17,7 @@ import * as SortOrder from "../util/SortOrder";
 import {NotFound} from "../util/HttpErrors";
 import StandardCategories from "../util/StandardCategories.json";
 import StandardSections from "../util/StandardSections.json";
+import SectionServices from "./SectionServices";
 
 // Public Classes ------------------------------------------------------------
 
@@ -86,7 +86,7 @@ class FacilityServices extends BaseParentServices<Facility> {
 
     public async sections(facilityId: number, query?: any): Promise<Section[]> {
         const facility = await this.read("FacilityServices.sections", facilityId);
-        const options: FindOptions = CategoryServices.appendMatchOptions({
+        const options: FindOptions = SectionServices.appendMatchOptions({
             order: SortOrder.SECTIONS,
         }, query);
         return await facility.$get("sections", options);

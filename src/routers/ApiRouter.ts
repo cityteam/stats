@@ -13,6 +13,7 @@ import ClientRouter from "./ClientRouter";
 import DetailRouter from "./DetailRouter";
 import FacilityRouter from "./FacilityRouter";
 import SectionRouter from "./SectionRouter";
+import SummaryRouter from "./SummaryRouter";
 import UserRouter from "./UserRouter";
 
 // Public Objects ------------------------------------------------------------
@@ -30,4 +31,5 @@ ApiRouter.use("/client", ClientRouter);
 ApiRouter.use("/details", DetailRouter);
 ApiRouter.use("/facilities", FacilityRouter);
 ApiRouter.use("/sections", SectionRouter);
+ApiRouter.use("/summaries", SummaryRouter);
 ApiRouter.use("/users", UserRouter);
