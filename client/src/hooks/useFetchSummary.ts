@@ -56,18 +56,30 @@ const useFetchSummary = (props: Props): State => {
             });
 
             try {
-                if ((facilityContext.facility.id > 0) && (props.section.id > 0)) {
-                    theSummary = toSummary((await Api.get(SUMMARIES_BASE
-                        + `/${facilityContext.facility.id}/${props.section.id}/${props.date}`))
-                        .data);
+                const url = SUMMARIES_BASE
+                    + `/${facilityContext.facility.id}/${props.section.id}/${props.date}`;
+                if (loginContext.data.loggedIn && (facilityContext.facility.id > 0) && (props.section.id > 0)) {
+                    theSummary = toSummary((await Api.get(url)).data);
+                    logger.info({
+                        context: "useFetchSummary.fetchSummary",
+                        facility: Abridgers.FACILITY(facilityContext.facility),
+                        section: Abridgers.SECTION(props.section),
+                        date: props.date,
+                        url: url,
+                        summary: theSummary,
+                    });
+                } else {
+                    logger.info({
+                        context: "useFetchSummary",
+                        msg: "Skipped fetching Summary",
+                        facility: Abridgers.FACILITY(facilityContext.facility),
+                        section: Abridgers.SECTION(props.section),
+                        date: props.date,
+                        url: url,
+                        loggedIn: loginContext.data.loggedIn,
+                    });
                 }
-                logger.info({
-                    context: "useFetchSummary.fetchSummary",
-                    facility: Abridgers.FACILITY(facilityContext.facility),
-                    section: Abridgers.SECTION(props.section),
-                    date: props.date,
-                    summary: theSummary,
-                });
+                setSummary(theSummary);
             } catch (error) {
                 setError(error as Error);
                 ReportError("useFetchSummary.fetchSummary", error, {
