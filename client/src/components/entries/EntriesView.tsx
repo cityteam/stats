@@ -113,7 +113,11 @@ const EntriesView = () => {
                 {(style === SINGLE_COLUMN_NARROW) ? (
                     <>
                         {fetchSections.sections.map((section, rowIndex) => (
-                            <SectionEntries narrow={true} section={section}/>
+                            <SectionEntries
+                                date={entriesDate}
+                                narrow={true}
+                                section={section}
+                            />
                         ))}
                     </>
                 ) : null}
@@ -121,7 +125,11 @@ const EntriesView = () => {
                 {(style === SINGLE_COLUMN_WIDE) ? (
                     <>
                         {fetchSections.sections.map((section, rowIndex) => (
-                            <SectionEntries narrow={false} section={section}/>
+                            <SectionEntries
+                                date={entriesDate}
+                                narrow={false}
+                                section={section}
+                            />
                         ))}
                     </>
                 ) : null}
@@ -130,7 +138,11 @@ const EntriesView = () => {
                     <>
                         {fetchSections.sections.map((section, rowIndex) => (
                             <Col>
-                                <SectionEntries narrow={true} section={section}/>
+                                <SectionEntries
+                                    date={entriesDate}
+                                    narrow={true}
+                                    section={section}
+                                />
                             </Col>
                         ))}
                     </>
@@ -140,7 +152,10 @@ const EntriesView = () => {
                     <>
                         {fetchSections.sections.map((section, rowIndex) => (
                             <Col>
-                                <SectionEntries narrow={false} section={section}/>
+                                <SectionEntries
+                                    date={entriesDate}
+                                    narrow={false}
+                                    section={section}/>
                             </Col>
                         ))}
                     </>

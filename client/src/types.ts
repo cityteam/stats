@@ -12,6 +12,7 @@ import Category from "./models/Category";
 import Detail from "./models/Detail";
 import Facility from "./models/Facility";
 import Section from "./models/Section";
+import Summary from "./models/Summary";
 import User from "./models/User";
 
 // Enumerations --------------------------------------------------------------
@@ -61,4 +62,5 @@ export type HandleCategory = (category: Category) => void;
 export type HandleDetail = (detail: Detail) => void;
 export type HandleFacility = (facility: Facility) => void;
 export type HandleSection = (section: Section) => void;
+export type HandleSummary = (summary: Summary) => void;
 export type HandleUser = (user: User) => void;

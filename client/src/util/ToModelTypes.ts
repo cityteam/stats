@@ -10,6 +10,7 @@ import Detail from "../models/Detail";
 import Facility from "../models/Facility";
 import RefreshToken from "../models/RefreshToken";
 import Section from "../models/Section";
+import Summary from "../models/Summary";
 import User from "../models/User";
 
 // Public Objects ------------------------------------------------------------
@@ -84,6 +85,10 @@ export const toSections = (values: any[]): Section[] => {
         results.push(new Section(value));
     });
     return results;
+}
+
+export const toSummary = (value: any): Summary => {
+    return new Summary(value);
 }
 
 export const toUser = (value: any): User => {

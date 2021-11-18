@@ -10,14 +10,17 @@ import Table from "react-bootstrap/Table";
 
 // Internal Modules ----------------------------------------------------------
 
+import useFetchSummary from "../../hooks/useFetchSummary";
 import Category from "../../models/Category";
 import Section from "../../models/Section";
+//import Summary from "../../models/Summary";
 import * as Abridgers from "../../util/Abridgers";
 import logger from "../../util/ClientLogger";
 
 // Incoming Properties -------------------------------------------------------
 
 export interface Props {
+    date: string;                       // Date for entries
     narrow: boolean;                    // Show narrow presentation? [false]
     section: Section;                   // Section (with nested Categories)
 }
@@ -28,11 +31,17 @@ const SectionEntries = (props: Props) => {
 
     const [categories, setCategories] = useState<Category[]>([]);
 
+    const fetchSummary = useFetchSummary({
+        date: props.date,
+        section: props.section,
+    });
+
     useEffect(() => {
-        logger.debug({
+        logger.info({
             context: "SectionEntries.useEffect",
             narrow: props.narrow,
             section: Abridgers.SECTION(props.section),
+            summary: fetchSummary.summary,
         });
         const theCategories: Category[] = [];
         if (props.section.categories) {
@@ -43,7 +52,8 @@ const SectionEntries = (props: Props) => {
             });
         }
         setCategories(theCategories);
-    }, [props.narrow, props.section]);
+    }, [props.date, props.narrow, props.section,
+        fetchSummary.summary]);
 
     // @ts-ignore
     return (
