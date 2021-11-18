@@ -99,7 +99,7 @@ CREATE TABLE public.details (
     category_id integer NOT NULL,
     date date NOT NULL,
     notes text,
-    value numeric NOT NULL
+    value numeric
 );
 
 

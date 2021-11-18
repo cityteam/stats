@@ -14,6 +14,7 @@ import Category from "../models/Category";
 import Detail from "../models/Detail";
 import Summary from "../models/Summary";
 import {toDateObject} from "../util/Dates";
+import {Op} from "sequelize";
 
 // Public Objects ------------------------------------------------------------
 
@@ -42,18 +43,22 @@ class SummaryServices {
             date: date,
             sectionId: sectionId,
         });
+        const categoryIds: number[] = [];
         section.categories.forEach(category => {
+            categoryIds.push(category.id);
             summary.values[category.id] = null;
         })
 
         // Retrieve and pass on any previously recorded values
-        section.categories.forEach(async category => {
-            const details = await DetailServices.all(category.id, {
+        const details = await Detail.findAll({
+            where: {
+                categoryId: { [Op.in]: categoryIds },
                 date: date,
-            });
-            details.forEach(detail => {
-                summary.values[category.id] = (detail.value === 0) ? null : detail.value;
-            });
+            }
+        });
+        details.forEach(detail => {
+            summary.values[detail.categoryId]
+                = detail.value === null ? null : Number(detail.value);
         });
 
         // Return the completed summary
@@ -71,13 +76,19 @@ class SummaryServices {
      * @param facilityId                Facility ID that owns this Section
      * @param sectionId                 Section ID for which to store data
      * @param date                      Date for which to store data
-     * @param summary                   Summary containing data to be recorded
+     * @param summary                   Summary containing values to be recorded
+     *
+     * @returns Summary reflecting what was recorded
      */
-    public async write(facilityId: number, sectionId: number, date: string, summary: Summary): Promise<void> {
+    public async write(facilityId: number, sectionId: number, date: string, summary: Summary): Promise<Summary> {
 
         // Retrieve the specified Section and related Categories
         const section = await SectionServices.find(facilityId, sectionId, {
             withCategories: "",
+        });
+        const result = new Summary({
+            sectionId: sectionId,
+            date: date,
         });
 
         // Insert or update a Detail for each presented Category ID that is valid
@@ -86,22 +97,24 @@ class SummaryServices {
             if (this.included(categoryId, section.categories)) {
                 const details = await DetailServices.all(categoryId, {
                     categoryId: categoryId,
-                    date: summary.date
+                    date: date
                 });
                 if (details.length > 0) {
                     await DetailServices.update(categoryId, details[0].id, {
                         // @ts-ignore
-                        value: value ? value : 0,
+                        value: value ? value : null,
                     });
                 } else {
                     await DetailServices.insert(categoryId, {
                         categoryId: categoryId,
-                        date: toDateObject(summary.date),
-                        value: value ? value : 0,
+                        date: toDateObject(date),
+                        value: value ? value : undefined,
                     })
                 }
+                result.values[categoryId] = value;
             }
         }
+        return result;
 
     }
 

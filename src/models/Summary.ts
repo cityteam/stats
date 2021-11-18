@@ -31,13 +31,13 @@ class Summary {
         this.values = data.values ? data.values : {};
     }
 
-    // Date for which these values have been accumulated.
+    // Date for which these values have been accumulated (only relevant on read)
     date!: string;
 
-    // Section ID for which these values have been accumulated.
+    // Section ID for which these values have been accumulated (only relevant on read)
     sectionId!: number;
 
-    // Map of categoryId to value for a sectionId and date.
+    // Map of categoryId to value for a sectionId and date (relevant on read and write)
     values!: Values;
 
 }

@@ -64,6 +64,9 @@ class DetailServices extends BaseChildServices<Detail, Category> {
         if (query.date) {
             where.date = query.date;
         }
+        if (Object.keys(where).length > 0) {
+            options.where = where;
+        }
         return options;
     }
 

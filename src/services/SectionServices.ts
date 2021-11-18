@@ -102,6 +102,9 @@ class SectionServices extends BaseChildServices<Section, Facility> {
         if ("" === query.ordinal) {
             where.ordinal = Number(query.ordinal);
         }
+        if (Object.keys(where).length > 0) {
+            options.where = where;
+        }
         return options;
     }
 

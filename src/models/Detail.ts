@@ -76,17 +76,12 @@ class Detail extends Model<Detail> {
     notes?: string;
 
     @Column({
-       allowNull: false,
+       allowNull: true,
        field: "value",
        type: DataType.NUMBER,
-       validate: {
-           notNull: {
-               msg: "value: Is required",
-           },
-       }
     })
     // Recorded value for this Category (and Facility) on this date
-    value!: number;
+    value?: number;
 
 }
 
