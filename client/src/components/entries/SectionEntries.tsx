@@ -9,6 +9,7 @@ import {Formik,Form,FormikValues} from "formik";
 import React, {ChangeEvent, useEffect, useState} from "react";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
+import {store as notifications} from "react-notifications-component";
 
 // Internal Modules ----------------------------------------------------------
 
@@ -45,7 +46,9 @@ const SectionEntries = (props: Props) => {
         date: props.date,
         section: props.section,
     });
-    const mutateSummary = useMutateSummary({});
+    const mutateSummary = useMutateSummary({
+        alertPopup: false,
+    });
 
     useEffect(() => {
         const theCategories: Category[] = [];
@@ -110,8 +113,31 @@ const SectionEntries = (props: Props) => {
             summary: summary,
         });
         await mutateSummary.write(summary);
-        // TODO - notify user of success or failure
-        setSaveDisabled(true);
+        if (mutateSummary.error) {
+            notifications.addNotification({
+                container: "top-right",
+                dismiss: {
+                    duration: 0,
+                },
+                insert: "top",
+                message: `${(mutateSummary.error as Error).message}`,
+                title: props.section.slug,
+                type: "danger",
+            });
+        } else {
+            setSaveDisabled(true);
+            notifications.addNotification({
+                container: "top-right",
+                dismiss: {
+                    duration: 5000,
+                },
+                insert: "bottom",
+                message: "Data entries have been saved",
+                title: props.section.slug,
+                type: "success",
+            })
+        }
+
     }
 
     // The user has changed an input value, so enable the Save button
@@ -212,6 +238,7 @@ const SectionEntries = (props: Props) => {
                                 handleChange(event);
                                 localHandleChange(event);
                             }}
+                            pattern="[0-9]*"
                             type="number"
                             value={values[calculateName(category)]}
                         />

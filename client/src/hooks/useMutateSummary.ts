@@ -20,6 +20,7 @@ import {toSummary} from "../util/ToModelTypes";
 // Incoming Properties an Outgoing State -------------------------------------
 
 export interface Props {
+    alertPopup?: boolean;               // Pop up browser alert on error? [true]
 }
 
 export interface State {
@@ -34,6 +35,7 @@ const useMutateSummary = (props: Props): State => {
 
     const facilityContext = useContext(FacilityContext);
 
+    const [alertPopup] = useState<boolean>((props.alertPopup !== undefined) ? props.alertPopup : true);
     const [error, setError] = useState<Error | null>(null);
     const [executing, setExecuting] = useState<boolean>(false);
 
@@ -64,7 +66,7 @@ const useMutateSummary = (props: Props): State => {
             ReportError("useMutateSummary.write", error, {
                 facility: Abridgers.FACILITY(facilityContext.facility),
                 summary: theSummary,
-            });
+            }, alertPopup);
         }
 
         setExecuting(false);

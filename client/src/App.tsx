@@ -9,9 +9,12 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/cjs/NavDropdown";
 import NavItem from "react-bootstrap/NavItem";
+import ReactNotification from "react-notifications-component";
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import {LinkContainer} from "react-router-bootstrap";
+
 import "bootstrap/dist/css/bootstrap.min.css";
+import "react-notifications-component/dist/theme.css";
 
 // Internal Modules ----------------------------------------------------------
 
@@ -29,6 +32,7 @@ import {LoginContextProvider} from "./components/login/LoginContext";
 function App() {
   return (
       <>
+          <ReactNotification/>
           <LoginContextProvider>
               <FacilityContextProvider>
                   <Router>
