@@ -8,7 +8,7 @@ import {Request, Response, Router} from "express";
 
 // Internal Modules ----------------------------------------------------------
 
-import {requireRegular} from "../oauth/OAuthMiddleware";
+import {requireAdmin, requireRegular} from "../oauth/OAuthMiddleware";
 import SummaryServices from "../services/SummaryServices";
 
 // Public Objects ------------------------------------------------------------
@@ -20,6 +20,27 @@ export const SummaryRouter = Router({
 export default SummaryRouter;
 
 // Summary Routes -----------------------------------------------------------
+
+// GET /:facilityId/all/:dateFrom/:dateTo
+SummaryRouter.get("/:facilityId/all/:dateFrom/:dateTo",
+    requireAdmin,
+    async (req: Request, res: Response) => {
+        let sectionIds: number[] = [];
+        if (req.query.sectionIds) {
+            const queryIds = req.query.sectionIds;
+            if (typeof queryIds === "string") {
+                queryIds.split(",").forEach(queryId => {
+                    sectionIds.push(Number(queryId));
+                });
+            }
+        }
+        res.send(await SummaryServices.summaries(
+            parseInt(req.params.facilityId, 10),
+            req.params.dateFrom,
+            req.params.dateTo,
+            sectionIds.length > 0 ? sectionIds : undefined,
+        ));
+    });
 
 // GET /:facilityId/:sectionId/:date - Retrieve Summary for Section and date
 SummaryRouter.get("/:facilityId/:sectionId/:date",
@@ -43,4 +64,3 @@ SummaryRouter.post("/:facilityId/:sectionId/:date",
             req.body
         ));
     });
-

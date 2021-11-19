@@ -12,9 +12,10 @@ import DetailServices from "./DetailServices";
 import SectionServices from "./SectionServices";
 import Category from "../models/Category";
 import Detail from "../models/Detail";
+import Section from "../models/Section";
 import Summary from "../models/Summary";
 import {toDateObject} from "../util/Dates";
-import {Op} from "sequelize";
+import {FindOptions, IncludeOptions, Op, WhereOptions} from "sequelize";
 
 // Public Objects ------------------------------------------------------------
 
@@ -63,6 +64,86 @@ class SummaryServices {
 
         // Return the completed summary
         return summary;
+
+    }
+
+    /**
+     * Retrieve Summary rows that match the requested criteria.
+     *
+     * @param facilityId                Facility ID that owns these statistics
+     * @param dateFrom                  Earliest date for which to return results
+     * @param endDate                   Latest date for which to return results
+     * @param sectionIds                Comma-delimited list of section IDs
+     *                                  for which to return results [all sections]
+     */
+    public async summaries(facilityId: number, dateFrom: string, dateTo: string, sectionIds?: number[]): Promise<Summary[]> {
+
+        // Identify the section IDs we will be restricting our search for (if any)
+        // Perform the query to select the required information
+        const detailIncludeOptions: IncludeOptions = {
+            model: Detail,
+            where: {
+                date: { [Op.between]: [dateFrom, dateTo] },
+            }
+        }
+        const categoryIncludeOptions: IncludeOptions = {
+            include: [detailIncludeOptions],
+            model: Category,
+        }
+        let sectionWhereOptions: WhereOptions = {
+            facilityId: facilityId,
+        }
+        if (sectionIds) {
+            sectionWhereOptions.id = { [Op.in]: sectionIds };
+        }
+        const sectionFindOptions: FindOptions = {
+            include: [categoryIncludeOptions],
+            where: sectionWhereOptions,
+        };
+        const sections = await Section.findAll(sectionFindOptions);
+
+        // Produce a Summary for each date that has Categories with Details
+        const summaries: Map<string, Summary> = new Map(); // Key = sectionId|date
+        sections.forEach(section => {
+            section.categories.forEach(category => {
+                category.details.forEach(detail => {
+                    const key = `${section.id}|${detail.date}`;
+                    const existing = summaries.get(key);
+                    const summary = existing ? existing : new Summary({
+                        date: detail.date,
+                        sectionId: section.id,
+                    });
+                    if (!existing) {
+                        summaries.set(key, summary);
+                    }
+                    if (detail.value || (detail.value === 0)) {
+                        summary.values[detail.categoryId] = detail.value;
+                    }
+                });
+            });
+        });
+
+        // Return the accumulated results
+        const results: Summary[] = [];
+        for (const [key, value] of summaries.entries()) {
+            if (Object.keys(value.values).length > 0) {
+                results.push(value);
+
+            }
+        }
+        return results.sort(function (a, b) {
+            if (a.sectionId > b.sectionId) {
+                return 1;
+            } else if (a.sectionId < b.sectionId) {
+                return -1;
+            } else if (a.date > b.date) {
+                return 1;
+            } else if (a.date < b.date) {
+                return -1;
+            } else {
+                return 0;
+            }
+        });
 
     }
 
