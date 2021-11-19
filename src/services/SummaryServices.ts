@@ -102,13 +102,13 @@ class SummaryServices {
                 if (details.length > 0) {
                     await DetailServices.update(categoryId, details[0].id, {
                         // @ts-ignore
-                        value: value ? value : null,
+                        value: (value || (value === 0)) ? value : null,
                     });
                 } else {
                     await DetailServices.insert(categoryId, {
                         categoryId: categoryId,
                         date: toDateObject(date),
-                        value: value ? value : undefined,
+                        value: (value || (value === 0)) ? value : undefined,
                     })
                 }
                 result.values[categoryId] = value;

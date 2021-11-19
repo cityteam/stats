@@ -5,8 +5,9 @@
 
 // External Modules ----------------------------------------------------------
 
+import {Formik,Form,FormikValues} from "formik";
 import React, {useEffect, useState} from "react";
-import {Formik,FormikValues} from "formik";
+import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 
 // Internal Modules ----------------------------------------------------------
@@ -31,7 +32,7 @@ export interface Props {
 
 const PREFIX = "value_";
 type VALUES = {
-    [name: string]: number | null;
+    [name: string]: string;
 }
 
 const SectionEntries = (props: Props) => {
@@ -75,11 +76,14 @@ const SectionEntries = (props: Props) => {
     }
 
     // Return the value (if present) for this Category from this Summary
-    const getValue = (summary: Summary, category: Category): number | null => {
-        if (summary.values[category.id]) {
-            return summary.values[category.id];
+    const getValue = (summary: Summary, category: Category): string => {
+        const value = summary.values[category.id];
+        if (value === 0) {
+            return "0";
+        } else if (value) {
+            return "" + summary.values[category.id];
         } else {
-            return null;
+            return "";
         }
     }
 
@@ -91,10 +95,17 @@ const SectionEntries = (props: Props) => {
             values: {}
         });
         categories.forEach(category => {
-            summary.values[category.id] = values[calculateName(category)];
+            const value: string = values[calculateName(category)];
+            if (value === "") {
+                summary.values[category.id] = null;
+            } else {
+                summary.values[category.id] = Number(value);
+            }
         });
         logger.info({
             context: "SectionEntries.handleSubmit",
+            section: Abridgers.SECTION(props.section),
+            values: values,
             summary: summary,
         });
         await mutateSummary.write(summary);
@@ -103,6 +114,7 @@ const SectionEntries = (props: Props) => {
     // @ts-ignore
     return (
         <Formik
+            enableReinitialize={true}
             initialValues={initialValues}
             onSubmit={handleSubmit}
         >
@@ -118,10 +130,7 @@ const SectionEntries = (props: Props) => {
                 values
             }) => (
 
-                <form
-                    id={`Section_${props.section.id}_Form`}
-                    onSubmit={handleSubmit}
-                >
+                <Form id={`Section_${props.section.id}_Form`}>
 
         <Table
             bordered={true}
@@ -188,18 +197,42 @@ const SectionEntries = (props: Props) => {
                             id={calculateName(category)}
                             inputMode="numeric"
                             name={calculateName(category)}
+                            onBlur={handleBlur}
+                            onChange={handleChange}
                             pattern="[0-9]*"
                             type="number"
-                            // value={values[${calculateName(category)]} TODO!!!
+                            value={values[calculateName(category)]}
                         />
                     </td>
                 </tr>
             ))}
+            <tr>
+                <td>&nbsp;</td>
+                <td>
+                    <Button
+                        className="align-content-start"
+                        size="sm"
+                        type="submit"
+                        variant="primary"
+                    >
+                        Save
+                    </Button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <Button
+                        className="align-content-end"
+                        size="sm"
+                        type="reset"
+                        variant="secondary"
+                    >
+                        Reset
+                    </Button>
+                </td>
+            </tr>
             </tbody>
 
         </Table>
 
-        </form>
+        </Form>
 
         )}
 
