@@ -6,7 +6,7 @@
 // External Modules ----------------------------------------------------------
 
 import {Formik,Form,FormikValues} from "formik";
-import React, {useEffect, useState} from "react";
+import React, {ChangeEvent, useEffect, useState} from "react";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 
@@ -38,6 +38,7 @@ type VALUES = {
 const SectionEntries = (props: Props) => {
 
     const [categories, setCategories] = useState<Category[]>([]);
+    const [saveDisabled, setSaveDisabled] = useState<boolean>(true);
     const [initialValues, setInitialValues] = useState<VALUES>({});
 
     const fetchSummary = useFetchSummary({
@@ -109,6 +110,14 @@ const SectionEntries = (props: Props) => {
             summary: summary,
         });
         await mutateSummary.write(summary);
+        // TODO - notify user of success or failure
+        setSaveDisabled(true);
+    }
+
+    // The user has changed an input value, so enable the Save button
+    const localHandleChange = (event: ChangeEvent<any>): void => {
+//        console.info("LOCAL HANDLE CHANGE:", event);
+        setSaveDisabled(false);
     }
 
     // @ts-ignore
@@ -192,14 +201,17 @@ const SectionEntries = (props: Props) => {
                         </td>
                         </>
                     )}
-                    <td key={(1000 + props.section.ordinal) + (rowIndex * 100) + 99}>
+                    <td key={(1000 + props.section.ordinal) + (rowIndex * 100) + 98}>
                         <input
                             id={calculateName(category)}
                             inputMode="numeric"
+                            key={(1000 + props.section.ordinal) + (rowIndex * 100) + 99}
                             name={calculateName(category)}
                             onBlur={handleBlur}
-                            onChange={handleChange}
-                            pattern="[0-9]*"
+                            onChange={event => {
+                                handleChange(event);
+                                localHandleChange(event);
+                            }}
                             type="number"
                             value={values[calculateName(category)]}
                         />
@@ -211,6 +223,7 @@ const SectionEntries = (props: Props) => {
                 <td>
                     <Button
                         className="align-content-start"
+                        disabled={saveDisabled}
                         size="sm"
                         type="submit"
                         variant="primary"
