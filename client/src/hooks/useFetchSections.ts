@@ -101,7 +101,7 @@ const useFetchSections = (props: Props): State => {
 
         fetchSections();
 
-    }, [facilityContext.facility, loginContext,
+    }, [facilityContext.facility, facilityContext.facility.id, loginContext,
         props.active, props.currentPage, props.ordinal,
         props.pageSize, props.withCategories, props.withFacility]);
 

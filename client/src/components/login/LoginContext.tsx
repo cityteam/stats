@@ -83,12 +83,6 @@ export const LoginContextProvider = (props: any) => {
 
     const handleLogin = async (username: string, tokenResponse: TokenResponse): Promise<void> => {
 
-        logger.info({
-            context: "LoginContext.handleLogin",
-            username: username,
-            scope: tokenResponse.scope,
-        });
-
         // Save allowed scope(s) and set logging level
         let logLevel = LOG_DEFAULT;
         if (tokenResponse.scope) {
@@ -124,11 +118,6 @@ export const LoginContextProvider = (props: any) => {
         LOGIN_DATA = {    // No corrupting real internal state allowed
             ...theData,
         }
-        logger.trace({
-            context: "LoginContext.handleLogin",
-            msg: "Setting context data after login",
-            data: theData,
-        });
         setData(theData);
 
     }

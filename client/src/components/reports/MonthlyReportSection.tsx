@@ -107,6 +107,8 @@ const MonthlyReportSection = (props: Props) => {
     }
 
     return (
+        <h1>Hi There</h1>
+/*
         <Container fluid id={"MonthlyReportSection" + props.section.id}>
 
             <Table
@@ -162,6 +164,7 @@ const MonthlyReportSection = (props: Props) => {
             </Table>
 
         </Container>
+*/
     )
 
 }

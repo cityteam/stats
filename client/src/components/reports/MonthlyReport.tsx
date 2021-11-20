@@ -31,53 +31,57 @@ const MonthlyReport = () => {
 
     const facilityContext = useContext(FacilityContext);
 
-    const [activeCategories] = useState<boolean>(false);
-    const [activeSections] = useState<boolean>(false);
-    const [summariesMonth, setSummariesMonth] = useState<string>(todayMonth());
+    const [active] = useState<boolean>(false);
+    const [month, setMonth] = useState<string>(todayMonth());
+    const [sections, setSections] = useState<Section[]>([]); // Reported on
 
     const fetchSections = useFetchSections({
         withCategories: true,
     });
     const fetchSummaries = useFetchSummaries({
-        dateFrom: startDate(summariesMonth),
-        dateTo: endDate(summariesMonth),
+        active: active,
+        dateFrom: startDate(month),
+        dateTo: endDate(month),
     });
 
     useEffect(() => {
+
+        if (active) {
+            const theSections: Section[] = [];
+            fetchSections.sections.forEach(section => {
+                if (section.active) {
+                    theSections.push(section);
+                }
+            });
+            setSections(theSections);
+        } else {
+            setSections(fetchSections.sections);
+        }
+
         logger.info({
             context: "MonthlyReport.useEffect",
             facility: Abridgers.FACILITY(facilityContext.facility),
-            summariesCount: fetchSummaries.summaries.length,
+            active: active,
+            month: month,
+            //sectionsCount: sections.length,
+            //summariesCount: fetchSummaries.summaries.length,
         });
     }, [facilityContext.facility,
-        fetchSummaries.summaries]);
+        active, month]);
 
     const handleMonth: HandleMonth = (theMonth) => {
-        logger.debug({
+        logger.info({
             context: "MonthlyReport.handleMonth",
             summariesMonth: theMonth,
         });
-        setSummariesMonth(theMonth);
-    }
-
-    const reportedSections = (): Section[] => {
-        if (activeSections) {
-            return fetchSections.sections;
-        } else {
-            const results: Section[] = [];
-            fetchSections.sections.forEach(section => {
-                if (section.active) {
-                    results.push(section);
-                }
-            });
-            return results;
-        }
+        setMonth(theMonth);
     }
 
     return (
+        <h1>Ho There</h1>
+/*
         <Container fluid id="MonthlyReport">
 
-            {/* Title and Summaries Month Selector are always visible */}
             <Row className="mb-4 ml-1 mr-1">
                 <Col className="text-left">
                     <span><strong>Monthly Report for Facility:&nbsp;</strong></span>
@@ -89,7 +93,7 @@ const MonthlyReport = () => {
                         handleMonth={handleMonth}
                         label="Monthly Report For Month:"
                         required
-                        value={summariesMonth}
+                        value={month}
                     />
                 </Col>
             </Row>
@@ -101,15 +105,15 @@ const MonthlyReport = () => {
                 unmountOnExit={true}
             >
 
-                {reportedSections().map((section, tabIndex) => (
+                {sections.map((section, tabIndex) => (
                     <Tab
                         eventKey={section.id}
                         title={section.slug}
                     >
                         <MonthlyReportSection
                             active={activeCategories}
-                            dateFrom={startDate(summariesMonth)}
-                            dateTo={endDate(summariesMonth)}
+                            dateFrom={startDate(month)}
+                            dateTo={endDate(month)}
                             section={section}
                             summaries={fetchSummaries.summaries}
                         />
@@ -119,6 +123,7 @@ const MonthlyReport = () => {
             </Tabs>
 
         </Container>
+*/
     )
 
 }

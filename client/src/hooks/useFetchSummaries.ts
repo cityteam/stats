@@ -21,6 +21,7 @@ import {toSummaries} from "../util/ToModelTypes";
 // Incoming Properties and Outgoing State ------------------------------------
 
 export interface Props {
+    active?: boolean;                   // Select only active Sections? [false]
     dateFrom: string;                   // Earliest date for which to retrieve Summaries
     dateTo: string;                     // Latest date for which to retrieve Summaries
     sectionIds?: number[];              // List of Section IDs to retrieve (all sections)
@@ -67,9 +68,7 @@ const useFetchSummaries = (props: Props): State => {
                     logger.info({
                         context: "useFetchSummaries.fetchSummaries",
                         facility: Abridgers.FACILITY(facilityContext.facility),
-                        dateFrom: props.dateFrom,
-                        dateTo: props.dateTo,
-                        sectionIds: props.sectionIds ? props.sectionIds : undefined,
+                        props: props,
                         url: url,
                         summariesCount: theSummaries.length,
                     });
@@ -78,9 +77,7 @@ const useFetchSummaries = (props: Props): State => {
                         context: "useFetchSummaries.fetchSummaries",
                         msg: "Skipped fetching Summaries",
                         facility: Abridgers.FACILITY(facilityContext.facility),
-                        dateFrom: props.dateFrom,
-                        dateTo: props.dateTo,
-                        sectionIds: props.sectionIds ? props.sectionIds : undefined,
+                        props: props,
                         url: url,
                         loggedIn: loginContext.data.loggedIn,
                     });
@@ -90,7 +87,7 @@ const useFetchSummaries = (props: Props): State => {
                 setError(error as Error);
                 ReportError("useFetchSummaries.fetchSummaries", error, {
                     facility: Abridgers.FACILITY(facilityContext.facility),
-                    parameters: props,
+                    props: props,
                     url: url,
                 });
             }
@@ -102,8 +99,9 @@ const useFetchSummaries = (props: Props): State => {
 
         fetchSummaries();
 
-    }, [facilityContext.facility, loginContext.data.loggedIn,
-        props, props.dateFrom, props.dateTo, props.sectionIds]);
+    }, [facilityContext.facility, facilityContext.facility.id,
+        loginContext.data.loggedIn,
+        props, props.active, props.dateFrom, props.dateTo, props.sectionIds]);
 
     return {
         error: error ? error : null,
