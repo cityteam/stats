@@ -91,6 +91,14 @@ export const toSummary = (value: any): Summary => {
     return new Summary(value);
 }
 
+export const toSummaries = (values: any[]): Summary[] => {
+    const results: Summary[] = [];
+    values.forEach(value => {
+        results.push(new Summary(value));
+    });
+    return results;
+}
+
 export const toUser = (value: any): User => {
     return new User(value);
 }

@@ -70,7 +70,7 @@ const useFetchSummary = (props: Props): State => {
                     });
                 } else {
                     logger.info({
-                        context: "useFetchSummary",
+                        context: "useFetchSummary.fetchSummary",
                         msg: "Skipped fetching Summary",
                         facility: Abridgers.FACILITY(facilityContext.facility),
                         section: Abridgers.SECTION(props.section),

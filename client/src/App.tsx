@@ -23,6 +23,7 @@ import EntriesView from "./components/entries/EntriesView";
 import FacilitiesView from "./components/facilities/FacilitiesView";
 import HomeView from "./components/general/HomeView";
 import LoggedInUser from "./components/login/LoggedInUser";
+import MonthlyReport from "./components/reports/MonthlyReport";
 import SectionsView from "./components/sections/SectionsView";
 import UsersView from "./components/users/UsersView";
 import {FacilityContextProvider} from "./components/facilities/FacilityContext";
@@ -111,6 +112,9 @@ function App() {
                           </Route>
                           <Route exact path="/admin-users">
                               <UsersView/>
+                          </Route>
+                          <Route exact path="/report-month">
+                              <MonthlyReport/>
                           </Route>
                           <Route path="/">
                               <HomeView/>

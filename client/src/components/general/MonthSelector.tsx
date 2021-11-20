@@ -1,4 +1,4 @@
-// TimeSelector --------------------------------------------------------------
+// MonthSelector -------------------------------------------------------------
 
 // Selector text field to choose a month (YYYY-MM string) for processing.
 // On up-to-date browsers, this will utilize the browser's extended
@@ -57,33 +57,33 @@ const MonthSelector = (props: Props) => {
         }
     }
 
-    const processValue = (newValue: string): void => {
+    const processValue = (theValue: string): void => {
 
         // Validate the response
-        let newValid = validateMonth(newValue);
-        if (props.required && (newValue === "")) {
-            newValid = false;
-        } else if (props.max && (newValue > props.max)) {
-            newValid = false;
-        } else if (props.min && (newValue < props.min)) {
-            newValid = false;
+        let isValid = validateMonth(theValue);
+        if (props.required && (theValue === "")) {
+            isValid = false;
+        } else if (props.max && (theValue > props.max)) {
+            isValid = false;
+        } else if (props.min && (theValue < props.min)) {
+            isValid = false;
         }
 
-        // Forward response to parent if valid
-        if (!newValid) {
+        // Forward response to parent if it is valid
+        if (!isValid) {
             let message = "Invalid month, must be in format YYYY-MM";
-            if (props.required && (newValue === "")) {
+            if (props.required && (theValue === "")) {
                 message += ", required";
             }
-            if (props.max && (newValue > props.max)) {
+            if (props.max && (theValue > props.max)) {
                 message += `, <= ${props.max}`;
             }
-            if (props.min && (newValue < props.min)) {
+            if (props.min && (theValue < props.min)) {
                 message += `, >= ${props.min}`;
             }
             alert(message);
-        } else if (newValid && props.handleMonth) {
-            props.handleMonth(newValue);
+        } else if (isValid && props.handleMonth) {
+            props.handleMonth(theValue);
         }
 
     }
