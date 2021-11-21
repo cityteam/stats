@@ -17,6 +17,7 @@ import * as Abridgers from "../util/Abridgers";
 import logger from "../util/ClientLogger";
 import ReportError from "../util/ReportError";
 import {toSummaries} from "../util/ToModelTypes";
+import {queryParameters} from "../util/QueryParameters";
 
 // Incoming Properties and Outgoing State ------------------------------------
 
@@ -52,42 +53,42 @@ const useFetchSummaries = (props: Props): State => {
             setLoading(true);
             let theSummaries: Summary[] = [];
 
-            let url = SUMMARIES_BASE
-                + `/${facilityContext.facility.id}/all/${props.dateFrom}/${props.dateTo}`;
+            const parameters: any = {
+                active: props.active ? "" : undefined,
+            }
             if (props.sectionIds && (props.sectionIds.length > 0)) {
                 const ids: string[] = [];
                 props.sectionIds.forEach(sectionId => {
                     ids.push("" + sectionId);
                 })
-                url += "?sectionIds=" + ids.join(",");
+                parameters.sectionIds = ids.join(",");
             }
+            const url = SUMMARIES_BASE
+                + `/${facilityContext.facility.id}/all`
+                + `/${props.dateFrom}/${props.dateTo}`
+                + `${queryParameters(parameters)}`;
 
             try {
                 if (loginContext.data.loggedIn && (facilityContext.facility.id > 0)) {
                     theSummaries = toSummaries((await Api.get(url)).data);
                     logger.info({
                         context: "useFetchSummaries.fetchSummaries",
-                        facility: Abridgers.FACILITY(facilityContext.facility),
-                        props: props,
                         url: url,
-                        summariesCount: theSummaries.length,
+                        summaries: Abridgers.SUMMARIES(theSummaries),
                     });
                 } else {
                     logger.info({
                         context: "useFetchSummaries.fetchSummaries",
                         msg: "Skipped fetching Summaries",
-                        facility: Abridgers.FACILITY(facilityContext.facility),
-                        props: props,
-                        url: url,
                         loggedIn: loginContext.data.loggedIn,
+                        url: url,
                     });
                 }
                 setSummaries(theSummaries);
             } catch (error) {
                 setError(error as Error);
                 ReportError("useFetchSummaries.fetchSummaries", error, {
-                    facility: Abridgers.FACILITY(facilityContext.facility),
-                    props: props,
+                    loggedIn: loginContext.data.loggedIn,
                     url: url,
                 });
             }
@@ -99,9 +100,8 @@ const useFetchSummaries = (props: Props): State => {
 
         fetchSummaries();
 
-    }, [facilityContext.facility, facilityContext.facility.id,
-        loginContext.data.loggedIn,
-        props, props.active, props.dateFrom, props.dateTo, props.sectionIds]);
+    }, [facilityContext, loginContext,
+        props.active, props.dateFrom, props.dateTo, props.sectionIds]);
 
     return {
         error: error ? error : null,

@@ -38,6 +38,7 @@ SummaryRouter.get("/:facilityId/all/:dateFrom/:dateTo",
             parseInt(req.params.facilityId, 10),
             req.params.dateFrom,
             req.params.dateTo,
+            (req.params.active !== undefined) ? true : false,
             sectionIds.length > 0 ? sectionIds : undefined,
         ));
     });

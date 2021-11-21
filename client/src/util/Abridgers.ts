@@ -8,6 +8,7 @@ import Category from "../models/Category";
 import Detail from "../models/Detail";
 import Facility from "../models/Facility";
 import Section from "../models/Section";
+import Summary from "../models/Summary";
 import User from "../models/User";
 
 // Public Objects ------------------------------------------------------------
@@ -90,6 +91,22 @@ export const SECTIONS = (sections: Section[]): object[] => {
     const results: object[] = [];
     sections.forEach(section => {
         results.push(SECTION(section));
+    });
+    return results;
+}
+
+export const SUMMARY = (summary: Summary): object => {
+    return {
+        sectionId: summary.sectionId,
+        date: summary.date,
+        count: Object.keys(summary).length,
+    }
+}
+
+export const SUMMARIES = (summaries: Summary[]): object[] => {
+    const results: object[] = [];
+    summaries.forEach(summary => {
+        results.push(SUMMARY(summary));
     });
     return results;
 }

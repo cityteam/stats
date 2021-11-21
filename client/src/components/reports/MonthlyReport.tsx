@@ -16,6 +16,7 @@ import Tabs from "react-bootstrap/Tabs";
 
 import MonthlyReportSection from "./MonthlyReportSection";
 import FacilityContext from "../facilities/FacilityContext";
+import CheckBox from "../general/CheckBox";
 import MonthSelector from "../general/MonthSelector";
 import {HandleMonth} from "../../types";
 import useFetchSections from "../../hooks/useFetchSections";
@@ -32,42 +33,39 @@ const MonthlyReport = () => {
     const facilityContext = useContext(FacilityContext);
 
     const [active] = useState<boolean>(false);
+    const [dateFrom, setDateFrom] = useState<string>("2021-07-04");
+    const [dateTo, setDateTo] = useState<string>("2021-07-04");
     const [month, setMonth] = useState<string>(todayMonth());
-    const [sections, setSections] = useState<Section[]>([]); // Reported on
 
     const fetchSections = useFetchSections({
+        active: active,
         withCategories: true,
     });
     const fetchSummaries = useFetchSummaries({
         active: active,
-        dateFrom: startDate(month),
-        dateTo: endDate(month),
+        dateFrom: dateFrom,
+        dateTo: dateTo,
     });
 
     useEffect(() => {
 
-        if (active) {
-            const theSections: Section[] = [];
-            fetchSections.sections.forEach(section => {
-                if (section.active) {
-                    theSections.push(section);
-                }
-            });
-            setSections(theSections);
-        } else {
-            setSections(fetchSections.sections);
-        }
+        const theDateFrom = startDate(month);
+        const theDateTo = endDate(month);
+        setDateFrom(theDateFrom);
+        setDateTo(theDateTo);
 
         logger.info({
             context: "MonthlyReport.useEffect",
             facility: Abridgers.FACILITY(facilityContext.facility),
             active: active,
             month: month,
-            //sectionsCount: sections.length,
-            //summariesCount: fetchSummaries.summaries.length,
+            sections: Abridgers.SECTIONS(fetchSections.sections),
+            summaries: Abridgers.SUMMARIES(fetchSummaries.summaries),
         });
+
     }, [facilityContext.facility,
-        active, month]);
+        active, month,
+        fetchSections.sections, fetchSummaries.summaries]);
 
     const handleMonth: HandleMonth = (theMonth) => {
         logger.info({
@@ -77,6 +75,7 @@ const MonthlyReport = () => {
         setMonth(theMonth);
     }
 
+    // TODO: header needs checkbox for active Sections/Categories
     return (
         <h1>Ho There</h1>
 /*

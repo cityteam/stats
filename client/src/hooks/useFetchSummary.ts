@@ -14,7 +14,6 @@ import FacilityContext from "../components/facilities/FacilityContext";
 import LoginContext from "../components/login/LoginContext";
 import Section from "../models/Section";
 import Summary, {SUMMARIES_BASE} from "../models/Summary";
-import * as Abridgers from "../util/Abridgers";
 import logger from "../util/ClientLogger";
 import ReportError from "../util/ReportError";
 import {toSummary} from "../util/ToModelTypes";
@@ -55,16 +54,14 @@ const useFetchSummary = (props: Props): State => {
                 values: {},
             });
 
+            const url = SUMMARIES_BASE
+                + `/${facilityContext.facility.id}/${props.section.id}/${props.date}`;
+
             try {
-                const url = SUMMARIES_BASE
-                    + `/${facilityContext.facility.id}/${props.section.id}/${props.date}`;
                 if (loginContext.data.loggedIn && (facilityContext.facility.id > 0) && (props.section.id > 0)) {
                     theSummary = toSummary((await Api.get(url)).data);
                     logger.info({
                         context: "useFetchSummary.fetchSummary",
-                        facility: Abridgers.FACILITY(facilityContext.facility),
-                        section: Abridgers.SECTION(props.section),
-                        date: props.date,
                         url: url,
                         summary: theSummary,
                     });
@@ -72,21 +69,17 @@ const useFetchSummary = (props: Props): State => {
                     logger.info({
                         context: "useFetchSummary.fetchSummary",
                         msg: "Skipped fetching Summary",
-                        facility: Abridgers.FACILITY(facilityContext.facility),
-                        section: Abridgers.SECTION(props.section),
-                        date: props.date,
-                        url: url,
                         loggedIn: loginContext.data.loggedIn,
+                        url: url,
                     });
                 }
                 setSummary(theSummary);
             } catch (error) {
                 setError(error as Error);
                 ReportError("useFetchSummary.fetchSummary", error, {
-                    facility: Abridgers.FACILITY(facilityContext.facility),
-                    section: Abridgers.SECTION(props.section),
-                    date: props.date,
-                })
+                    loggedIn: loginContext.data.loggedIn,
+                    url: url,
+                });
             }
 
             setLoading(false);

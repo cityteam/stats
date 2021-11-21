@@ -43,9 +43,9 @@ const useFetchSections = (props: Props): State => {
     const facilityContext = useContext(FacilityContext);
     const loginContext = useContext(LoginContext);
 
-    const [sections, setSections] = useState<Section[]>([]);
     const [error, setError] = useState<Error | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
+    const [sections, setSections] = useState<Section[]>([]);
 
     useEffect(() => {
 
@@ -65,12 +65,13 @@ const useFetchSections = (props: Props): State => {
                 withCategories: props.withCategories ? "" : undefined,
                 withFacility: props.withFacility ? "" : undefined,
             }
+            const url = SECTIONS_BASE
+                + `/${facilityContext.facility.id}`
+                + `${queryParameters(parameters)}`;
 
             try {
-                if (facilityContext.facility.id > 0) {
-                    const allSections = toSections((await Api.get(SECTIONS_BASE
-                        + `/${facilityContext.facility.id}${queryParameters(parameters)}`))
-                        .data);
+                if (loginContext.data.loggedIn && (facilityContext.facility.id > 0)) {
+                    const allSections = toSections((await Api.get(url)).data);
                     allSections.forEach(allSection => {
                         if (loginContext.validateFacility(facilityContext.facility, allSection.scope)) {
                             if (allSection.categories && (allSection.categories.length > 1)) {
@@ -81,16 +82,22 @@ const useFetchSections = (props: Props): State => {
                     });
                     logger.info({
                         context: "useFetchSections.fetchSections",
-                        facility: Abridgers.FACILITY(facilityContext.facility),
-                        parameters: parameters,
+                        url: url,
                         sections: Abridgers.SECTIONS(theSections),
                     });
+                } else {
+                    logger.info({
+                        context: "useFetchSections.fetchSections",
+                        msg: "Skipped fetching Sections",
+                        loggedIn: loginContext.data.loggedIn,
+                        url: url,
+                    })
                 }
             } catch (error) {
                 setError(error as Error);
                 ReportError("useFetchSections.fetchSections", error, {
-                    facility: Abridgers.FACILITY(facilityContext.facility),
-                    ...parameters,
+                    loggedIn: loginContext.data.loggedIn,
+                    url: url,
                 });
             }
 
@@ -101,7 +108,7 @@ const useFetchSections = (props: Props): State => {
 
         fetchSections();
 
-    }, [facilityContext.facility, facilityContext.facility.id, loginContext,
+    }, [facilityContext, loginContext,
         props.active, props.currentPage, props.ordinal,
         props.pageSize, props.withCategories, props.withFacility]);
 
