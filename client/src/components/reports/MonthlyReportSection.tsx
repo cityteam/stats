@@ -59,6 +59,9 @@ const MonthlyReportSection = (props: Props) => {
 
         logger.info({
             context: "MonthlyReportSection.useEffect",
+            active: props.active,
+            dateFrom: props.dateFrom,
+            dateTo: props.dateTo,
             section: Abridgers.SECTION(props.section),
             categories: Abridgers.CATEGORIES(theCategories)
         });
@@ -107,9 +110,7 @@ const MonthlyReportSection = (props: Props) => {
     }
 
     return (
-        <h1>Hi There</h1>
-/*
-        <Container fluid id={"MonthlyReportSection" + props.section.id}>
+        <Container id={"MonthlyReportSection" + props.section.id}>
 
             <Table
                 bordered={true}
@@ -127,10 +128,10 @@ const MonthlyReportSection = (props: Props) => {
                     </th>
                 </tr>
                 <tr className="table-secondary">
-                    <th scope="col">Date</th>
+                    <th className="text-center" scope="col">Date</th>
                     {categories.map((category, categoryIndex) => (
-                        <th key={1000 + categoryIndex} scope="col">
-                            ${category.slug}
+                        <th className="text-center" key={1000 + categoryIndex} scope="col">
+                            {category.slug}
                         </th>
                     ))}
                 </tr>
@@ -139,7 +140,7 @@ const MonthlyReportSection = (props: Props) => {
                 <tbody>
                 {reportedDates().map((reportedDate, dateIndex) => (
                     <tr className="table-default" key={2000 + dateIndex}>
-                        <td key={3000 + (dateIndex * 100) + 0}>
+                        <td className="text-center" key={3000 + (dateIndex * 100) + 0}>
                             {reportedDate}
                         </td>
                         {reportedValues(reportedDate).map((reportedValue, valueIndex) => (
@@ -150,21 +151,19 @@ const MonthlyReportSection = (props: Props) => {
                     </tr>
                 ))}
                 <tr className="table-dark">
-                    <td key={99000}>
+                    <td className="text-center" key={99000}>
                         TOTALS
                     </td>
                     {totals.map((total, totalIndex) => (
-                        <td key={99000 + totalIndex + 1}>
+                        <td className="text-center" key={99000 + totalIndex + 1}>
                             {totals[totalIndex]}
                         </td>
                     ))}
                 </tr>
                 </tbody>
-
             </Table>
 
         </Container>
-*/
     )
 
 }

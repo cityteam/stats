@@ -18,10 +18,9 @@ import MonthlyReportSection from "./MonthlyReportSection";
 import FacilityContext from "../facilities/FacilityContext";
 import CheckBox from "../general/CheckBox";
 import MonthSelector from "../general/MonthSelector";
-import {HandleMonth} from "../../types";
+import {HandleBoolean, HandleMonth} from "../../types";
 import useFetchSections from "../../hooks/useFetchSections";
 import useFetchSummaries from "../../hooks/useFetchSummaries";
-import Section from "../../models/Section";
 import * as Abridgers from "../../util/Abridgers";
 import logger from "../../util/ClientLogger";
 import {endDate, startDate, todayMonth} from "../../util/Months";
@@ -32,7 +31,7 @@ const MonthlyReport = () => {
 
     const facilityContext = useContext(FacilityContext);
 
-    const [active] = useState<boolean>(false);
+    const [active, setActive] = useState<boolean>(false);
     const [dateFrom, setDateFrom] = useState<string>("2021-07-04");
     const [dateTo, setDateTo] = useState<string>("2021-07-04");
     const [month, setMonth] = useState<string>(todayMonth());
@@ -49,23 +48,25 @@ const MonthlyReport = () => {
 
     useEffect(() => {
 
-        const theDateFrom = startDate(month);
-        const theDateTo = endDate(month);
-        setDateFrom(theDateFrom);
-        setDateTo(theDateTo);
+        setDateFrom(startDate(month));
+        setDateTo(endDate(month));
 
         logger.info({
             context: "MonthlyReport.useEffect",
             facility: Abridgers.FACILITY(facilityContext.facility),
             active: active,
             month: month,
-            sections: Abridgers.SECTIONS(fetchSections.sections),
-            summaries: Abridgers.SUMMARIES(fetchSummaries.summaries),
+            //sections: Abridgers.SECTIONS(fetchSections.sections),
+            //summaries: Abridgers.SUMMARIES(fetchSummaries.summaries),
         });
 
     }, [facilityContext.facility,
         active, month,
         fetchSections.sections, fetchSummaries.summaries]);
+
+    const handleActive: HandleBoolean = (theActive) => {
+        setActive(theActive);
+    }
 
     const handleMonth: HandleMonth = (theMonth) => {
         logger.info({
@@ -75,16 +76,21 @@ const MonthlyReport = () => {
         setMonth(theMonth);
     }
 
-    // TODO: header needs checkbox for active Sections/Categories
     return (
-        <h1>Ho There</h1>
-/*
         <Container fluid id="MonthlyReport">
 
             <Row className="mb-4 ml-1 mr-1">
                 <Col className="text-left">
                     <span><strong>Monthly Report for Facility:&nbsp;</strong></span>
                     <span className="text-info"><strong>{facilityContext.facility.name}</strong></span>
+                </Col>
+                <Col>
+                    <CheckBox
+                        handleChange={handleActive}
+                        id="activeOnly"
+                        initialValue={active}
+                        label="Active Sections and Categories Only?"
+                    />
                 </Col>
                 <Col className="col-5 text-right">
                     <MonthSelector
@@ -104,15 +110,15 @@ const MonthlyReport = () => {
                 unmountOnExit={true}
             >
 
-                {sections.map((section, tabIndex) => (
+                {fetchSections.sections.map((section, tabIndex) => (
                     <Tab
                         eventKey={section.id}
                         title={section.slug}
                     >
                         <MonthlyReportSection
-                            active={activeCategories}
-                            dateFrom={startDate(month)}
-                            dateTo={endDate(month)}
+                            active={active}
+                            dateFrom={dateFrom}
+                            dateTo={dateTo}
                             section={section}
                             summaries={fetchSummaries.summaries}
                         />
@@ -122,7 +128,6 @@ const MonthlyReport = () => {
             </Tabs>
 
         </Container>
-*/
     )
 
 }
