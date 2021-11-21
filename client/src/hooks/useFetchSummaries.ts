@@ -16,7 +16,7 @@ import Summary, {SUMMARIES_BASE} from "../models/Summary";
 import * as Abridgers from "../util/Abridgers";
 import logger from "../util/ClientLogger";
 import ReportError from "../util/ReportError";
-import {toSummaries} from "../util/ToModelTypes";
+import * as ToModel from "../util/ToModel";
 import {queryParameters} from "../util/QueryParameters";
 
 // Incoming Properties and Outgoing State ------------------------------------
@@ -70,7 +70,7 @@ const useFetchSummaries = (props: Props): State => {
 
             try {
                 if (loginContext.data.loggedIn && (facilityContext.facility.id > 0)) {
-                    theSummaries = toSummaries((await Api.get(url)).data);
+                    theSummaries = ToModel.SUMMARIES((await Api.get(url)).data);
                     logger.info({
                         context: "useFetchSummaries.fetchSummaries",
                         url: url,

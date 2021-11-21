@@ -17,7 +17,7 @@ import * as Abridgers from "../util/Abridgers";
 import logger from "../util/ClientLogger";
 import {queryParameters} from "../util/QueryParameters";
 import ReportError from "../util/ReportError";
-import {toCategories} from "../util/ToModelTypes";
+import * as ToModel from "../util/ToModel";
 
 // Incoming Properties and Outgoing State ------------------------------------
 
@@ -70,7 +70,7 @@ const useFetchCategories = (props: Props): State => {
 
             try {
                 if (loginContext.data.loggedIn && (facilityContext.facility.id > 0) && (props.section.id > 0)) {
-                    theCategories = toCategories((await Api.get(url)).data);
+                    theCategories = ToModel.CATEGORIES((await Api.get(url)).data);
                     logger.info({
                         context: "useFetchCategories.fetchCategories",
                         url: url,

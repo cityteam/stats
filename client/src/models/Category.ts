@@ -6,7 +6,7 @@
 
 import Detail from "./Detail";
 import Section from "./Section";
-import {toDetails, toSection} from "../util/ToModelTypes";
+import * as ToModel from "../util/ToModel";
 
 // Public Objects ------------------------------------------------------------
 
@@ -28,8 +28,8 @@ class Category {
         this.scope = data.scope ? data.scope : "";
         this.slug = data.slug ? data.slug : null;
 
-        this.details = data.details ? toDetails(data.details) : undefined;
-        this.section = data.section ? toSection(data.section) : undefined;
+        this.details = data.details ? ToModel.DETAILS(data.details) : undefined;
+        this.section = data.section ? ToModel.SECTION(data.section) : undefined;
 
     }
 

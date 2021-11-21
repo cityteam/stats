@@ -14,6 +14,7 @@ import Facility, {FACILITIES_BASE} from "../models/Facility";
 import * as Abridgers from "../util/Abridgers";
 import logger from "../util/ClientLogger";
 import ReportError from "../util/ReportError";
+import * as ToModel from "../util/ToModel";
 
 // Incoming Properties and Outgoing State ------------------------------------
 
@@ -30,32 +31,36 @@ export interface State {
 
 // Component Details ---------------------------------------------------------
 
-const useMutateFacility = (props: Props): State => {
+const useMutateFacility = (props: Props = {}): State => {
 
     const [error, setError] = useState<Error | null>(null);
     const [executing, setExecuting] = useState<boolean>(false);
 
     useEffect(() => {
-        logger.debug({
+        logger.info({
             context: "useMutateFacility.useEffect",
         });
     });
 
     const insert: HandleFacility = async (theFacility): Promise<Facility> => {
 
-        let inserted = new Facility();
         setError(null);
         setExecuting(true);
 
+        let inserted = new Facility();
+        const url = FACILITIES_BASE;
+
         try {
-            inserted = (await Api.post(FACILITIES_BASE, theFacility)).data;
-            logger.debug({
+            inserted = ToModel.FACILITY((await Api.post(url, theFacility)).data);
+            logger.info({
                 context: "useMutateFacility.insert",
+                url: url,
                 facility: Abridgers.FACILITY(inserted),
             });
         } catch (error) {
             setError(error as Error);
             ReportError("useMutateFacility.insert", error, {
+                url: url,
                 facility: theFacility,
             });
         }
@@ -67,20 +72,23 @@ const useMutateFacility = (props: Props): State => {
 
     const remove: HandleFacility = async (theFacility): Promise<Facility> => {
 
-        let removed = new Facility();
         setError(null);
         setExecuting(true);
 
+        let removed = new Facility();
+        const url = FACILITIES_BASE + `/${theFacility.id}`;
+
         try {
-            removed = (await Api.delete(FACILITIES_BASE
-                + `/${theFacility.id}`)).data;
-            logger.debug({
+            removed = ToModel.FACILITY((await Api.delete(url)).data);
+            logger.info({
                 context: "useMutateFacility.remove",
+                url: url,
                 facility: Abridgers.FACILITY(removed),
             });
         } catch (error) {
             setError(error as Error);
             ReportError("useMutateFcility.remove", error, {
+                url: url,
                 facility: theFacility,
             });
         }
@@ -92,20 +100,23 @@ const useMutateFacility = (props: Props): State => {
 
     const update: HandleFacility = async (theFacility): Promise<Facility> => {
 
-        let updated = new Facility();
         setError(null);
         setExecuting(true);
 
+        let updated = new Facility();
+        const url = FACILITIES_BASE + `/${theFacility.id}`;
+
         try {
-            updated = (await Api.put(FACILITIES_BASE
-                + `/${theFacility.id}`, theFacility)).data;
-            logger.debug({
+            updated = ToModel.FACILITY((await Api.put(url, theFacility)).data);
+            logger.info({
                 context: "useMutateFacility.update",
+                url: url,
                 facility: Abridgers.FACILITY(updated),
             });
         } catch (error) {
             setError(error as Error);
             ReportError("useMutateFacility.update", error, {
+                url: url,
                 facility: theFacility,
             });
         }

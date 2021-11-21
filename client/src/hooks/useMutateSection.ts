@@ -15,6 +15,7 @@ import Section, {SECTIONS_BASE} from "../models/Section";
 import * as Abridgers from "../util/Abridgers";
 import logger from "../util/ClientLogger";
 import ReportError from "../util/ReportError";
+import * as ToModel from "../util/ToModel";
 
 // Incoming Properties and Outgoing State ------------------------------------
 
@@ -31,7 +32,7 @@ export interface State {
 
 // Component Details ---------------------------------------------------------
 
-const useMutateSection = (props: Props): State => {
+const useMutateSection = (props: Props = {}): State => {
 
     const facilityContext = useContext(FacilityContext);
 
@@ -39,30 +40,32 @@ const useMutateSection = (props: Props): State => {
     const [executing, setExecuting] = useState<boolean>(false);
 
     useEffect(() => {
-        logger.debug({
+        logger.info({
             context: "useMutateSection.useEffect",
         });
     });
 
     const insert: HandleSection = async (theSection): Promise<Section> => {
 
-        let inserted = new Section();
         setError(null);
         setExecuting(true);
 
+        let inserted = new Section();
+        const url = SECTIONS_BASE
+            + `/${facilityContext.facility.id}`;
+
         try {
-            inserted = (await Api.post(SECTIONS_BASE
-                + `/${facilityContext.facility.id}`, theSection)).data;
-            logger.debug({
+            inserted = ToModel.SECTION((await Api.post(url, theSection)).data);
+            logger.info({
                 context: "useMutateSection.insert",
-                facility: Abridgers.FACILITY(facilityContext.facility),
-                category: Abridgers.SECTION(inserted),
+                url: url,
+                section: Abridgers.SECTION(inserted),
             });
         } catch (error) {
             setError(error as Error);
             ReportError("useMutateSection.insert", error, {
-                facility: Abridgers.FACILITY(facilityContext.facility),
-                category: theSection,
+                url: url,
+                section: theSection,
             });
         }
 
@@ -73,23 +76,25 @@ const useMutateSection = (props: Props): State => {
 
     const remove: HandleSection = async (theSection): Promise<Section> => {
 
-        let removed = new Section();
         setError(null);
         setExecuting(true);
 
+        let removed = new Section();
+        const url = SECTIONS_BASE
+            + `/${facilityContext.facility.id}/${theSection.id}`;
+
         try {
-            removed = (await Api.delete(SECTIONS_BASE
-                + `/${facilityContext.facility.id}/${theSection.id}`)).data;
-            logger.debug({
+            removed = ToModel.SECTION((await Api.delete(url)).data);
+            logger.info({
                 context: "useMutateSection.remove",
-                facility: Abridgers.FACILITY(facilityContext.facility),
-                category: Abridgers.SECTION(removed),
+                url: url,
+                section: Abridgers.SECTION(removed),
             });
         } catch (error) {
             setError(error as Error);
             ReportError("useMutateSection.remove", error, {
-                facility: Abridgers.FACILITY(facilityContext.facility),
-                category: theSection,
+                url: url,
+                section: theSection,
             });
         }
 
@@ -100,23 +105,25 @@ const useMutateSection = (props: Props): State => {
 
     const update: HandleSection = async (theSection): Promise<Section> => {
 
-        let updated = new Section();
         setError(null);
         setExecuting(true);
 
+        let updated = new Section();
+        const url = SECTIONS_BASE
+            + `/${facilityContext.facility.id}/${theSection.id}`;
+
         try {
-            updated = (await Api.put(SECTIONS_BASE
-                + `/${facilityContext.facility.id}/${theSection.id}`, theSection)).data;
-            logger.debug({
+            updated = ToModel.SECTION((await Api.put(url, theSection)).data);
+            logger.info({
                 context: "useMutateSection.update",
-                facility: Abridgers.FACILITY(facilityContext.facility),
-                category: Abridgers.SECTION(updated),
+                url: url,
+                section: Abridgers.SECTION(updated),
             });
         } catch (error) {
             setError(error as Error);
             ReportError("useMutateSection.update", error, {
-                facility: Abridgers.FACILITY(facilityContext.facility),
-                category: theSection,
+                url: url,
+                section: theSection,
             })
         }
 

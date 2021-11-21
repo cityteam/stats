@@ -4,8 +4,8 @@
 
 // Internal Modules ----------------------------------------------------------
 
-import Facility from "./Facility";
-import {toFacility} from "../util/ToModelTypes";
+import User from "./User";
+import * as ToModel from "../util/ToModel";
 
 // Public Objects ------------------------------------------------------------
 
@@ -20,7 +20,7 @@ class AccessToken {
         this.token = data.token ? data.token : null;
         this.userId = data.userId ? data.userId : null;
 
-        this.facility = data.facility ? toFacility(data.facility) : undefined;
+        this.user = data.user ? ToModel.USER(data.user) : undefined;
 
     }
 
@@ -31,7 +31,7 @@ class AccessToken {
     token!: string;
     userId!: number;
 
-    facility?: Facility;
+    user?: User;
 
 }
 

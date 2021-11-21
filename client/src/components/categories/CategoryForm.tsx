@@ -20,7 +20,7 @@ import FacilityContext from "../facilities/FacilityContext";
 import {HandleCategory} from "../../types";
 import Category from "../../models/Category";
 import logger from "../../util/ClientLogger";
-import {toCategory} from "../../util/ToModelTypes";
+import * as ToModel from "../../util/ToModel";
 import {toEmptyStrings, toNullValues} from "../../util/Transformations";
 import {validateCategoryOrdinal} from "../../util/ApplicationValidators";
 import {validateCategoryOrdinalUnique} from "../../util/AsyncValidators";
@@ -56,15 +56,11 @@ const CategoryForm = (props: Props) => {
     }, [props.category, initialValues]);
 
     const handleSubmit = (values: FormikValues, actions: FormikHelpers<FormikValues>): void => {
-        logger.debug({
-            context: "CategoryForm.handleSubmit",
-            category: toCategory(toNullValues(values)),
-            values: values,
-        });
+        const category = ToModel.CATEGORY(toNullValues(values));
         if (adding) {
-            props.handleInsert(toCategory(toNullValues(values)));
+            props.handleInsert(category);
         } else {
-            props.handleUpdate(toCategory(toNullValues(values)));
+            props.handleUpdate(category);
         }
     }
 
@@ -95,7 +91,7 @@ const CategoryForm = (props: Props) => {
                         if (!validateCategoryOrdinal(this.parent.ordinal)) {
                             return false;
                         }
-                        return await validateCategoryOrdinalUnique(facilityContext.facility, toCategory(this.parent));
+                        return await validateCategoryOrdinalUnique(facilityContext.facility, ToModel.CATEGORY(this.parent));
                     }),
             service: Yup.string()
                 .required("Service is required"),

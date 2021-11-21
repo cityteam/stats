@@ -15,7 +15,7 @@ import logger from "../util/ClientLogger";
 import {queryParameters} from "../util/QueryParameters";
 import ReportError from "../util/ReportError";
 import * as Sorters from "../util/Sorters";
-import {toUsers} from "../util/ToModelTypes";
+import * as ToModel from "../util/ToModel";
 
 // Incoming Properties and Outgoing State ------------------------------------
 
@@ -64,7 +64,7 @@ const useFetchUsers = (props: Props): State => {
                 + `${queryParameters(parameters)}`;
 
             try {
-                theUsers = toUsers((await Api.get(url)).data);
+                theUsers = ToModel.USERS((await Api.get(url)).data);
                 theUsers.forEach(theUser => {
                     if (theUser.accessTokens && (theUser.accessTokens.length > 0)) {
                         theUser.accessTokens = Sorters.ACCESS_TOKENS(theUser.accessTokens);

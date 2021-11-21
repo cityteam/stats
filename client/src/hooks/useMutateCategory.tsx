@@ -16,6 +16,7 @@ import Section from "../models/Section";
 import * as Abridgers from "../util/Abridgers";
 import logger from "../util/ClientLogger";
 import ReportError from "../util/ReportError";
+import * as ToModel from "../util/ToModel";
 
 // Incoming Properties and Outgoing State ------------------------------------
 
@@ -41,31 +42,32 @@ const useMutateCategory = (props: Props): State => {
     const [executing, setExecuting] = useState<boolean>(false);
 
     useEffect(() => {
-        logger.debug({
+        logger.info({
             context: "useMutateCategory.useEffect",
+            section: Abridgers.SECTION(props.section),
         });
     });
 
     const insert: HandleCategory = async (theCategory): Promise<Category> => {
 
-        let inserted = new Category();
         setError(null);
         setExecuting(true);
 
+        let inserted = new Category();
+        const url = CATEGORIES_BASE
+            + `/${facilityContext.facility.id}/${props.section.id}`;
+
         try {
-            inserted = (await Api.post(CATEGORIES_BASE
-                + `/${facilityContext.facility.id}/${props.section.id}`, theCategory)).data;
-            logger.debug({
+            inserted = ToModel.CATEGORY((await Api.post(url, theCategory)).data);
+            logger.info({
                 context: "useMutateCategory.insert",
-                facility: Abridgers.FACILITY(facilityContext.facility),
-                section: Abridgers.SECTION(props.section),
+                url: url,
                 category: Abridgers.CATEGORY(inserted),
             });
         } catch (error) {
             setError(error as Error);
             ReportError("useMutateCategory.insert", error, {
-                facility: Abridgers.FACILITY(facilityContext.facility),
-                section: Abridgers.SECTION(props.section),
+                url: url,
                 category: theCategory,
             });
         }
@@ -77,24 +79,24 @@ const useMutateCategory = (props: Props): State => {
 
     const remove: HandleCategory = async (theCategory): Promise<Category> => {
 
-        let removed = new Category();
         setError(null);
         setExecuting(true);
 
+        let removed = new Category();
+        const url = CATEGORIES_BASE
+            + `/${facilityContext.facility.id}/${props.section.id}/${theCategory.id}`;
+
         try {
-            removed = (await Api.delete(CATEGORIES_BASE
-                + `/${facilityContext.facility.id}/${props.section.id}/${theCategory.id}`)).data;
-            logger.debug({
+            removed = ToModel.CATEGORY((await Api.delete(url)).data);
+            logger.info({
                 context: "useMutateCategory.remove",
-                facility: Abridgers.FACILITY(facilityContext.facility),
-                section: Abridgers.SECTION(props.section),
+                url: url,
                 category: Abridgers.CATEGORY(removed),
             });
         } catch (error) {
             setError(error as Error);
             ReportError("useMutateCategory.remove", error, {
-                facility: Abridgers.FACILITY(facilityContext.facility),
-                section: Abridgers.SECTION(props.section),
+                url: url,
                 category: theCategory,
             });
         }
@@ -106,24 +108,24 @@ const useMutateCategory = (props: Props): State => {
 
     const update: HandleCategory = async (theCategory): Promise<Category> => {
 
-        let updated = new Category();
         setError(null);
         setExecuting(true);
 
+        let updated = new Category();
+        const url = CATEGORIES_BASE
+            + `/${facilityContext.facility.id}/${props.section.id}/${theCategory.id}`;
+
         try {
-            updated = (await Api.put(CATEGORIES_BASE
-                + `/${facilityContext.facility.id}/${props.section.id}/${theCategory.id}`, theCategory)).data;
-            logger.debug({
+            updated = ToModel.CATEGORY((await Api.put(url, theCategory)).data);
+            logger.info({
                 context: "useMutateCategory.update",
-                facility: Abridgers.FACILITY(facilityContext.facility),
-                section: Abridgers.SECTION(props.section),
+                url: url,
                 category: Abridgers.CATEGORY(updated),
             });
         } catch (error) {
             setError(error as Error);
             ReportError("useMutateCategory.update", error, {
-                facility: Abridgers.FACILITY(facilityContext.facility),
-                section: Abridgers.SECTION(props.section),
+                url: url,
                 category: theCategory,
             })
         }

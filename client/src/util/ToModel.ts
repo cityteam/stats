@@ -1,4 +1,4 @@
-// ToModelTypes --------------------------------------------------------------
+// ToModel -------------------------------------------------------------------
 
 // Convert arbitrary objects or arrays to the specified Model objects.
 
@@ -15,11 +15,11 @@ import User from "../models/User";
 
 // Public Objects ------------------------------------------------------------
 
-export const toAccessToken = (value: any): AccessToken => {
+export const ACCESS_TOKEN = (value: any): AccessToken => {
     return new AccessToken(value);
 }
 
-export const toAccessTokens = (values: any[]): AccessToken[] => {
+export const ACCESS_TOKENS = (values: any[]): AccessToken[] => {
     const results: AccessToken[] = [];
     values.forEach(value => {
         results.push(new AccessToken(value));
@@ -27,11 +27,11 @@ export const toAccessTokens = (values: any[]): AccessToken[] => {
     return results;
 }
 
-export const toCategory = (value: any): Category => {
+export const CATEGORY = (value: any): Category => {
     return new Category(value);
 }
 
-export const toCategories = (values: any[]): Category[] => {
+export const CATEGORIES = (values: any[]): Category[] => {
     const results: Category[] = [];
     values.forEach(value => {
         results.push(new Category(value));
@@ -39,11 +39,11 @@ export const toCategories = (values: any[]): Category[] => {
     return results;
 }
 
-export const toDetail = (value: any): Detail => {
+export const DETAIL = (value: any): Detail => {
     return new Detail(value);
 }
 
-export const toDetails = (values: any[]): Detail[] => {
+export const DETAILS = (values: any[]): Detail[] => {
     const results: Detail[] = [];
     values.forEach(value => {
         results.push(new Detail(value));
@@ -51,11 +51,11 @@ export const toDetails = (values: any[]): Detail[] => {
     return results;
 }
 
-export const toFacility = (value: any): Facility => {
+export const FACILITY = (value: any): Facility => {
     return new Facility(value);
 }
 
-export const toFacilities = (values: any[]): Facility[] => {
+export const FACILITIES = (values: any[]): Facility[] => {
     const results: Facility[] = [];
     values.forEach(value => {
         results.push(new Facility(value));
@@ -63,11 +63,11 @@ export const toFacilities = (values: any[]): Facility[] => {
     return results;
 }
 
-export const toRefreshToken = (value: any): RefreshToken => {
+export const REFRESH_TOKEN = (value: any): RefreshToken => {
     return new RefreshToken(value);
 }
 
-export const toRefreshTokens = (values: any[]): RefreshToken[] => {
+export const REFRESH_TOKENS = (values: any[]): RefreshToken[] => {
     const results: RefreshToken[] = [];
     values.forEach(value => {
         results.push(new RefreshToken(value));
@@ -75,11 +75,11 @@ export const toRefreshTokens = (values: any[]): RefreshToken[] => {
     return results;
 }
 
-export const toSection = (value: any): Section => {
+export const SECTION = (value: any): Section => {
     return new Section(value);
 }
 
-export const toSections = (values: any[]): Section[] => {
+export const SECTIONS = (values: any[]): Section[] => {
     const results: Section[] = [];
     values.forEach(value => {
         results.push(new Section(value));
@@ -87,11 +87,11 @@ export const toSections = (values: any[]): Section[] => {
     return results;
 }
 
-export const toSummary = (value: any): Summary => {
+export const SUMMARY = (value: any): Summary => {
     return new Summary(value);
 }
 
-export const toSummaries = (values: any[]): Summary[] => {
+export const SUMMARIES = (values: any[]): Summary[] => {
     const results: Summary[] = [];
     values.forEach(value => {
         results.push(new Summary(value));
@@ -99,11 +99,11 @@ export const toSummaries = (values: any[]): Summary[] => {
     return results;
 }
 
-export const toUser = (value: any): User => {
+export const USER = (value: any): User => {
     return new User(value);
 }
 
-export const toUsers = (values: any[]): User[] => {
+export const USERS = (values: any[]): User[] => {
     const results: User[] = [];
     values.forEach(value => {
         results.push(new User(value));

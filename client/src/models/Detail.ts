@@ -6,7 +6,7 @@
 // Internal Modules ----------------------------------------------------------
 
 import Category from "./Category";
-import {toCategory} from "../util/ToModelTypes";
+import * as ToModel from "../util/ToModel";
 
 // Public Objects ------------------------------------------------------------
 
@@ -21,7 +21,7 @@ class Detail {
         this.notes = data.notes ? data.notes : null;
         this.value = data.value ? data.value : 0;
 
-        this.category = data.category ? toCategory(data.category) : undefined;
+        this.category = data.category ? ToModel.CATEGORY(data.category) : undefined;
 
     }
 

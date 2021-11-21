@@ -4,7 +4,7 @@
 
 // External Modules ----------------------------------------------------------
 
-import React, {/*useContext, */useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Formik,FormikHelpers,FormikValues} from "formik";
 import Button from "react-bootstrap/button";
 import Col from "react-bootstrap/Col";
@@ -23,7 +23,7 @@ import {
     validateFacilityScopeUnique
 } from "../../util/AsyncValidators";
 import logger from "../../util/ClientLogger";
-import {toFacility} from "../../util/ToModelTypes";
+import * as ToModel from "../../util/ToModel";
 import {toEmptyStrings, toNullValues} from "../../util/Transformations";
 import {
     validateEmail,
@@ -62,10 +62,11 @@ const FacilityForm = (props: Props) => {
     }, [props.facility, initialValues]);
 
     const handleSubmit = (values: FormikValues, actions: FormikHelpers<FormikValues>): void => {
+        const facility = ToModel.FACILITY(toNullValues(values));
         if (adding) {
-            props.handleInsert(toFacility(toNullValues(values)));
+            props.handleInsert(facility);
         } else {
-            props.handleUpdate(toFacility(toNullValues(values)));
+            props.handleUpdate(facility);
         }
     }
 
@@ -99,7 +100,7 @@ const FacilityForm = (props: Props) => {
                 .test("unique-name",
                     "That name is already in use",
                     async function (this) {
-                        return await validateFacilityNameUnique(toFacility(this.parent));
+                        return await validateFacilityNameUnique(ToModel.FACILITY(this.parent));
                     }
                 ),
             phone: Yup.string()
@@ -118,7 +119,7 @@ const FacilityForm = (props: Props) => {
                 .test("unique-scope",
                     "That scope is already in use",
                     async function(value) {
-                        return await validateFacilityScopeUnique(toFacility(this.parent));
+                        return await validateFacilityScopeUnique(ToModel.FACILITY(this.parent));
                     }),
             state: Yup.string()
                 .test("valid-state",

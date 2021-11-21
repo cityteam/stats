@@ -20,7 +20,7 @@ import {HandleUser} from "../../types";
 import User from "../../models/User";
 import {validateUserUsernameUnique} from "../../util/AsyncValidators";
 import logger from "../../util/ClientLogger";
-import {toUser} from "../../util/ToModelTypes";
+import * as ToModel from "../../util/ToModel";
 import {toEmptyStrings, toNullValues} from "../../util/Transformations";
 
 // Incoming Properties ------------------------------------------------------
@@ -52,10 +52,11 @@ const UserForm = (props: Props) => {
     }, [props.user, initialValues]);
 
     const handleSubmit = (values: FormikValues, actions: FormikHelpers<FormikValues>): void => {
+        const user = ToModel.USER(toNullValues(values));
         if (adding) {
-            props.handleInsert(toUser(toNullValues(values)));
+            props.handleInsert(user);
         } else {
-            props.handleUpdate(toUser(toNullValues(values)));
+            props.handleUpdate(user);
         }
     }
 
@@ -105,7 +106,7 @@ const UserForm = (props: Props) => {
                 .test("unique-username",
                     "That username is already in use",
                     async function (this) {
-                        return await validateUserUsernameUnique(toUser(toNullValues(this.parent)))
+                        return await validateUserUsernameUnique(ToModel.USER(toNullValues(this.parent)))
                     }),
         });
     }

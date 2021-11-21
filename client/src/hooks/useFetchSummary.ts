@@ -16,7 +16,7 @@ import Section from "../models/Section";
 import Summary, {SUMMARIES_BASE} from "../models/Summary";
 import logger from "../util/ClientLogger";
 import ReportError from "../util/ReportError";
-import {toSummary} from "../util/ToModelTypes";
+import * as ToModel from "../util/ToModel";
 
 // Incoming Properties and Outgoing State ------------------------------------
 
@@ -59,7 +59,7 @@ const useFetchSummary = (props: Props): State => {
 
             try {
                 if (loginContext.data.loggedIn && (facilityContext.facility.id > 0) && (props.section.id > 0)) {
-                    theSummary = toSummary((await Api.get(url)).data);
+                    theSummary = ToModel.SUMMARY((await Api.get(url)).data);
                     logger.info({
                         context: "useFetchSummary.fetchSummary",
                         url: url,

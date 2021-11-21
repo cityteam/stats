@@ -12,10 +12,9 @@ import {HandleSummary} from "../types";
 import Api from "../clients/Api";
 import FacilityContext from "../components/facilities/FacilityContext";
 import Summary, {SUMMARIES_BASE} from "../models/Summary";
-import * as Abridgers from "../util/Abridgers";
 import logger from "../util/ClientLogger";
 import ReportError from "../util/ReportError";
-import {toSummary} from "../util/ToModelTypes";
+import * as ToModel from "../util/ToModel";
 
 // Incoming Properties an Outgoing State -------------------------------------
 
@@ -31,7 +30,7 @@ export interface State {
 
 // Hook Details --------------------------------------------------------------
 
-const useMutateSummary = (props: Props): State => {
+const useMutateSummary = (props: Props = {}): State => {
 
     const facilityContext = useContext(FacilityContext);
 
@@ -48,23 +47,25 @@ const useMutateSummary = (props: Props): State => {
     // Forward Summary containing values for the specified Section ID and date.
     const write: HandleSummary = async (theSummary): Promise<Summary> => {
 
-        let result = new Summary();
         setError(null);
         setExecuting(true);
 
+        let result = new Summary();
+        const url = SUMMARIES_BASE +
+                `/${facilityContext.facility.id}/${theSummary.sectionId}`
+                + `/${theSummary.date}`
+
         try {
-            result = toSummary((await Api.post(SUMMARIES_BASE +
-                `/${facilityContext.facility.id}/${theSummary.sectionId}/${theSummary.date}`,
-                theSummary)).data);
-            logger.debug({
+            result = ToModel.SUMMARY((await Api.post(url, theSummary)).data);
+            logger.info({
                 context: "useMutateSummary.write",
-                facility: Abridgers.FACILITY(facilityContext.facility),
+                url: url,
                 summary: result,
             });
         } catch (error) {
             setError(error as Error);
             ReportError("useMutateSummary.write", error, {
-                facility: Abridgers.FACILITY(facilityContext.facility),
+                url: url,
                 summary: theSummary,
             }, alertPopup);
         }

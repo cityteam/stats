@@ -6,7 +6,7 @@
 
 import Category from "./Category";
 import Facility from "./Facility";
-import {toCategories, toFacility} from "../util/ToModelTypes";
+import * as ToModel from "../util/ToModel";
 
 // Public Objects ------------------------------------------------------------
 
@@ -26,8 +26,8 @@ class Section {
         this.slug = data.slug ? data.slug : "";
         this.title = data.title ? data.title : "";
 
-        this.categories = data.categories ? toCategories(data.categories) : undefined;
-        this.facility = data.facility ? toFacility(data.facility) : undefined;
+        this.categories = data.categories ? ToModel.CATEGORIES(data.categories) : undefined;
+        this.facility = data.facility ? ToModel.FACILITY(data.facility) : undefined;
 
     }
 

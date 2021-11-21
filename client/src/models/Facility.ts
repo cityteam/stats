@@ -5,7 +5,7 @@
 // Internal Modules ----------------------------------------------------------
 
 import Section from "../models/Section";
-import {toSections} from "../util/ToModelTypes";
+import * as ToModel from "../util/ToModel";
 
 // Public Objects ------------------------------------------------------------
 
@@ -28,7 +28,7 @@ class Facility {
         this.state = data.state ? data.state : null;
         this.zipCode = data.zipCode ? data.zipCode : null;
 
-        this.sections = data.sections ? toSections(data.sections) : undefined;
+        this.sections = data.sections ? ToModel.SECTIONS(data.sections) : undefined;
 
     }
 

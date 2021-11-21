@@ -14,6 +14,7 @@ import User, {USERS_BASE} from "../models/User";
 import * as Abridgers from "../util/Abridgers";
 import logger from "../util/ClientLogger";
 import ReportError from "../util/ReportError";
+import * as ToModel from "../util/ToModel";
 
 // Incoming Properties and Outgoing State ------------------------------------
 
@@ -30,7 +31,7 @@ export interface State {
 
 // Component Details ---------------------------------------------------------
 
-const useMutateUser = (props: Props): State => {
+const useMutateUser = (props: Props = {}): State => {
 
     const [error, setError] = useState<Error | null>(null);
     const [executing, setExecuting] = useState<boolean>(false);
@@ -43,19 +44,23 @@ const useMutateUser = (props: Props): State => {
 
     const insert: HandleUser = async (theUser): Promise<User> => {
 
-        let inserted = new User();
         setError(null);
         setExecuting(true);
 
+        let inserted = new User();
+        const url = USERS_BASE;
+
         try {
-            inserted = (await Api.post(USERS_BASE, theUser)).data;
-            logger.debug({
+            inserted = ToModel.USER((await Api.post(url, theUser)).data);
+            logger.info({
                 context: "useMutateUser.insert",
+                url: url,
                 user: Abridgers.USER(inserted),
             });
         } catch (error) {
             setError(error as Error);
             ReportError("useMutateUser.insert", error, {
+                url: url,
                 user: {
                     ...theUser,
                     password: "*REDACTED*",
@@ -70,20 +75,23 @@ const useMutateUser = (props: Props): State => {
 
     const remove: HandleUser = async (theUser): Promise<User> => {
 
-        let removed = new User();
         setError(null);
         setExecuting(true);
 
+        let removed = new User();
+        const url = USERS_BASE + `/${theUser.id}`;
+
         try {
-            removed = (await Api.delete(USERS_BASE
-                + `/${theUser.id}`)).data;
-            logger.debug({
+            removed = ToModel.USER((await Api.delete(url)).data);
+            logger.info({
                 context: "useMutateUser.remove",
+                url: url,
                 user: Abridgers.USER(removed),
             });
         } catch (error) {
             setError(error as Error);
             ReportError("useMutateUser.remove", error, {
+                url: url,
                 user: {
                     ...theUser,
                     password: theUser.password ? "*REDACTED*" : null,
@@ -98,20 +106,23 @@ const useMutateUser = (props: Props): State => {
 
     const update: HandleUser = async (theUser): Promise<User> => {
 
-        let updated = new User();
         setError(null);
         setExecuting(true);
 
+        let updated = new User();
+        const url = USERS_BASE + `/${theUser.id}`;
+
         try {
-            updated = (await Api.put(USERS_BASE
-                + `/${theUser.id}`, theUser)).data;
-            logger.debug({
+            updated = ToModel.USER((await Api.put(url, theUser)).data);
+            logger.info({
                 context: "useMutateUser.update",
+                url: url,
                 user: Abridgers.USER(updated),
             });
         } catch (error) {
             setError(error as Error);
             ReportError("useMutateUser.update", error, {
+                url: url,
                 user: {
                     ...theUser,
                     password: theUser.password ? "*REDACTED*" : null,

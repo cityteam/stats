@@ -17,7 +17,7 @@ import logger from "../util/ClientLogger";
 import {queryParameters} from "../util/QueryParameters";
 import ReportError from "../util/ReportError";
 import * as Sorters from "../util/Sorters";
-import {toSections} from "../util/ToModelTypes";
+import * as ToModel from "../util/ToModel";
 
 // Incoming Properties and Outgoing State ------------------------------------
 
@@ -71,7 +71,7 @@ const useFetchSections = (props: Props): State => {
 
             try {
                 if (loginContext.data.loggedIn && (facilityContext.facility.id > 0)) {
-                    const allSections = toSections((await Api.get(url)).data);
+                    const allSections = ToModel.SECTIONS((await Api.get(url)).data);
                     allSections.forEach(allSection => {
                         if (loginContext.validateFacility(facilityContext.facility, allSection.scope)) {
                             if (allSection.categories && (allSection.categories.length > 1)) {

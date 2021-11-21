@@ -19,7 +19,7 @@ import * as Yup from "yup";
 import {HandleSection} from "../../types";
 import Section from "../../models/Section";
 import logger from "../../util/ClientLogger";
-import {toSection} from "../../util/ToModelTypes";
+import * as ToModel from "../../util/ToModel";
 import {validateSectionOrdinal} from "../../util/ApplicationValidators";
 import {validateSectionOrdinalUnique} from "../../util/AsyncValidators";
 import {toEmptyStrings, toNullValues} from "../../util/Transformations";
@@ -53,15 +53,11 @@ const SectionForm = (props: Props) => {
     }, [props.section, initialValues]);
 
     const handleSubmit = (values: FormikValues, actions: FormikHelpers<FormikValues>): void => {
-        logger.debug({
-            context: "SectionForm.handleSubmit",
-            category: toSection(toNullValues(values)),
-            values: values,
-        });
+        const section = ToModel.SECTION(toNullValues(values));
         if (adding) {
-            props.handleInsert(toSection(toNullValues(values)));
+            props.handleInsert(section);
         } else {
-            props.handleUpdate(toSection(toNullValues(values)));
+            props.handleUpdate(section);
         }
     }
 
@@ -90,7 +86,7 @@ const SectionForm = (props: Props) => {
                         if (!validateSectionOrdinal(this.parent.ordinal)) {
                             return false;
                         }
-                        return await validateSectionOrdinalUnique(toSection(this.parent));
+                        return await validateSectionOrdinalUnique(ToModel.SECTION(this.parent));
                     }),
             scope: Yup.string()
                 .required("Scope is required"),

@@ -15,6 +15,7 @@ import logger from "../util/ClientLogger";
 import {queryParameters} from "../util/QueryParameters";
 import ReportError from "../util/ReportError";
 import * as Sorters from "../util/Sorters";
+import * as ToModel from "../util/ToModel";
 
 // Incoming Properties and Outgoing State ------------------------------------
 
@@ -61,7 +62,7 @@ const useFetchFacilities = (props: Props): State => {
                 + `${queryParameters(parameters)}`;
 
             try {
-                theFacilities = (await Api.get(url)).data;
+                theFacilities = ToModel.FACILITIES((await Api.get(url)).data);
                 theFacilities.forEach(theFacility => {
                     if (theFacility.sections && (theFacility.sections.length > 0)) {
                         theFacility.sections = Sorters.SECTIONS(theFacility.sections);
