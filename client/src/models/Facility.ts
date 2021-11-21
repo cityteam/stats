@@ -4,8 +4,8 @@
 
 // Internal Modules ----------------------------------------------------------
 
-import Category from "./Category";
-import {toCategories} from "../util/ToModelTypes";
+import Section from "../models/Section";
+import {toSections} from "../util/ToModelTypes";
 
 // Public Objects ------------------------------------------------------------
 
@@ -28,7 +28,7 @@ class Facility {
         this.state = data.state ? data.state : null;
         this.zipCode = data.zipCode ? data.zipCode : null;
 
-        this.categories = data.categories ? toCategories(data.categories) : undefined;
+        this.sections = data.sections ? toSections(data.sections) : undefined;
 
     }
 
@@ -45,7 +45,7 @@ class Facility {
     state?: string;
     zipCode?: string;
 
-    categories?: Category[];
+    sections?: Section[];
 
 }
 

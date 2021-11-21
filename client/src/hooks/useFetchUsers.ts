@@ -15,6 +15,7 @@ import logger from "../util/ClientLogger";
 import {queryParameters} from "../util/QueryParameters";
 import ReportError from "../util/ReportError";
 import * as Sorters from "../util/Sorters";
+import {toUsers} from "../util/ToModelTypes";
 
 // Incoming Properties and Outgoing State ------------------------------------
 
@@ -59,10 +60,11 @@ const useFetchUsers = (props: Props): State => {
                 withAccessTokens: props.withAccessTokens ? "" : undefined,
                 withRefreshTokens: props.withRefreshTokens ? "" : undefined,
             };
+            const url = USERS_BASE
+                + `${queryParameters(parameters)}`;
 
             try {
-                theUsers = (await Api.get(USERS_BASE
-                    + `${queryParameters(parameters)}`)).data;
+                theUsers = toUsers((await Api.get(url)).data);
                 theUsers.forEach(theUser => {
                     if (theUser.accessTokens && (theUser.accessTokens.length > 0)) {
                         theUser.accessTokens = Sorters.ACCESS_TOKENS(theUser.accessTokens);
@@ -71,16 +73,16 @@ const useFetchUsers = (props: Props): State => {
                         theUser.refreshTokens = Sorters.REFRESH_TOKENS(theUser.refreshTokens);
                     }
                 });
-                logger.debug({
+                logger.info({
                     context: "useFetchUsers.fetchUsers",
-                    parameters: parameters,
+                    url: url,
                     users: Abridgers.USERS(theUsers),
                 });
 
             } catch (error) {
                 setError(error as Error);
                 ReportError("useFetchUsers.fetchUsers", error, {
-                    parameters: parameters,
+                    url: url,
                 });
             }
 

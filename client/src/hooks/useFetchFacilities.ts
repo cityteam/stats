@@ -4,12 +4,11 @@
 
 // External Modules ----------------------------------------------------------
 
-import {useContext, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 
 // Internal Modules ----------------------------------------------------------
 
 import Api from "../clients/Api";
-import LoginContext from "../components/login/LoginContext";
 import Facility, {FACILITIES_BASE} from "../models/Facility";
 import * as Abridgers from "../util/Abridgers";
 import logger from "../util/ClientLogger";
@@ -24,24 +23,22 @@ export interface Props {
     currentPage?: number;               // One-relative current page number [1]
     pageSize?: number;                  // Number of entries per page [25]
     name?: string;                      // Select Facilities matching pattern [none]
-    withCategories?: boolean;           // Include child Checkins? [false]
+    withSections?: boolean;             // Include child Sections? [false]
 }
 
 export interface State {
     error: Error | null;                // I/O error (if any)
-    loading: boolean;                   // Are we currently loading?
     facilities: Facility[];             // Fetched Facilities
+    loading: boolean;                   // Are we currently loading?
 }
 
 // Hook Details --------------------------------------------------------------
 
 const useFetchFacilities = (props: Props): State => {
 
-    const loginContext = useContext(LoginContext);
-
     const [error, setError] = useState<Error | null>(null);
-    const [loading, setLoading] = useState<boolean>(false);
     const [facilities, setFacilities] = useState<Facility[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
 
@@ -58,31 +55,28 @@ const useFetchFacilities = (props: Props): State => {
                 limit: limit,
                 offset: offset,
                 name: props.name ? props.name : undefined,
-                withCategories: props.withCategories ? "" : undefined,
+                withSections: props.withSections ? "" : undefined,
             };
-
+            const url = FACILITIES_BASE
+                + `${queryParameters(parameters)}`;
 
             try {
-                if (loginContext.data.loggedIn) {
-                    theFacilities = (await Api.get(FACILITIES_BASE
-                        + `${queryParameters(parameters)}`)).data;
-                    theFacilities.forEach(theFacility => {
-                        if (theFacility.categories && (theFacility.categories.length > 0)) {
-                            theFacility.categories = Sorters.CATEGORIES(theFacility.categories);
-                        }
-                    });
-                }
-                logger.debug({
+                theFacilities = (await Api.get(url)).data;
+                theFacilities.forEach(theFacility => {
+                    if (theFacility.sections && (theFacility.sections.length > 0)) {
+                        theFacility.sections = Sorters.SECTIONS(theFacility.sections);
+                    }
+                });
+                logger.info({
                     context: "useFetchFacilities.fetchFacilities",
-                    parameters: parameters,
+                    url: url,
                     facilities: Abridgers.FACILITIES(theFacilities),
                 });
-
             } catch (error) {
                 setError(error as Error);
                 ReportError("useFetchFacilities.fetchFacilities", error, {
-                    parameters: parameters,
-                })
+                    url: url,
+                });
             }
 
             setLoading(false);
@@ -92,13 +86,13 @@ const useFetchFacilities = (props: Props): State => {
 
         fetchFacilities();
 
-    }, [props.active, props.currentPage, props.pageSize, props.name,
-        props.withCategories, loginContext.data.loggedIn]);
+    }, [props.active, props.currentPage,
+        props.pageSize, props.name, props.withSections]);
 
     return {
         error: error ? error : null,
-        loading: loading,
         facilities: facilities,
+        loading: loading,
     }
 
 }

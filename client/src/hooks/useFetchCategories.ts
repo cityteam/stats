@@ -10,6 +10,7 @@ import {useContext, useEffect, useState} from "react";
 
 import Api from "../clients/Api";
 import FacilityContext from "../components/facilities/FacilityContext";
+import LoginContext from "../components/login/LoginContext";
 import Category, {CATEGORIES_BASE} from "../models/Category";
 import Section from "../models/Section";
 import * as Abridgers from "../util/Abridgers";
@@ -40,6 +41,7 @@ export interface State {
 const useFetchCategories = (props: Props): State => {
 
     const facilityContext = useContext(FacilityContext);
+    const loginContext = useContext(LoginContext);
 
     const [categories, setCategories] = useState<Category[]>([]);
     const [error, setError] = useState<Error | null>(null);
@@ -62,25 +64,31 @@ const useFetchCategories = (props: Props): State => {
                 ordinal: props.ordinal ? props.ordinal : undefined,
                 withSection: props.withSection ? "" : undefined,
             }
+            const url = CATEGORIES_BASE
+                + `/${facilityContext.facility.id}/${props.section.id}`
+                + `${queryParameters(parameters)}`;
 
             try {
-                if ((facilityContext.facility.id > 0) && (props.section.id > 0)) {
-                    theCategories = toCategories((await Api.get(CATEGORIES_BASE
-                        + `/${facilityContext.facility.id}/${props.section.id}${queryParameters(parameters)}`))
-                        .data);
-                    logger.debug({
+                if (loginContext.data.loggedIn && (facilityContext.facility.id > 0) && (props.section.id > 0)) {
+                    theCategories = toCategories((await Api.get(url)).data);
+                    logger.info({
                         context: "useFetchCategories.fetchCategories",
-                        facility: Abridgers.FACILITY(facilityContext.facility),
-                        parameters: parameters,
+                        url: url,
                         categories: Abridgers.CATEGORIES(theCategories),
+                    });
+                } else {
+                    logger.info({
+                        context: "useFetchCategories.fetchCategories",
+                        msg: "Skipped fetching Categories",
+                        loggedIn: loginContext.data.loggedIn,
+                        url: url,
                     });
                 }
             } catch (error) {
                 setError(error as Error);
                 ReportError("useFetchCategories.fetchCategories", error, {
-                    facility: Abridgers.FACILITY(facilityContext.facility),
-                    section: Abridgers.SECTION(props.section),
-                    ...parameters,
+                    loggedIn: loginContext.data.loggedIn,
+                    url: url,
                 });
             }
 
@@ -91,8 +99,9 @@ const useFetchCategories = (props: Props): State => {
 
         fetchCategories();
 
-    }, [facilityContext.facility, props.active, props.currentPage,
-            props.ordinal, props.pageSize, props.section, props.withSection]);
+    }, [facilityContext, loginContext,
+        props.active, props.currentPage, props.ordinal,
+        props.pageSize, props.section, props.withSection]);
 
     return {
         categories: categories,
