@@ -33,30 +33,25 @@ export interface Props {
 const MonthlyReportSection = (props: Props) => {
 
     const [categories, setCategories] = useState<Category[]>([]);
-    const [totals, setTotals] = useState<number[]>([]);
 
     useEffect(() => {
 
         // Calculate the Categories we will be reporting over
         let theCategories: Category[] = [];
-        if ((props.active !== undefined) ? props.active : false) {
-            theCategories = props.section.categories ? props.section.categories : [];
-        } else if (props.section.categories) {
-            props.section.categories.forEach(category => {
-                if (category.active) {
-                    theCategories.push(category);
-                }
-            });
+        if (props.section.categories) {
+            if (props.active) {
+                props.section.categories.forEach(category => {
+                    if (category.active) {
+                        theCategories.push(category);
+                    }
+                });
+            } else {
+                theCategories = props.section.categories;
+            }
         }
         setCategories(theCategories);
 
-        // Initialize the totals accumulators we will need
-        const theTotals: number[] = [];
-        for(let i = 0; i < theCategories.length; i++) {
-            theTotals.push(0);
-        }
-        setTotals(theTotals);
-
+        // Report our configuration information
         logger.info({
             context: "MonthlyReportSection.useEffect",
             active: props.active,
@@ -67,6 +62,36 @@ const MonthlyReportSection = (props: Props) => {
         });
 
     }, [props.active, props.dateFrom, props.dateTo, props.section]);
+
+    // Return a list of the individual dates we will be reporting on
+    const reportedDates = (): string[] => {
+        const results: string[] = [];
+        for (let reportedDate = props.dateFrom; reportedDate <= props.dateTo; reportedDate = incrementDate(reportedDate, 1)) {
+            results.push(reportedDate);
+        }
+        return results;
+    }
+
+    // Return a list of the totals to report for all categories
+    const reportedTotals = (): number[] => {
+        const totals: number[] = [];
+        for (let i = 0; i < categories.length; i++) {
+            totals.push(0);
+        }
+        props.summaries.forEach(summary => {
+            if ((summary.sectionId === props.section.id)
+                && (summary.date >= props.dateFrom)
+                && (summary.date <= props.dateTo)) {
+                for (let i = 0; i < categories.length; i++) {
+                    const value = summary.values[categories[i].id];
+                    if (value) {
+                        totals[i] += Number(value);
+                    }
+                }
+            }
+        });
+        return totals;
+    }
 
     // Return a list of the values to report for a specified date
     const reportedValues = (reportedDate: string): (number | null)[] => {
@@ -82,9 +107,6 @@ const MonthlyReportSection = (props: Props) => {
                 if (foundSummary.values[categories[i].id]) {
                     const value: number | null = foundSummary.values[categories[i].id];
                     results.push(value);
-                    if (value) {
-                        totals[i] += value;
-                    }
                 } else if (foundSummary.values[categories[i].id] === 0) {
                     results.push(0);
                 } else {
@@ -98,15 +120,6 @@ const MonthlyReportSection = (props: Props) => {
             }
             return results;
         }
-    }
-
-    // Return a list of the individual dates we will be reporting on
-    const reportedDates = (): string[] => {
-        const results: string[] = [];
-        for (let reportedDate = props.dateFrom; reportedDate <= props.dateTo; reportedDate = incrementDate(reportedDate, 1)) {
-            results.push(reportedDate);
-        }
-        return results;
     }
 
     return (
@@ -144,7 +157,7 @@ const MonthlyReportSection = (props: Props) => {
                             {reportedDate}
                         </td>
                         {reportedValues(reportedDate).map((reportedValue, valueIndex) => (
-                            <td key={3000 + (dateIndex * 100) + valueIndex + 1}>
+                            <td className="text-center" key={3000 + (dateIndex * 100) + valueIndex + 1}>
                                 {listValue(reportedValue)}
                             </td>
                         ))}
@@ -154,9 +167,9 @@ const MonthlyReportSection = (props: Props) => {
                     <td className="text-center" key={99000}>
                         TOTALS
                     </td>
-                    {totals.map((total, totalIndex) => (
+                    {reportedTotals().map((reportedTotal, totalIndex) => (
                         <td className="text-center" key={99000 + totalIndex + 1}>
-                            {totals[totalIndex]}
+                            {reportedTotal}
                         </td>
                     ))}
                 </tr>

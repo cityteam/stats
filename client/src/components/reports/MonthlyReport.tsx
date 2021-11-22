@@ -31,7 +31,7 @@ const MonthlyReport = () => {
 
     const facilityContext = useContext(FacilityContext);
 
-    const [active, setActive] = useState<boolean>(false);
+    const [active, setActive] = useState<boolean>(true);
     const [dateFrom, setDateFrom] = useState<string>("2021-07-04");
     const [dateTo, setDateTo] = useState<string>("2021-07-04");
     const [month, setMonth] = useState<string>(todayMonth());
@@ -106,7 +106,7 @@ const MonthlyReport = () => {
             <Tabs
                 className="mb-3"
                 mountOnEnter={true}
-                transition={false}
+                //transition={false}
                 unmountOnExit={true}
             >
 

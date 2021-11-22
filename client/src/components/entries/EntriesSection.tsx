@@ -1,4 +1,4 @@
-// SectionEntries ------------------------------------------------------------
+// EntriesSection ------------------------------------------------------------
 
 // Encapsulates display and input fields for the Categories associated with
 // a specified Section.
@@ -24,8 +24,8 @@ import logger from "../../util/ClientLogger";
 // Incoming Properties -------------------------------------------------------
 
 export interface Props {
+    active?: boolean;                   // Report active Categories only? [false]
     date: string;                       // Date for entries
-    narrow: boolean;                    // Show narrow presentation? [false]
     section: Section;                   // Section (with nested Categories)
 }
 
@@ -36,7 +36,7 @@ type VALUES = {
     [name: string]: string;
 }
 
-const SectionEntries = (props: Props) => {
+const EntriesSection = (props: Props) => {
 
     const [categories, setCategories] = useState<Category[]>([]);
     const [saveDisabled, setSaveDisabled] = useState<boolean>(true);
@@ -51,27 +51,41 @@ const SectionEntries = (props: Props) => {
     });
 
     useEffect(() => {
-        const theCategories: Category[] = [];
-        const theInitialValues: VALUES = {};
+
+        // Calculate the Categories we will be reporting over
+        let theCategories: Category[] = [];
         if (props.section.categories) {
-            props.section.categories.forEach(category => {
-                if (category.active) {
-                    theCategories.push(category);
-                    theInitialValues[calculateName(category)] = getValue(fetchSummary.summary, category);
-                }
-            });
+            if (props.active) {
+                props.section.categories.forEach(category => {
+                    if (category.active) {
+                        theCategories.push(category);
+                    }
+                });
+            } else {
+                theCategories = props.section.categories;
+            }
         }
+        setCategories(theCategories);
+
+        // Calculate the initial values to be displayed
+        const theInitialValues: VALUES = {};
+        theCategories.forEach(category => {
+            theInitialValues[calculateName(category)] = getValue(fetchSummary.summary, category);
+        });
+        setInitialValues(theInitialValues);
+
+        // Report our configuration information
         logger.info({
-            context: "SectionEntries.useEffect",
-            narrow: props.narrow,
+            context: "EntriesSection.useEffect",
+            active: props.active,
+            date: props.date,
             section: Abridgers.SECTION(props.section),
-            summary: fetchSummary.summary,
             categories: Abridgers.CATEGORIES(theCategories),
+            summary: fetchSummary.summary,
             initialValues: theInitialValues,
         });
-        setCategories(theCategories);
-        setInitialValues(theInitialValues);
-    }, [props.date, props.narrow, props.section,
+
+    }, [props.active, props.date, props.section,
         fetchSummary.summary]);
 
     // Calculate the field name for the value associated with this Category
@@ -107,7 +121,7 @@ const SectionEntries = (props: Props) => {
             }
         });
         logger.info({
-            context: "SectionEntries.handleSubmit",
+            context: "EntriesSection.handleSubmit",
             section: Abridgers.SECTION(props.section),
             values: values,
             summary: summary,
@@ -142,7 +156,6 @@ const SectionEntries = (props: Props) => {
 
     // The user has changed an input value, so enable the Save button
     const localHandleChange = (event: ChangeEvent<any>): void => {
-//        console.info("LOCAL HANDLE CHANGE:", event);
         setSaveDisabled(false);
     }
 
@@ -175,33 +188,15 @@ const SectionEntries = (props: Props) => {
         >
 
             <thead>
-            {(props.narrow) ? (
-                <>
-                <tr className="table-warning">
-                    <th className="text-center" colSpan={2}>
-                        {props.section.slug}
-                    </th>
-                </tr>
-                <tr>
-                    <th>Statistic</th>
-                    <th>Value</th>
-                </tr>
-                </>
-            ) : (
-                <>
-                <tr className="table-dark">
-                    <th className="text-center" colSpan={4}>
-                        {props.section.title}
-                    </th>
-                </tr>
-                <tr>
-                    <th>Service</th>
-                    <th>Description</th>
-                    <th>Notes</th>
-                    <th>Value</th>
-                </tr>
-                </>
-            )}
+            <tr className="table-warning">
+                <th className="text-center" colSpan={2}>
+                    {props.section.slug}
+                </th>
+            </tr>
+            <tr>
+                <th>Statistic</th>
+                <th>Value</th>
+            </tr>
             </thead>
 
             <tbody>
@@ -210,23 +205,9 @@ const SectionEntries = (props: Props) => {
                     className="table-default"
                     key={(1000 + props.section.ordinal) + (rowIndex * 100)}
                 >
-                    {(props.narrow) ? (
-                        <td key={(1000 + props.section.ordinal) + (rowIndex * 100) + 1}>
-                            <label htmlFor={calculateName(category)}>{category.slug}</label>
-                        </td>
-                    ) : (
-                        <>
-                        <td key={(1000 + props.section.ordinal) + (rowIndex * 100) + 11}>
-                            <label htmlFor={calculateName(category)}>{category.service}</label>
-                        </td>
-                        <td key={(1000 + props.section.ordinal) + (rowIndex * 100) + 12}>
-                            {category.description}
-                        </td>
-                        <td key={(1000 + props.section.ordinal) + (rowIndex * 100) + 13}>
-                            {category.notes}
-                        </td>
-                        </>
-                    )}
+                    <td key={(1000 + props.section.ordinal) + (rowIndex * 100) + 1}>
+                        <label htmlFor={calculateName(category)}>{category.slug}</label>
+                    </td>
                     <td key={(1000 + props.section.ordinal) + (rowIndex * 100) + 98}>
                         <input
                             id={calculateName(category)}
@@ -281,4 +262,4 @@ const SectionEntries = (props: Props) => {
 
 }
 
-export default SectionEntries;
+export default EntriesSection;
