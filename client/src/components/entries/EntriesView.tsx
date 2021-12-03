@@ -52,7 +52,7 @@ const EntriesView = () => {
     }
 
     const handleDate: HandleDate = (theDate) => {
-        logger.trace({
+        logger.info({
             context: "EntriesView.handleDate",
             date: theDate,
         });
