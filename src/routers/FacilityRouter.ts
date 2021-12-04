@@ -41,7 +41,7 @@ FacilityRouter.get("/exact/:name",
 // Standard CRUD Routes ------------------------------------------------------
 
 FacilityRouter.get("/",
-    requireAny,
+    // requireAny, // This is used before login
     async (req: Request, res: Response) => {
         res.send(await FacilityServices.all(
             req.query

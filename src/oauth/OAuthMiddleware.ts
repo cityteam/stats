@@ -28,7 +28,7 @@ const AUTHORIZATION_HEADER = "Authorization";
 const NODE_ENV: string | undefined = process.env.NODE_ENV;
 const REGULAR_PERMISSION = "regular";
 const SUPERUSER_SCOPE = process.env.SUPERUSER_SCOPE ? process.env.SUPERUSER_SCOPE : "superuser";
-const TOP_LEVEL_OBJECT_ID = "libraryId"; // Top level object ID for this application
+const TOP_LEVEL_OBJECT_ID = "facilityId"; // Top level object ID for this application
 
 let oauthEnabled: boolean = true;
 if (process.env.OAUTH_ENABLED !== undefined) {

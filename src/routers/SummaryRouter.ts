@@ -8,7 +8,7 @@ import {Request, Response, Router} from "express";
 
 // Internal Modules ----------------------------------------------------------
 
-import {requireAdmin, requireRegular} from "../oauth/OAuthMiddleware";
+import {requireRegular} from "../oauth/OAuthMiddleware";
 import SummaryServices from "../services/SummaryServices";
 
 // Public Objects ------------------------------------------------------------
@@ -23,7 +23,7 @@ export default SummaryRouter;
 
 // GET /:facilityId/all/:dateFrom/:dateTo
 SummaryRouter.get("/:facilityId/all/:dateFrom/:dateTo",
-    requireAdmin,
+    requireRegular,
     async (req: Request, res: Response) => {
         let sectionIds: number[] = [];
         if (req.query.sectionIds) {

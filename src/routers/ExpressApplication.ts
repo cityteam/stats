@@ -31,14 +31,37 @@ app.use(cors({
 }));
 
 // Configure access log management
-morgan.token("timestamp",(req: any, res: any): string => {
+const ACCESS_LOG = process.env.ACCESS_LOG ? process.env.ACCESS_LOG : "stderr";
+morgan.token("date",(req: any, res: any): string => {
     return toLocalISO(new Date());
-})
-app.use(morgan("combined", {
-    skip: function (req: any, res: any) {
-        return req.path === "/clientLog";
+});
+const REMOTE_USER_HEADER = "x-ct-username";
+morgan.token("remote-user", (req, res): string => {
+    let username = "-";
+    const header: string | string[] | undefined = req.headers[REMOTE_USER_HEADER];
+    if (typeof header === "string") {
+        username = header;
     }
-}));
+    return username;
+});
+if ((ACCESS_LOG === "stderr") || (ACCESS_LOG === "stdout")) {
+    app.use(morgan("combined", {
+        skip: function (req: any, res: any) {
+            return req.path === "/clientLog";
+        },
+        stream: (ACCESS_LOG === "stderr") ? process.stderr : process.stdout,
+    }));
+} else {
+    app.use(morgan("combined", {
+        skip: function (req: any, res: any) {
+            return req.path === "/clientLog";
+        },
+        stream: rfs.createStream(ACCESS_LOG, {
+            interval: "1d",
+            path: "log",
+        }),
+    }));
+}
 
 // Configure body handling middleware
 app.use(bodyParser.json({
