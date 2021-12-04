@@ -81,7 +81,7 @@ const MonthlyReport = () => {
 
             <Row className="mb-4 ml-1 mr-1">
                 <Col className="text-left">
-                    <span><strong>Monthly Report for Facility:&nbsp;</strong></span>
+                    <span><strong>Report for Facility:&nbsp;</strong></span>
                     <span className="text-info"><strong>{facilityContext.facility.name}</strong></span>
                 </Col>
                 <Col>
@@ -89,14 +89,15 @@ const MonthlyReport = () => {
                         handleChange={handleActive}
                         id="activeOnly"
                         initialValue={active}
-                        label="Active Sections and Categories Only?"
+                        label="Active Sections/Categories Only?"
                     />
                 </Col>
                 <Col className="col-5 text-right">
                     <MonthSelector
+                        actionLabel="Go"
                         autoFocus
                         handleMonth={handleMonth}
-                        label="Monthly Report For Month:"
+                        label="Report For Month:"
                         required
                         value={month}
                     />

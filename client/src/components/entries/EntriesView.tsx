@@ -65,7 +65,7 @@ const EntriesView = () => {
             {/* Title and Entries Date Selector are always visible */}
             <Row className="mb-4 ml-1 mr-1">
                 <Col className="text-left">
-                    <span><strong>Data Entries for Facility:&nbsp;</strong></span>
+                    <span><strong>Entries for Facility:&nbsp;</strong></span>
                     <span className="text-info"><strong>{facilityContext.facility.name}</strong></span>
                 </Col>
                 <Col>
@@ -73,14 +73,15 @@ const EntriesView = () => {
                         handleChange={handleActive}
                         id="activeOnly"
                         initialValue={active}
-                        label="Active Sections and Categories Only?"
+                        label="Active Sections/Categories Only?"
                     />
                 </Col>
                 <Col className="col-5 text-right">
                     <DateSelector
+                        actionLabel="Go"
                         autoFocus
                         handleDate={handleDate}
-                        label="Data Entries For Date:"
+                        label="Entries For Date:"
                         required
                         value={date}
                     />

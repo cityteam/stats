@@ -45,12 +45,15 @@ function App() {
                           variant="light"
                       >
                           <Navbar.Brand>
+{/*
                               <img
                                   alt="CityTeam Logo"
                                   height={66}
                                   src="/CityTeamDarkBlue.png"
                                   width={160}
                               />
+*/}
+                              CityTeam Stats
                           </Navbar.Brand>
                           <Navbar.Toggle aria-controls="basic-navbar-brand"/>
                           <Navbar.Collapse id="basic-navbar-brand">
@@ -89,7 +92,7 @@ function App() {
                               </Nav>
                           </Navbar.Collapse>
                           <LoggedInUser/>
-                          <span className="mr-4"/>
+                          <span className="mr-2"/>
                           <FacilitySelector/>
                       </Navbar>
                       <Switch>

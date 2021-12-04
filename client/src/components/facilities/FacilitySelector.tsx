@@ -37,7 +37,7 @@ export const FacilitySelector = (props: Props) => {
     const [index, setIndex] = useState<number>(-1);
     const [label] = useState<string>(props.label ? props.label : "Facility:");
     const [name] = useState<string>(props.name ? props.name : "facilitySelector");
-    const [placeholder] = useState<string>(props.placeholder ? props.placeholder : "(Select Facility)");
+    const [placeholder] = useState<string>(props.placeholder ? props.placeholder : "(Select)");
 
     useEffect(() => {
         logger.debug({
@@ -71,7 +71,7 @@ export const FacilitySelector = (props: Props) => {
 
     return (
         <Form id="FacilitySelector" inline>
-            <Form.Label className="mr-2" htmlFor="facilitySelector">
+            <Form.Label className="mr-1" htmlFor="facilitySelector">
                 {label}
             </Form.Label>
             <Form.Control
