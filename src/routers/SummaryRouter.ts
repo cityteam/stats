@@ -21,8 +21,8 @@ export default SummaryRouter;
 
 // Summary Routes -----------------------------------------------------------
 
-// GET /:facilityId/all/:dateFrom/:dateTo
-SummaryRouter.get("/:facilityId/all/:dateFrom/:dateTo",
+// GET /:facilityId/dailies/:dateFrom/:dateTo
+SummaryRouter.get("/:facilityId/dailies/:dateFrom/:dateTo",
     requireRegular,
     async (req: Request, res: Response) => {
         let sectionIds: number[] = [];
@@ -34,7 +34,7 @@ SummaryRouter.get("/:facilityId/all/:dateFrom/:dateTo",
                 });
             }
         }
-        res.send(await SummaryServices.summaries(
+        res.send(await SummaryServices.dailies(
             parseInt(req.params.facilityId, 10),
             req.params.dateFrom,
             req.params.dateTo,

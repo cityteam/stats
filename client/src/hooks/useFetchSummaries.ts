@@ -64,7 +64,7 @@ const useFetchSummaries = (props: Props): State => {
                 parameters.sectionIds = ids.join(",");
             }
             const url = SUMMARIES_BASE
-                + `/${facilityContext.facility.id}/all`
+                + `/${facilityContext.facility.id}/dailies`
                 + `/${props.dateFrom}/${props.dateTo}`
                 + `${queryParameters(parameters)}`;
 

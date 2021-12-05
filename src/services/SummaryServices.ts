@@ -68,16 +68,16 @@ class SummaryServices {
     }
 
     /**
-     * Retrieve Summary rows that match the requested criteria.
+     * Retrieve daily Summary rows that match the requested criteria.
      *
      * @param facilityId                Facility ID that owns these statistics
      * @param dateFrom                  Earliest date for which to return results
-     * @param endDate                   Latest date for which to return results
+     * @param dateTo                    Latest date for which to return results
      * @param active                    Return only active Sections and Categories? [false]
      * @param sectionIds                Comma-delimited list of section IDs
      *                                  for which to return results [all sections]
      */
-    public async summaries(facilityId: number, dateFrom: string, dateTo: string, active: boolean, sectionIds?: number[]): Promise<Summary[]> {
+    public async dailies(facilityId: number, dateFrom: string, dateTo: string, active: boolean, sectionIds?: number[]): Promise<Summary[]> {
 
         // Identify the section IDs we will be restricting our search for (if any)
         // Perform the query to select the required information
