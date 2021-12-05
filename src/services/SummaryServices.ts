@@ -14,7 +14,7 @@ import Category from "../models/Category";
 import Detail from "../models/Detail";
 import Section from "../models/Section";
 import Summary from "../models/Summary";
-import {toDateObject} from "../util/Dates";
+import {fromDateObject, toDateObject} from "../util/Dates";
 import {FindOptions, IncludeOptions, Op, WhereOptions} from "sequelize";
 
 // Public Objects ------------------------------------------------------------
@@ -79,68 +79,14 @@ class SummaryServices {
      */
     public async dailies(facilityId: number, dateFrom: string, dateTo: string, active: boolean, sectionIds?: number[]): Promise<Summary[]> {
 
-        // Identify the section IDs we will be restricting our search for (if any)
-        // Perform the query to select the required information
-        const detailIncludeOptions: IncludeOptions = {
-            model: Detail,
-            where: {
-                date: { [Op.between]: [dateFrom, dateTo] },
-            }
-        }
-        const categoryIncludeOptions: IncludeOptions = {
-            include: [detailIncludeOptions],
-            model: Category,
-        }
-        if (active) {
-            categoryIncludeOptions.where = {
-                active: true,
-            }
-        }
-        let sectionWhereOptions: WhereOptions = {
-            facilityId: facilityId,
-        }
-        if (active) {
-            sectionWhereOptions.active = true;
-        }
-        if (sectionIds) {
-            sectionWhereOptions.id = { [Op.in]: sectionIds };
-        }
-        const sectionFindOptions: FindOptions = {
-            include: [categoryIncludeOptions],
-            where: sectionWhereOptions,
-        };
-        const sections = await Section.findAll(sectionFindOptions);
+        // Retrieve the requested information
+        const sections = await this.sections(facilityId, dateFrom, dateTo, active, sectionIds);
 
-        // Produce a Summary for each date that has Categories with Details
-        const summaries: Map<string, Summary> = new Map(); // Key = sectionId|date
-        sections.forEach(section => {
-            section.categories.forEach(category => {
-                category.details.forEach(detail => {
-                    const key = `${section.id}|${detail.date}`;
-                    const existing = summaries.get(key);
-                    const summary = existing ? existing : new Summary({
-                        date: detail.date,
-                        sectionId: section.id,
-                    });
-                    if (!existing) {
-                        summaries.set(key, summary);
-                    }
-                    if (detail.value || (detail.value === 0)) {
-                        summary.values[detail.categoryId] = detail.value;
-                    }
-                });
-            });
-        });
+        // Merge the detailed information into Summaries
+        const summaries = this.summaries(sections, false);
 
-        // Return the accumulated results
-        const results: Summary[] = [];
-        for (const [key, value] of summaries.entries()) {
-            if (Object.keys(value.values).length > 0) {
-                results.push(value);
-
-            }
-        }
-        return results.sort(function (a, b) {
+        // Sort and return the calculated Summaries
+        return summaries.sort(function (a, b) {
             if (a.sectionId > b.sectionId) {
                 return 1;
             } else if (a.sectionId < b.sectionId) {
@@ -155,6 +101,43 @@ class SummaryServices {
         });
 
     }
+
+    /**
+     * Retrieve monthly Summary rows that match the requested criteria.  Dates in
+     * the returned Summaries will arbitrarily be the first of that month
+     *
+     * @param facilityId                Facility ID that owns these statistics
+     * @param dateFrom                  Earliest date for which to return results (should be BOM)
+     * @param dateTo                    Latest date for which to return results (should be EOM)
+     * @param active                    Return only active Sections and Categories? [false]
+     * @param sectionIds                Comma-delimited list of section IDs
+     *                                  for which to return results [all sections]
+     */
+    public async monthlies(facilityId: number, dateFrom: string, dateTo: string, active: boolean, sectionIds?: number[]): Promise<Summary[]> {
+
+        // Retrieve the requested information
+        const sections = await this.sections(facilityId, dateFrom, dateTo, active, sectionIds);
+
+        // Merge the detailed information into Summaries
+        const summaries = this.summaries(sections, true);
+
+        // Sort and return the calculated Summaries
+        return summaries.sort(function (a, b) {
+            if (a.sectionId > b.sectionId) {
+                return 1;
+            } else if (a.sectionId < b.sectionId) {
+                return -1;
+            } else if (a.date > b.date) {
+                return 1;
+            } else if (a.date < b.date) {
+                return -1;
+            } else {
+                return 0;
+            }
+        });
+
+    }
+
 
     /**
      * Insert Detail objects to reflect the specified values for referenced
@@ -219,6 +202,115 @@ class SummaryServices {
             }
         });
         return found;
+    }
+
+    /**
+     * Return the requested Sections (with nested Categories and Details)
+     * that match the specified criteria.
+     *
+     * @param facilityId                Facility ID that owns these statistics
+     * @param dateFrom                  Earliest date for which to return results
+     * @param dateTo                    Latest date for which to return results
+     * @param active                    Return only active Sections and Categories? [false]
+     * @param sectionIds                Comma-delimited list of section IDs
+     *                                  for which to return results [all sections]
+     */
+    private async sections(facilityId: number, dateFrom: string, dateTo: string, active: boolean, sectionIds?: number[]): Promise<Section[]> {
+
+        // Configure the criteria we will be using for this select
+        const detailIncludeOptions: IncludeOptions = {
+            model: Detail,
+            where: {
+                date: { [Op.between]: [dateFrom, dateTo] },
+            }
+        }
+        const categoryIncludeOptions: IncludeOptions = {
+            include: [detailIncludeOptions],
+            model: Category,
+        }
+        if (active) {
+            categoryIncludeOptions.where = {
+                active: true,
+            }
+        }
+        let sectionWhereOptions: WhereOptions = {
+            facilityId: facilityId,
+        }
+        if (active) {
+            sectionWhereOptions.active = true;
+        }
+        if (sectionIds) {
+            sectionWhereOptions.id = { [Op.in]: sectionIds };
+        }
+        const sectionFindOptions: FindOptions = {
+            include: [categoryIncludeOptions],
+            where: sectionWhereOptions,
+        };
+
+        // Perform the query to select the required information
+        return await Section.findAll(sectionFindOptions);
+
+    }
+
+    /**
+     * Accumulate the specified Sections (with nested Categories and Details)
+     * into Summaries, respecting whether dates should be trimmed to the first
+     * day of the month (for monthly totals) or not.
+     *
+     * These results will likely need to be sorted as desired.
+     *
+     * @param sections                  Sections (with nested Categories and Details)
+     * @param trim                      Trim dates to first day of the month?
+     */
+    private summaries(sections: Section[], trim: boolean): Summary[] {
+
+        // Produce a Summary for each date that has Categories with Details
+        const summaries: Map<string, Summary> = new Map(); // Key = sectionId|trimmedDate
+        sections.forEach(section => {
+            section.categories.forEach(category => {
+                category.details.forEach(detail => {
+                    const detailDate = fromDateObject(detail.date);
+                    let trimmedDate = trim
+                        ? detailDate.substr(0, 7) + "-01"
+                        : detailDate;
+                    const key = `${section.id}|${trimmedDate}`;
+                    const existing = summaries.get(key);
+                    const summary = existing ? existing : new Summary({
+                        date: trimmedDate,
+                        sectionId: section.id,
+                    });
+                    if (!existing) {
+                        summaries.set(key, summary);
+                    }
+                    if (summary.values[detail.categoryId] === undefined) {
+                        summary.values[detail.categoryId] = null;
+                    }
+                    if (detail.value || (detail.value === 0)) {
+                        let summaryValue = summary.values[detail.categoryId];
+                        if (summaryValue === null) {
+                            summaryValue = 0;
+                        }
+                        let detailValue = detail.value;
+                        if (!detailValue) {
+                            detailValue = 0;
+                        }
+                        summaryValue = summaryValue + Number(detailValue);
+                        summary.values[detail.categoryId] = summaryValue;
+                    }
+                });
+            });
+        });
+
+        // Return the accumulated results
+        const results: Summary[] = [];
+        for (const [key, value] of summaries.entries()) {
+            if (Object.keys(value.values).length > 0) {
+                results.push(value);
+
+            }
+        }
+        return results;
+
     }
 
 }

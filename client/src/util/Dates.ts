@@ -21,6 +21,9 @@ export const decrementDate = (originalDate: string, decrement: number): string =
 
 // Return the date string from the specified Date object (local time)
 export const fromDateObject = (originalObject: Date): string => {
+    if (typeof originalObject === "string") {
+        return originalObject;
+    }
     let temp = format(originalObject, "P");
     return temp.substr(6, 4) + "-" + temp.substr(0, 2)
         + "-" + temp.substr(3, 2);
