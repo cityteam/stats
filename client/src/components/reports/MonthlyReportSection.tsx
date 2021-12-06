@@ -16,7 +16,6 @@ import Summary from "../../models/Summary";
 import * as Abridgers from "../../util/Abridgers";
 import logger from "../../util/ClientLogger";
 import {incrementDate} from "../../util/Dates";
-import {listValue} from "../../util/Transformations";
 
 // Incoming Properties -------------------------------------------------------
 
@@ -30,11 +29,46 @@ export interface Props {
 
 // Component Details ---------------------------------------------------------
 
+type Row = {
+    date: string;
+    values: (number | null)[];          // One per Category
+}
+
 const MonthlyReportSection = (props: Props) => {
 
     const [categories, setCategories] = useState<Category[]>([]);
+    const [rows, setRows] = useState<Row[]>([]);
+    const [totals, setTotals] = useState<(number)[]>([]);
 
     useEffect(() => {
+
+        logger.info({
+            context: "MonthlyReportSection.useEffect",
+            active: props.active,
+            dateFrom: props.dateFrom,
+            dateTo: props.dateTo,
+            section: Abridgers.SECTION(props.section),
+        });
+
+        const calculateColIndex = (categoryId: number, categories: Category[]): number => {
+            let theIndex = -1;
+            categories.forEach((category, index) => {
+                if (category.id === categoryId) {
+                    theIndex = index;
+                }
+            });
+            return theIndex;
+        }
+
+        const calculateRowIndex = (date: string, rows: Row[]): number => {
+            let theIndex = -1;
+            rows.forEach((row, index) => {
+                if (row.date === date) {
+                    theIndex = index;
+                }
+            });
+            return theIndex;
+        }
 
         // Calculate the Categories we will be reporting over
         let theCategories: Category[] = [];
@@ -51,18 +85,49 @@ const MonthlyReportSection = (props: Props) => {
         }
         setCategories(theCategories);
 
-        // Report our configuration information
-        logger.info({
-            context: "MonthlyReportSection.useEffect",
-            active: props.active,
-            dateFrom: props.dateFrom,
-            dateTo: props.dateTo,
-            section: Abridgers.SECTION(props.section),
-            categories: Abridgers.CATEGORIES(theCategories)
+        // Prepare all Rows for population of detailed values
+        const theRows: Row[] = [];
+        for (let theDate = props.dateFrom; theDate <= props.dateTo; theDate = incrementDate(theDate, 1)) {
+            const theRow: Row = {
+                date: theDate,
+                values: [],
+            }
+            theCategories.forEach(category => {
+                theRow.values.push(null);
+            });
+            theRows.push(theRow);
+        }
+        const theTotals: (number)[] = [];
+        theCategories.forEach(category => {
+            theTotals.push(0);
+        })
+
+        // Fill in the detailed values from the specified Summaries
+        props.summaries.forEach(summary => {
+            if (summary.sectionId === props.section.id) {
+                const rowIndex = calculateRowIndex(summary.date, theRows);
+                if (rowIndex >= 0) {
+                    for (const [key, value] of Object.entries(summary.values)) {
+                        const colIndex = calculateColIndex(Number(key), theCategories);
+                        if (colIndex >= 0) {
+                            theRows[rowIndex].values[colIndex] = value;
+                            if (value) {
+                                theTotals[colIndex] += value;
+                            }
+                        }
+                    }
+                }
+            }
         });
 
-    }, [props.active, props.dateFrom, props.dateTo, props.section]);
+        // Save the computed information for rendering
+        setRows(theRows);
+        setTotals(theTotals);
 
+    }, [props.active, props.dateFrom, props.dateTo,
+        props.section, props.summaries]);
+
+/*
     // Return a list of the individual dates we will be reporting on
     const reportedDates = (): string[] => {
         const results: string[] = [];
@@ -71,7 +136,9 @@ const MonthlyReportSection = (props: Props) => {
         }
         return results;
     }
+*/
 
+/*
     // Return a list of the totals to report for all categories
     const reportedTotals = (): number[] => {
         const totals: number[] = [];
@@ -92,7 +159,9 @@ const MonthlyReportSection = (props: Props) => {
         });
         return totals;
     }
+*/
 
+/*
     // Return a list of the values to report for a specified date
     const reportedValues = (reportedDate: string): (number | null)[] => {
         const results: (number | null)[] = [];
@@ -121,9 +190,11 @@ const MonthlyReportSection = (props: Props) => {
             return results;
         }
     }
+*/
 
     return (
-        <Container id={"MonthlyReportSection" + props.section.id}>
+        <Container id={"MonthlyReportSection-S" + props.section.id}
+                   key={"MRS-S" + props.section.id}>
 
             <Table
                 bordered={true}
@@ -141,9 +212,12 @@ const MonthlyReportSection = (props: Props) => {
                     </th>
                 </tr>
                 <tr className="table-secondary">
-                    <th className="text-center" scope="col">Date</th>
+                    <th className="text-center">Date</th>
                     {categories.map((category, categoryIndex) => (
-                        <th className="text-center" key={1000 + categoryIndex} scope="col">
+                        <th
+                            className="text-center"
+                            key={"S" + props.section.id + "-C" + categoryIndex + "-S"}
+                        >
                             {category.slug}
                         </th>
                     ))}
@@ -151,6 +225,7 @@ const MonthlyReportSection = (props: Props) => {
                 </thead>
 
                 <tbody>
+{/*
                 {reportedDates().map((reportedDate, dateIndex) => (
                     <tr className="table-default" key={2000 + dateIndex}>
                         <td className="text-center" key={3000 + (dateIndex * 100) + 0}>
@@ -163,13 +238,33 @@ const MonthlyReportSection = (props: Props) => {
                         ))}
                     </tr>
                 ))}
+*/}
+                {rows.map((row, rowIndex) => (
+                    <tr className="table-default" key={"S" + props.section.id + "-R" + rowIndex}>
+                        <td className="text-center" key={"S" + props.section.id + "-R" + rowIndex + "-D"}>
+                            {row.date}
+                        </td>
+                        {row.values.map((value, colIndex) => (
+                            <td className="text-center" key={"S" + props.section.id + "-R" + rowIndex + "-C" + colIndex}>
+                                {value}
+                            </td>
+                        ))}
+                    </tr>
+                ))}
                 <tr className="table-dark">
-                    <td className="text-center" key={99000}>
+                    <td className="text-center" key={"S" + props.section.id + "-T"}>
                         TOTALS
                     </td>
+{/*
                     {reportedTotals().map((reportedTotal, totalIndex) => (
                         <td className="text-center" key={99000 + totalIndex + 1}>
                             {reportedTotal}
+                        </td>
+                    ))}
+*/}
+                    {totals.map((total, colIndex) => (
+                        <td className="text-center" key={"S" + props.section.id + "-C" + colIndex + "-T"}>
+                            {total}
                         </td>
                     ))}
                 </tr>

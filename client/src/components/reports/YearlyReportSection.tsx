@@ -9,6 +9,7 @@ import Table from "react-bootstrap/Table";
 
 // Internal Modules ----------------------------------------------------------
 
+import Category from "../../models/Category";
 import Section from "../../models/Section";
 import Summary from "../../models/Summary";
 import * as Abridgers from "../../util/Abridgers";
@@ -30,7 +31,7 @@ type Row = {
     id: number;
     slug: string;
     total: number;
-    values: number[];
+    values: number[];                   // One per month
 }
 
 const YearlyReportSection = (props: Props) => {
@@ -43,9 +44,9 @@ const YearlyReportSection = (props: Props) => {
             context: "YearlyReportSection.useEffect",
             active: props.active,
             section: Abridgers.SECTION(props.section),
-        })
+        });
 
-        const calculateColumnIndex = (theMonth: string): number => {
+        const calculateColIndex = (theMonth: string): number => {
             let theIndex: number = -1;
             props.months.forEach((month, index) => {
                 if (theMonth === month) {
@@ -65,33 +66,45 @@ const YearlyReportSection = (props: Props) => {
             return theIndex;
         }
 
+        // Calculate the Categories we will be reporting over
+        let theCategories: Category[] = [];
+        if (props.section.categories) {
+            if (props.active) {
+                props.section.categories.forEach(category => {
+                    if (category.active) {
+                        theCategories.push(category);
+                    }
+                });
+            } else {
+                theCategories = props.section.categories;
+            }
+        }
+
         // Prepare all Rows for population of detailed values
         const theRows: Row[] = [];
-        if (props.section.categories) {
-            props.section.categories.forEach(category => {
-                const theRow: Row = {
-                    id: category.id,
-                    slug: category.slug ? category.slug : "Category " + category.id,
-                    total: 0,
-                    values: [],
-                }
-                props.months.forEach((month, monthIndex) => {
-                    theRow.values.push(0);
-                })
-                theRows.push(theRow);
+        theCategories.forEach(category => {
+            const theRow: Row = {
+                id: category.id,
+                slug: category.slug ? category.slug : "Category " + category.id,
+                total: 0,
+                values: [],
+            }
+            props.months.forEach((month, monthIndex) => {
+                theRow.values.push(0);
             });
-        }
+            theRows.push(theRow);
+        });
 
         // Fill in the detailed values from the specified Summaries
         props.summaries.forEach(summary => {
             if (summary.sectionId === props.section.id) {
-                const columnIndex = calculateColumnIndex(summary.date.substr(0, 7));
-                if (columnIndex >= 0) {
+                const colIndex = calculateColIndex(summary.date.substr(0, 7));
+                if (colIndex >= 0) {
                     for (const [key, value] of Object.entries(summary.values)) {
                         if (value) {
                             const rowIndex = calculateRowIndex(Number(key), theRows);
                             if (rowIndex >= 0) {
-                                theRows[rowIndex].values[columnIndex] = value;
+                                theRows[rowIndex].values[colIndex] = value;
                                 theRows[rowIndex].total += value;
                             }
                         }
@@ -130,13 +143,13 @@ const YearlyReportSection = (props: Props) => {
             <tbody>
             {rows.map((row, rowIndex) => (
                 <tr>
-                    <td key={"S" + props.section.id + "-C" + row.id + "-C"}>
+                    <td key={"S" + props.section.id + "-C" + row.id + "-S"}>
                         {row.slug}
                     </td>
-                    {row.values.map((value, valueIndex) => (
+                    {row.values.map((value, colIndex) => (
                         <td
                             className="text-center"
-                            key={"S" + props.section.id + "-C" + row.id + "-V" + valueIndex}
+                            key={"S" + props.section.id + "-C" + row.id + "-V" + colIndex}
                         >
                             {value}
                         </td>

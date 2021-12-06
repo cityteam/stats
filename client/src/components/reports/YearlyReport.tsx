@@ -125,7 +125,7 @@ const YearlyReport = () => {
             </Row>
 
             {fetchSections.sections.map((section, sectionIndex) => (
-                <Row className="mb-1 ml-1 mr-1" key={"YRS-S" + sectionIndex}>
+                <Row className="mb-1 ml-1 mr-1" key={"YR-S" + section.id}>
                     <YearlyReportSection
                         active={active}
                         labels={labels}

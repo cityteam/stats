@@ -57,8 +57,6 @@ const MonthlyReport = () => {
             facility: Abridgers.FACILITY(facilityContext.facility),
             active: active,
             month: month,
-            //sections: Abridgers.SECTIONS(fetchSections.sections),
-            //summaries: Abridgers.SUMMARIES(fetchSummaries.summaries),
         });
 
     }, [facilityContext.facility,
@@ -93,7 +91,7 @@ const MonthlyReport = () => {
                         label="Active Sections/Categories Only?"
                     />
                 </Col>
-                <Col className="col-5 text-right">
+                <Col className="col-4 text-right">
                     <MonthSelector
                         actionLabel="Go"
                         autoFocus
@@ -115,6 +113,7 @@ const MonthlyReport = () => {
                 {fetchSections.sections.map((section, tabIndex) => (
                     <Tab
                         eventKey={section.id}
+                        key={"MR-S" + section.id}
                         title={section.slug}
                     >
                         <MonthlyReportSection
