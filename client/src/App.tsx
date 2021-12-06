@@ -24,6 +24,7 @@ import FacilitiesView from "./components/facilities/FacilitiesView";
 import HomeView from "./components/general/HomeView";
 import LoggedInUser from "./components/login/LoggedInUser";
 import MonthlyReport from "./components/reports/MonthlyReport";
+import YearlyReport from "./components/reports/YearlyReport";
 import SectionsView from "./components/sections/SectionsView";
 import UsersView from "./components/users/UsersView";
 import {FacilityContextProvider} from "./components/facilities/FacilityContext";
@@ -66,7 +67,7 @@ function App() {
                                   </LinkContainer>
                                   <NavDropdown id="reports" title="Reports">
                                       <LinkContainer to="/report-month">
-                                          <NavDropdown.Item>Monthly Details</NavDropdown.Item>
+                                          <NavDropdown.Item>Monthly Summary</NavDropdown.Item>
                                       </LinkContainer>
                                       <LinkContainer to="/report-year">
                                           <NavDropdown.Item>Yearly Summary</NavDropdown.Item>
@@ -118,6 +119,9 @@ function App() {
                           </Route>
                           <Route exact path="/report-month">
                               <MonthlyReport/>
+                          </Route>
+                          <Route exact path="/report-year">
+                              <YearlyReport/>
                           </Route>
                           <Route path="/">
                               <HomeView/>

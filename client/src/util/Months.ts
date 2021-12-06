@@ -20,7 +20,7 @@ import {fromDateObject, toDateObject, todayDate} from "./Dates";
 
 // Public Objects ------------------------------------------------------------
 
-// Return the specified month minus decrement days
+// Return the specified month minus decrement months
 export const decrementMonth = (originalMonth: string, decrement: number): string => {
     let originalDate: Date = toDateObject(originalMonth + "-01");
     let updatedDate: Date = subMonths(originalDate, decrement);
@@ -38,7 +38,7 @@ export const fromDate = (originalDate: string): string => {
     return originalDate.substr(0, 7);
 }
 
-// Return the specified month plus increment days
+// Return the specified month plus increment months
 export const incrementMonth = (originalMonth: String, increment: number): string => {
     let originalDate: Date = toDateObject(originalMonth + "-01");
     let updatedDate: Date = addMonths(originalDate, increment);

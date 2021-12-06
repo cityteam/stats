@@ -25,6 +25,7 @@ export interface Props {
     active?: boolean;                   // Select only active Sections? [false]
     dateFrom: string;                   // Earliest date for which to retrieve Summaries
     dateTo: string;                     // Latest date for which to retrieve Summaries
+    monthlies?: boolean;                // Monthly summaries, not daily? [false]
     sectionIds?: number[];              // List of Section IDs to retrieve (all sections)
 }
 
@@ -63,8 +64,9 @@ const useFetchSummaries = (props: Props): State => {
                 })
                 parameters.sectionIds = ids.join(",");
             }
+            const which = props.monthlies ? "monthlies" : "dailies";
             const url = SUMMARIES_BASE
-                + `/${facilityContext.facility.id}/dailies`
+                + `/${facilityContext.facility.id}/${which}`
                 + `/${props.dateFrom}/${props.dateTo}`
                 + `${queryParameters(parameters)}`;
 
@@ -101,7 +103,7 @@ const useFetchSummaries = (props: Props): State => {
         fetchSummaries();
 
     }, [facilityContext, loginContext,
-        props.active, props.dateFrom, props.dateTo, props.sectionIds]);
+        props.active, props.dateFrom, props.dateTo, props.monthlies, props.sectionIds]);
 
     return {
         error: error ? error : null,

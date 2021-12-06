@@ -1,7 +1,7 @@
-// MonthlyReport -------------------------------------------------------------
+// YearlyReport --------------------------------------------------------------
 
-// Monthly report (with daily totals).  There will be a separate tab for each
-// defined Section, with dates as rows and Categories as columns.
+// Yearly report (with monthly totals).  Categories (subtitled by their Section)
+// will be rows, and months of the selected year will be columns.
 
 // External Modules ----------------------------------------------------------
 
@@ -9,12 +9,10 @@ import React, {useContext, useEffect, useState} from "react";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
-import Tab from "react-bootstrap/Tab";
-import Tabs from "react-bootstrap/Tabs";
 
 // Internal Modules ----------------------------------------------------------
 
-import MonthlyReportSection from "./MonthlyReportSection";
+import YearlyReportSection from "./YearlyReportSection";
 import FacilityContext from "../facilities/FacilityContext";
 import CheckBox from "../general/CheckBox";
 import MonthSelector from "../general/MonthSelector";
@@ -23,18 +21,30 @@ import useFetchSections from "../../hooks/useFetchSections";
 import useFetchSummaries from "../../hooks/useFetchSummaries";
 import * as Abridgers from "../../util/Abridgers";
 import logger from "../../util/ClientLogger";
-import {endDate, startDate, todayMonth} from "../../util/Months";
+import {decrementMonth, endDate, incrementMonth, startDate, todayMonth} from "../../util/Months";
 
 // Component Details ---------------------------------------------------------
 
-const MonthlyReport = () => {
+const YearlyReport = () => {
+
+    // Calculate starting month of the desired fiscal year
+    const START_MONTH = "09";       // September
+    const yearStartMonth = (): string => {
+        let month = todayMonth();
+        while (month.substr(5, 2) !== START_MONTH) {
+            month = decrementMonth(month, 1);
+        }
+        return month;
+    }
 
     const facilityContext = useContext(FacilityContext);
 
     const [active, setActive] = useState<boolean>(true);
     const [dateFrom, setDateFrom] = useState<string>("2021-07-04");
     const [dateTo, setDateTo] = useState<string>("2021-07-04");
-    const [month, setMonth] = useState<string>(todayMonth());
+    const [labels, setLabels] = useState<string[]>([]); // Column headings
+    const [month, setMonth] = useState<string>(yearStartMonth());
+    const [months, setMonths] = useState<string[]>([]); // Month values
 
     const fetchSections = useFetchSections({
         active: active,
@@ -44,22 +54,31 @@ const MonthlyReport = () => {
         active: active,
         dateFrom: dateFrom,
         dateTo: dateTo,
-        monthlies: false,
+        monthlies: true,
     });
 
     useEffect(() => {
 
         setDateFrom(startDate(month));
-        setDateTo(endDate(month));
+        setDateTo(endDate(incrementMonth(month, 11)));
 
         logger.info({
-            context: "MonthlyReport.useEffect",
+            context: "YearlyReport.useEffect",
             facility: Abridgers.FACILITY(facilityContext.facility),
             active: active,
             month: month,
-            //sections: Abridgers.SECTIONS(fetchSections.sections),
-            //summaries: Abridgers.SUMMARIES(fetchSummaries.summaries),
         });
+
+        const theLabels: string[] = [];
+        const theMonths: string[] = [];
+        let theMonth = month;
+        for (let i = 0; i < 12; i++) {
+            theLabels.push(theMonth);
+            theMonths.push(theMonth);
+            theMonth = incrementMonth(theMonth, 1);
+        }
+        setLabels(theLabels);
+        setMonths(theMonths);
 
     }, [facilityContext.facility,
         active, month,
@@ -78,11 +97,11 @@ const MonthlyReport = () => {
     }
 
     return (
-        <Container fluid id="MonthlyReport">
+        <Container fluid id="YearlyReport">
 
             <Row className="mb-4 ml-1 mr-1">
                 <Col className="text-left">
-                    <span><strong>Monthly Report for Facility:&nbsp;</strong></span>
+                    <span><strong>Yearly Report for Facility:&nbsp;</strong></span>
                     <span className="text-info"><strong>{facilityContext.facility.name}</strong></span>
                 </Col>
                 <Col>
@@ -98,40 +117,28 @@ const MonthlyReport = () => {
                         actionLabel="Go"
                         autoFocus
                         handleMonth={handleMonth}
-                        label="Report For Month:"
+                        label="Starting Month:"
                         required
                         value={month}
                     />
                 </Col>
             </Row>
 
-            <Tabs
-                className="mb-3"
-                mountOnEnter={true}
-                //transition={false}
-                unmountOnExit={true}
-            >
-
-                {fetchSections.sections.map((section, tabIndex) => (
-                    <Tab
-                        eventKey={section.id}
-                        title={section.slug}
-                    >
-                        <MonthlyReportSection
-                            active={active}
-                            dateFrom={dateFrom}
-                            dateTo={dateTo}
-                            section={section}
-                            summaries={fetchSummaries.summaries}
-                        />
-                    </Tab>
-                ))}
-
-            </Tabs>
+            {fetchSections.sections.map((section, sectionIndex) => (
+                <Row className="mb-1 ml-1 mr-1" key={"YRS-S" + sectionIndex}>
+                    <YearlyReportSection
+                        active={active}
+                        labels={labels}
+                        months={months}
+                        section={section}
+                        summaries={fetchSummaries.summaries}
+                    />
+                </Row>
+            ))}
 
         </Container>
     )
 
 }
 
-export default MonthlyReport;
+export default YearlyReport;
