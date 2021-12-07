@@ -106,14 +106,15 @@ const MonthlyReport = () => {
             <Tabs
                 className="mb-3"
                 mountOnEnter={true}
-                //transition={false}
+                transition={false}
                 unmountOnExit={true}
             >
 
                 {fetchSections.sections.map((section, tabIndex) => (
                     <Tab
                         eventKey={section.id}
-                        key={"MR-S" + section.id}
+                        id={`MR-S${section.id}-Tab`}
+                        key={`MR-S${section.id}-Tab`}
                         title={section.slug}
                     >
                         <MonthlyReportSection

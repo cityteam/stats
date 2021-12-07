@@ -121,6 +121,8 @@ const YearlyReportSection = (props: Props) => {
     return (
         <Table
             bordered={true}
+            //id={`YRS-S${props.section.id}-Table`}
+            key={`YRS-S${props.section.id}-Table`}
             size="sm"
             striped={true}
         >
@@ -133,30 +135,36 @@ const YearlyReportSection = (props: Props) => {
             </tr>
             <tr className="table-secondary">
                 <th className="text-center">Category</th>
-                {props.labels.map((label, labelIndex) => (
-                    <th className="text-center" key={1000 + labelIndex}>{label}</th>
+                {props.labels.map((label, ci) => (
+                    <th className="text-center"
+                        //id={`YRS-S${props.section.id}-C${ci}-th`}
+                        key={`YRS-S${props.section.id}-C${ci}-th`}
+                    >{label}</th>
                 ))}
                 <th className="text-center">Totals</th>
             </tr>
             </thead>
 
             <tbody>
-            {rows.map((row, rowIndex) => (
-                <tr>
-                    <td key={"S" + props.section.id + "-C" + row.id + "-S"}>
-                        {row.slug}
-                    </td>
-                    {row.values.map((value, colIndex) => (
+            {rows.map((row, ri) => (
+                <tr
+                    //id={`YRS-S${props.section.id}-R${ri}-tr`}
+                    key={`YRS-S${props.section.id}-R${ri}-tr`}
+                >
+                    <td>{row.slug}</td>
+                    {row.values.map((value, ci) => (
                         <td
                             className="text-center"
-                            key={"S" + props.section.id + "-C" + row.id + "-V" + colIndex}
+                            //id={`YRS-S${props.section.id}-R${ri}-C${ci}-td`}
+                            key={`YRS-S${props.section.id}-R${ri}-C${ci}-td`}
                         >
                             {value}
                         </td>
                     ))}
                     <td
                         className="text-center"
-                        key={"S" + props.section.id + "-C" + row.id + "-T"}
+                        //id={`YRS-S${props.section.id}-R${ri}-td-tot`}
+                        key={`YRS-S${props.section.id}-R${ri}-td-tot`}
                     >
                         {row.total}
                     </td>

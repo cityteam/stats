@@ -127,77 +127,15 @@ const MonthlyReportSection = (props: Props) => {
     }, [props.active, props.dateFrom, props.dateTo,
         props.section, props.summaries]);
 
-/*
-    // Return a list of the individual dates we will be reporting on
-    const reportedDates = (): string[] => {
-        const results: string[] = [];
-        for (let reportedDate = props.dateFrom; reportedDate <= props.dateTo; reportedDate = incrementDate(reportedDate, 1)) {
-            results.push(reportedDate);
-        }
-        return results;
-    }
-*/
-
-/*
-    // Return a list of the totals to report for all categories
-    const reportedTotals = (): number[] => {
-        const totals: number[] = [];
-        for (let i = 0; i < categories.length; i++) {
-            totals.push(0);
-        }
-        props.summaries.forEach(summary => {
-            if ((summary.sectionId === props.section.id)
-                && (summary.date >= props.dateFrom)
-                && (summary.date <= props.dateTo)) {
-                for (let i = 0; i < categories.length; i++) {
-                    const value = summary.values[categories[i].id];
-                    if (value) {
-                        totals[i] += Number(value);
-                    }
-                }
-            }
-        });
-        return totals;
-    }
-*/
-
-/*
-    // Return a list of the values to report for a specified date
-    const reportedValues = (reportedDate: string): (number | null)[] => {
-        const results: (number | null)[] = [];
-        let foundSummary = new Summary();
-        props.summaries.forEach(summary => {
-            if ((summary.sectionId === props.section.id) && (summary.date === reportedDate)) {
-                foundSummary = summary;
-            };
-        });
-        if ((foundSummary.sectionId === props.section.id) && (foundSummary.date === reportedDate)) {
-            for (let i = 0; i < categories.length; i++) {
-                if (foundSummary.values[categories[i].id]) {
-                    const value: number | null = foundSummary.values[categories[i].id];
-                    results.push(value);
-                } else if (foundSummary.values[categories[i].id] === 0) {
-                    results.push(0);
-                } else {
-                    results.push(null);
-                }
-            }
-            return results;
-        } else {
-            for (let i = 0; i < categories.length; i++) {
-                results.push(null);
-            }
-            return results;
-        }
-    }
-*/
-
     return (
-        <Container id={"MonthlyReportSection-S" + props.section.id}
-                   key={"MRS-S" + props.section.id}>
-
+        <Container
+            id={`MRS-S${props.section.id}-Container`}
+            key={`MRS-S${props.section.id}-Container`}
+        >
             <Table
                 bordered={true}
+                id={`MRS-S${props.section.id}-Table`}
+                key={`MRS-S${props.section.id}-Table`}
                 size="sm"
                 striped={true}
             >
@@ -213,10 +151,11 @@ const MonthlyReportSection = (props: Props) => {
                 </tr>
                 <tr className="table-secondary">
                     <th className="text-center">Date</th>
-                    {categories.map((category, categoryIndex) => (
+                    {categories.map((category, ci) => (
                         <th
                             className="text-center"
-                            key={"S" + props.section.id + "-C" + categoryIndex + "-S"}
+                            id={`MRS-S${props.section.id}-C${ci}-th`}
+                            key={`MRS-S${props.section.id}-C${ci}-th`}
                         >
                             {category.slug}
                         </th>
@@ -225,47 +164,33 @@ const MonthlyReportSection = (props: Props) => {
                 </thead>
 
                 <tbody>
-{/*
-                {reportedDates().map((reportedDate, dateIndex) => (
-                    <tr className="table-default" key={2000 + dateIndex}>
-                        <td className="text-center" key={3000 + (dateIndex * 100) + 0}>
-                            {reportedDate}
-                        </td>
-                        {reportedValues(reportedDate).map((reportedValue, valueIndex) => (
-                            <td className="text-center" key={3000 + (dateIndex * 100) + valueIndex + 1}>
-                                {listValue(reportedValue)}
-                            </td>
-                        ))}
-                    </tr>
-                ))}
-*/}
-                {rows.map((row, rowIndex) => (
-                    <tr className="table-default" key={"S" + props.section.id + "-R" + rowIndex}>
-                        <td className="text-center" key={"S" + props.section.id + "-R" + rowIndex + "-D"}>
-                            {row.date}
-                        </td>
-                        {row.values.map((value, colIndex) => (
-                            <td className="text-center" key={"S" + props.section.id + "-R" + rowIndex + "-C" + colIndex}>
-                                {value}
-                            </td>
+                {rows.map((row, ri) => (
+                    <tr className="table-default"
+                        id={`MRS-S${props.section.id}-R${ri}-tr`}
+                        key={`MRS-S${props.section.id}-R${ri}-tr`}
+                    >
+                        <td className="text-center"
+                            id={`MRS-S${props.section.id}-R${ri}-td-date`}
+                            key={`MRS-S${props.section.id}-R${ri}-td-date`}
+                        >{row.date}</td>
+                        {row.values.map((value, ci) => (
+                            <td className="text-center"
+                                id={`MRS-S${props.section.id}-R${ri}-C${ci}-td`}
+                                key={`MRS-S${props.section.id}-R${ri}-C${ci}-td`}
+                            >{value}</td>
                         ))}
                     </tr>
                 ))}
                 <tr className="table-dark">
-                    <td className="text-center" key={"S" + props.section.id + "-T"}>
-                        TOTALS
-                    </td>
-{/*
-                    {reportedTotals().map((reportedTotal, totalIndex) => (
-                        <td className="text-center" key={99000 + totalIndex + 1}>
-                            {reportedTotal}
-                        </td>
-                    ))}
-*/}
-                    {totals.map((total, colIndex) => (
-                        <td className="text-center" key={"S" + props.section.id + "-C" + colIndex + "-T"}>
-                            {total}
-                        </td>
+                    <td className="text-center"
+                        id={`MRS-S${props.section.id}-td-tot`}
+                        key={`MRS-S${props.section.id}-td-tot`}
+                    >TOTALS</td>
+                    {totals.map((total, ci) => (
+                        <td className="text-center"
+                            id={`MRS-S${props.section.id}-C${ci}-td-tot`}
+                            key={`MRS-S${props.section.id}-C${ci}-td-tot`}
+                        >{total}</td>
                     ))}
                 </tr>
                 </tbody>
