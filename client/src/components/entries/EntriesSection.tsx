@@ -200,19 +200,26 @@ const EntriesSection = (props: Props) => {
             </thead>
 
             <tbody>
-            {categories.map((category, rowIndex) => (
+            {categories.map((category, ri) => (
                 <tr
                     className="table-default"
-                    key={(1000 + props.section.ordinal) + (rowIndex * 100)}
+                    id={`ES-S${props.section.id}-R${ri}-tr`}
+                    key={`ES-S${props.section.id}-R${ri}-tr`}
                 >
-                    <td key={(1000 + props.section.ordinal) + (rowIndex * 100) + 1}>
+                    <td
+                        id={`ES-S${props.section.id}-R${ri}-label`}
+                        key={`ES-S${props.section.id}-R${ri}-label`}
+                    >
                         <label htmlFor={calculateName(category)}>{category.slug}</label>
                     </td>
-                    <td key={(1000 + props.section.ordinal) + (rowIndex * 100) + 98}>
+                    <td
+                        id={`ES-S${props.section.id}-R${ri}-input`}
+                        key={`ES-S${props.section.id}-R${ri}-input`}
+                    >
                         <input
                             id={calculateName(category)}
                             inputMode="numeric"
-                            key={(1000 + props.section.ordinal) + (rowIndex * 100) + 99}
+                            key={(1000 + props.section.ordinal) + (ri * 100) + 99}
                             name={calculateName(category)}
                             onBlur={handleBlur}
                             onChange={event => {
