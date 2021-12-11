@@ -8,7 +8,7 @@ import {useContext, useEffect, useState} from "react";
 
 // Internal Modules ----------------------------------------------------------
 
-import {HandleCategory} from "../types";
+import {ProcessCategory} from "../types";
 import Api from "../clients/Api";
 import FacilityContext from "../components/facilities/FacilityContext";
 import Category, {CATEGORIES_BASE} from "../models/Category";
@@ -21,15 +21,16 @@ import * as ToModel from "../util/ToModel";
 // Incoming Properties and Outgoing State ------------------------------------
 
 export interface Props {
+    alertPopup?: boolean;               // Pop up browser alert on error? [true]
     section: Section;                   // Section for which to mutate Categories
 }
 
 export interface State {
     error: Error | null;                // I/O error (if any)
     executing: boolean;                 // Are we currently executing?
-    insert: HandleCategory;             // Function to insert a new Category
-    remove: HandleCategory;             // Function to remove an existing Category
-    update: HandleCategory;             // Function to update an existing Category
+    insert: ProcessCategory;            // Function to insert a new Category
+    remove: ProcessCategory;            // Function to remove an existing Category
+    update: ProcessCategory;            // Function to update an existing Category
 }
 
 // Component Details ---------------------------------------------------------
@@ -38,6 +39,7 @@ const useMutateCategory = (props: Props): State => {
 
     const facilityContext = useContext(FacilityContext);
 
+    const [alertPopup] = useState<boolean>((props.alertPopup !== undefined) ? props.alertPopup : true);
     const [error, setError] = useState<Error | null>(null);
     const [executing, setExecuting] = useState<boolean>(false);
 
@@ -48,7 +50,7 @@ const useMutateCategory = (props: Props): State => {
         });
     });
 
-    const insert: HandleCategory = async (theCategory): Promise<Category> => {
+    const insert: ProcessCategory = async (theCategory) => {
 
         setError(null);
         setExecuting(true);
@@ -69,7 +71,7 @@ const useMutateCategory = (props: Props): State => {
             ReportError("useMutateCategory.insert", error, {
                 url: url,
                 category: theCategory,
-            });
+            }, alertPopup);
         }
 
         setExecuting(false);
@@ -77,7 +79,7 @@ const useMutateCategory = (props: Props): State => {
 
     }
 
-    const remove: HandleCategory = async (theCategory): Promise<Category> => {
+    const remove: ProcessCategory = async (theCategory) => {
 
         setError(null);
         setExecuting(true);
@@ -98,7 +100,7 @@ const useMutateCategory = (props: Props): State => {
             ReportError("useMutateCategory.remove", error, {
                 url: url,
                 category: theCategory,
-            });
+            }, alertPopup);
         }
 
         setExecuting(false);
@@ -106,7 +108,7 @@ const useMutateCategory = (props: Props): State => {
 
     }
 
-    const update: HandleCategory = async (theCategory): Promise<Category> => {
+    const update: ProcessCategory = async (theCategory) => {
 
         setError(null);
         setExecuting(true);
@@ -127,7 +129,7 @@ const useMutateCategory = (props: Props): State => {
             ReportError("useMutateCategory.update", error, {
                 url: url,
                 category: theCategory,
-            })
+            }, alertPopup);
         }
 
         setExecuting(false);

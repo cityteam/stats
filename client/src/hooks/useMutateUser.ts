@@ -8,7 +8,7 @@ import {useEffect, useState} from "react";
 
 // Internal Modules ----------------------------------------------------------
 
-import {HandleUser} from "../types";
+import {ProcessUser} from "../types";
 import Api from "../clients/Api";
 import User, {USERS_BASE} from "../models/User";
 import * as Abridgers from "../util/Abridgers";
@@ -19,20 +19,22 @@ import * as ToModel from "../util/ToModel";
 // Incoming Properties and Outgoing State ------------------------------------
 
 export interface Props {
+    alertPopup?: boolean;               // Pop up browser alert on error? [true]
 }
 
 export interface State {
     error: Error | null;                // I/O error (if any)
     executing: boolean;                 // Are we currently executing?
-    insert: HandleUser;                 // Function to insert a new User
-    remove: HandleUser;                 // Function to remove an existing User
-    update: HandleUser;                 // Function to update an existing User
+    insert: ProcessUser;                // Function to insert a new User
+    remove: ProcessUser;                // Function to remove an existing User
+    update: ProcessUser;                // Function to update an existing User
 }
 
 // Component Details ---------------------------------------------------------
 
 const useMutateUser = (props: Props = {}): State => {
 
+    const [alertPopup] = useState<boolean>((props.alertPopup !== undefined) ? props.alertPopup : true);
     const [error, setError] = useState<Error | null>(null);
     const [executing, setExecuting] = useState<boolean>(false);
 
@@ -42,7 +44,7 @@ const useMutateUser = (props: Props = {}): State => {
         });
     });
 
-    const insert: HandleUser = async (theUser): Promise<User> => {
+    const insert: ProcessUser = async (theUser) => {
 
         setError(null);
         setExecuting(true);
@@ -65,7 +67,7 @@ const useMutateUser = (props: Props = {}): State => {
                     ...theUser,
                     password: "*REDACTED*",
                 }
-            });
+            }, alertPopup);
         }
 
         setExecuting(false);
@@ -73,7 +75,7 @@ const useMutateUser = (props: Props = {}): State => {
 
     }
 
-    const remove: HandleUser = async (theUser): Promise<User> => {
+    const remove: ProcessUser = async (theUser) => {
 
         setError(null);
         setExecuting(true);
@@ -96,7 +98,7 @@ const useMutateUser = (props: Props = {}): State => {
                     ...theUser,
                     password: theUser.password ? "*REDACTED*" : null,
                 }
-            });
+            }, alertPopup);
         }
 
         setExecuting(false);
@@ -104,7 +106,7 @@ const useMutateUser = (props: Props = {}): State => {
 
     }
 
-    const update: HandleUser = async (theUser): Promise<User> => {
+    const update: ProcessUser = async (theUser) => {
 
         setError(null);
         setExecuting(true);
@@ -127,7 +129,7 @@ const useMutateUser = (props: Props = {}): State => {
                     ...theUser,
                     password: theUser.password ? "*REDACTED*" : null,
                 }
-            });
+            }, alertPopup);
         }
 
         setExecuting(false);

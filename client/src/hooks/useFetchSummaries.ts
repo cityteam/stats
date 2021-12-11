@@ -23,6 +23,7 @@ import {queryParameters} from "../util/QueryParameters";
 
 export interface Props {
     active?: boolean;                   // Select only active Sections? [false]
+    alertPopup?: boolean;               // Pop up browser alert on error? [true]
     dateFrom: string;                   // Earliest date for which to retrieve Summaries
     dateTo: string;                     // Latest date for which to retrieve Summaries
     monthlies?: boolean;                // Monthly summaries, not daily? [false]
@@ -42,6 +43,7 @@ const useFetchSummaries = (props: Props): State => {
     const facilityContext = useContext(FacilityContext);
     const loginContext = useContext(LoginContext);
 
+    const [alertPopup] = useState<boolean>((props.alertPopup !== undefined) ? props.alertPopup : true);
     const [error, setError] = useState<Error | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [summaries, setSummaries] = useState<Summary[]>([]);
@@ -92,7 +94,7 @@ const useFetchSummaries = (props: Props): State => {
                 ReportError("useFetchSummaries.fetchSummaries", error, {
                     loggedIn: loginContext.data.loggedIn,
                     url: url,
-                });
+                }, alertPopup);
             }
 
             setLoading(false);
@@ -103,7 +105,8 @@ const useFetchSummaries = (props: Props): State => {
         fetchSummaries();
 
     }, [facilityContext, loginContext,
-        props.active, props.dateFrom, props.dateTo, props.monthlies, props.sectionIds]);
+        props.active, props.dateFrom, props.dateTo, props.monthlies, props.sectionIds,
+        alertPopup]);
 
     return {
         error: error ? error : null,

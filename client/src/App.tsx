@@ -18,15 +18,15 @@ import "react-notifications-component/dist/theme.css";
 
 // Internal Modules ----------------------------------------------------------
 
-import CategoriesView from "./components/categories/CategoriesView";
+import CategorySegment from "./components/categories/CategorySegment";
 import EntriesView from "./components/entries/EntriesView";
-import FacilitiesView from "./components/facilities/FacilitiesView";
+import FacilitySegment from "./components/facilities/FacilitySegment";
 import HomeView from "./components/general/HomeView";
 import LoggedInUser from "./components/login/LoggedInUser";
 import MonthlyReport from "./components/reports/MonthlyReport";
 import YearlyReport from "./components/reports/YearlyReport";
-import SectionsView from "./components/sections/SectionsView";
-import UsersView from "./components/users/UsersView";
+import SectionSegment from "./components/sections/SectionSegment";
+import UserSegment from "./components/users/UserSegment";
 import {FacilityContextProvider} from "./components/facilities/FacilityContext";
 import FacilitySelector from "./components/facilities/FacilitySelector";
 import {LoginContextProvider} from "./components/login/LoginContext";
@@ -98,7 +98,7 @@ function App() {
                       </Navbar>
                       <Switch>
                           <Route exact path="/admin-categories">
-                              <CategoriesView/>
+                              <CategorySegment/>
                           </Route>
 {/*
                           <Route exact path="/admin-database">
@@ -109,13 +109,13 @@ function App() {
                               <EntriesView/>
                           </Route>
                           <Route exact path="/admin-facilities">
-                              <FacilitiesView/>
+                              <FacilitySegment/>
                           </Route>
                           <Route exact path="/admin-sections">
-                              <SectionsView/>
+                              <SectionSegment/>
                           </Route>
                           <Route exact path="/admin-users">
-                              <UsersView/>
+                              <UserSegment/>
                           </Route>
                           <Route exact path="/report-month">
                               <MonthlyReport/>

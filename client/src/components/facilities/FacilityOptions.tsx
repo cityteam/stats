@@ -1,4 +1,4 @@
-// FacilitiesList -----------------------------------------------------------------
+// FacilityOptions -----------------------------------------------------------
 
 // List Facilities that match search criteria, offering callbacks for adding,
 // editing, and removing Facilities.
@@ -16,10 +16,9 @@ import Table from "react-bootstrap/Table";
 
 import FacilityContext from "./FacilityContext";
 import CheckBox from "../general/CheckBox";
-import Pagination from "../general/Pagination";
-import SearchBar from "../general/SearchBar";
+import LoadingProgress from "../general/LoadingProgress";
 import LoginContext from "../login/LoginContext";
-import {HandleBoolean, HandleFacility, HandleValue, OnAction, Scope} from "../../types";
+import {HandleAction, HandleBoolean, HandleFacility, Scope} from "../../types";
 import Facility from "../../models/Facility";
 import useFetchFacilities from "../../hooks/useFetchFacilities";
 import logger from "../../util/ClientLogger";
@@ -28,37 +27,29 @@ import {listValue} from "../../util/Transformations";
 // Incoming Properties -------------------------------------------------------
 
 export interface Props {
-    canInsert: boolean;                 // Can this user add Facilities?
-    canRemove: boolean;                 // Can this user remove Facilities?
-    canUpdate: boolean;                 // Can this user edit Facilities?
-    handleAdd: OnAction;                // Handle request to add a Facility
-    handleSelect: HandleFacility;       // Handle request to select a Facility
+    handleAdd?: HandleAction;           // Handle request to add a Facility [not allowed]
+    handleEdit?: HandleFacility;        // Handle request to select a Facility [not allowed]
 }
 
 // Component Details ---------------------------------------------------------
 
-const FacilitiesList = (props: Props) => {
+const FacilityOptions = (props: Props) => {
 
     const facilityContext = useContext(FacilityContext);
     const loginContext = useContext(LoginContext);
 
     const [active, setActive] = useState<boolean>(false);
     const [availables, setAvailables] = useState<Facility[]>([]);
-    const [currentPage, setCurrentPage] = useState<number>(1);
-    const [pageSize] = useState<number>(100);
-    const [searchText, setSearchText] = useState<string>("");
 
     const fetchFacilities = useFetchFacilities({
         active: active,
-        currentPage: currentPage,
-        name: (searchText.length > 0) ? searchText : undefined,
-        pageSize: pageSize,
+        alertPopup: false,
     });
 
     useEffect(() => {
 
         logger.info({
-            context: "FacilitiesList.useEffect"
+            context: "FacilityOptions.useEffect"
         });
 
         const isSuperuser = loginContext.validateScope(Scope.SUPERUSER);
@@ -74,31 +65,29 @@ const FacilitiesList = (props: Props) => {
         setActive(theActive);
     }
 
-    const handleChange: HandleValue = (theSearchText) => {
-        setSearchText(theSearchText);
-    }
-
-    const onNext: OnAction = () => {
-        setCurrentPage(currentPage + 1);
-    }
-
-    const onPrevious: OnAction = () => {
-        setCurrentPage(currentPage - 1);
+    const handleEdit: HandleFacility = (theFacility) => {
+        if (props.handleEdit) {
+            props.handleEdit(theFacility);
+        }
     }
 
     return (
-        <Container fluid id="FacilitiesList">
+        <Container fluid id="FacilityOptions">
+
+            <LoadingProgress
+                error={fetchFacilities.error}
+                loading={fetchFacilities.loading}
+                title="Selected Facilities"
+            />
 
             <Row className="mb-3 ml-1 mr-1">
-                <Col className="col-6">
-                    <SearchBar
-                        autoFocus
-                        handleChange={handleChange}
-                        label="Search For Facilities:"
-                        placeholder="Search by all or part of name"
-                    />
+                <Col className="text-left">
+                    <span><strong>Manage Facilities</strong></span>
                 </Col>
-                <Col>
+            </Row>
+
+            <Row className="mb-3 ml-1 mr-1">
+                <Col className="text-left">
                     <CheckBox
                         handleChange={handleActive}
                         id="activeOnly"
@@ -107,18 +96,8 @@ const FacilitiesList = (props: Props) => {
                     />
                 </Col>
                 <Col className="text-right">
-                    <Pagination
-                        currentPage={currentPage}
-                        lastPage={(fetchFacilities.facilities.length === 0) ||
-                        (fetchFacilities.facilities.length < pageSize)}
-                        onNext={onNext}
-                        onPrevious={onPrevious}
-                        variant="secondary"
-                    />
-                </Col>
-                <Col className="text-right">
                     <Button
-                        disabled={!props.canInsert}
+                        disabled={!props.handleAdd}
                         onClick={props.handleAdd}
                         size="sm"
                         variant="primary"
@@ -149,7 +128,7 @@ const FacilitiesList = (props: Props) => {
                         <tr
                             className="table-default"
                             key={1000 + (rowIndex * 100)}
-                            onClick={() => props.handleSelect(facility)}
+                            onClick={props.handleEdit ? (() => handleEdit(facility)) : undefined}
                         >
                             <td key={1000 + (rowIndex * 100) + 1}>
                                 {facility.name}
@@ -178,4 +157,4 @@ const FacilitiesList = (props: Props) => {
 
 }
 
-export default FacilitiesList;
+export default FacilityOptions;

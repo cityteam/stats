@@ -8,7 +8,7 @@ import {useContext, useEffect, useState} from "react";
 
 // Internal Modules ----------------------------------------------------------
 
-import {HandleSummary} from "../types";
+import {ProcessSummary} from "../types";
 import Api from "../clients/Api";
 import FacilityContext from "../components/facilities/FacilityContext";
 import Summary, {SUMMARIES_BASE} from "../models/Summary";
@@ -25,7 +25,7 @@ export interface Props {
 export interface State {
     error: Error | null;                // I/O error (if any)
     executing: boolean;                 // Are we currently executing?
-    write: HandleSummary;               // Function to write Summary to server
+    write: ProcessSummary;              // Function to write Summary to server
 }
 
 // Hook Details --------------------------------------------------------------
@@ -45,7 +45,7 @@ const useMutateSummary = (props: Props = {}): State => {
     })
 
     // Forward Summary containing values for the specified Section ID and date.
-    const write: HandleSummary = async (theSummary): Promise<Summary> => {
+    const write: ProcessSummary = async (theSummary) => {
 
         setError(null);
         setExecuting(true);

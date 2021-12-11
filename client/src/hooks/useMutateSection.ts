@@ -8,7 +8,7 @@ import {useContext, useEffect, useState} from "react";
 
 // Internal Modules ----------------------------------------------------------
 
-import {HandleSection} from "../types";
+import {ProcessSection} from "../types";
 import Api from "../clients/Api";
 import FacilityContext from "../components/facilities/FacilityContext";
 import Section, {SECTIONS_BASE} from "../models/Section";
@@ -20,14 +20,15 @@ import * as ToModel from "../util/ToModel";
 // Incoming Properties and Outgoing State ------------------------------------
 
 export interface Props {
+    alertPopup?: boolean;               // Pop up browser alert on error? [true]
 }
 
 export interface State {
     error: Error | null;                // I/O error (if any)
     executing: boolean;                 // Are we currently executing?
-    insert: HandleSection;              // Function to insert a new Section
-    remove: HandleSection;              // Function to remove an existing Section
-    update: HandleSection;              // Function to update an existing Section
+    insert: ProcessSection;             // Function to insert a new Section
+    remove: ProcessSection;             // Function to remove an existing Section
+    update: ProcessSection;             // Function to update an existing Section
 }
 
 // Component Details ---------------------------------------------------------
@@ -36,6 +37,7 @@ const useMutateSection = (props: Props = {}): State => {
 
     const facilityContext = useContext(FacilityContext);
 
+    const [alertPopup] = useState<boolean>((props.alertPopup !== undefined) ? props.alertPopup : true);
     const [error, setError] = useState<Error | null>(null);
     const [executing, setExecuting] = useState<boolean>(false);
 
@@ -45,7 +47,7 @@ const useMutateSection = (props: Props = {}): State => {
         });
     });
 
-    const insert: HandleSection = async (theSection): Promise<Section> => {
+    const insert: ProcessSection = async (theSection) => {
 
         setError(null);
         setExecuting(true);
@@ -66,7 +68,7 @@ const useMutateSection = (props: Props = {}): State => {
             ReportError("useMutateSection.insert", error, {
                 url: url,
                 section: theSection,
-            });
+            }, alertPopup);
         }
 
         setExecuting(false);
@@ -74,7 +76,7 @@ const useMutateSection = (props: Props = {}): State => {
 
     }
 
-    const remove: HandleSection = async (theSection): Promise<Section> => {
+    const remove: ProcessSection = async (theSection) => {
 
         setError(null);
         setExecuting(true);
@@ -95,7 +97,7 @@ const useMutateSection = (props: Props = {}): State => {
             ReportError("useMutateSection.remove", error, {
                 url: url,
                 section: theSection,
-            });
+            }, alertPopup);
         }
 
         setExecuting(false);
@@ -103,7 +105,7 @@ const useMutateSection = (props: Props = {}): State => {
 
     }
 
-    const update: HandleSection = async (theSection): Promise<Section> => {
+    const update: ProcessSection = async (theSection) => {
 
         setError(null);
         setExecuting(true);
@@ -124,7 +126,7 @@ const useMutateSection = (props: Props = {}): State => {
             ReportError("useMutateSection.update", error, {
                 url: url,
                 section: theSection,
-            })
+            }, alertPopup);
         }
 
         setExecuting(false);

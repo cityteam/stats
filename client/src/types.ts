@@ -64,3 +64,10 @@ export type HandleFacility = (facility: Facility) => void;
 export type HandleSection = (section: Section) => void;
 export type HandleSummary = (summary: Summary) => void;
 export type HandleUser = (user: User) => void;
+
+export type ProcessCategory = (category: Category) => Promise<Category>;
+export type ProcessDetail = (detail: Detail) => Promise<Detail>;
+export type ProcessFacility = (facility: Facility) => Promise<Facility>;
+export type ProcessSection = (section: Section) => Promise<Section>;
+export type ProcessSummary = (summary: Summary) => Promise<Summary>;
+export type ProcessUser = (user: User) => Promise<User>;

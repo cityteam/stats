@@ -23,6 +23,7 @@ import * as ToModel from "../util/ToModel";
 
 export interface Props {
     active?: boolean;                   // Select only active Sections? [false]
+    alertPopup?: boolean;               // Pop up browser alert on error? [true]
     currentPage?: number;               // One-relative current page number [1]
     ordinal?: number;                   // Select Sections with matching ordinal [none]
     pageSize?: number;                  // Number of entries per page [100]
@@ -43,6 +44,7 @@ const useFetchSections = (props: Props): State => {
     const facilityContext = useContext(FacilityContext);
     const loginContext = useContext(LoginContext);
 
+    const [alertPopup] = useState<boolean>((props.alertPopup !== undefined) ? props.alertPopup : true);
     const [error, setError] = useState<Error | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [sections, setSections] = useState<Section[]>([]);
@@ -98,7 +100,7 @@ const useFetchSections = (props: Props): State => {
                 ReportError("useFetchSections.fetchSections", error, {
                     loggedIn: loginContext.data.loggedIn,
                     url: url,
-                });
+                }, alertPopup);
             }
 
             setLoading(false);
@@ -110,7 +112,8 @@ const useFetchSections = (props: Props): State => {
 
     }, [facilityContext, loginContext,
         props.active, props.currentPage, props.ordinal,
-        props.pageSize, props.withCategories, props.withFacility]);
+        props.pageSize, props.withCategories, props.withFacility,
+        alertPopup]);
 
     return {
         sections: sections,

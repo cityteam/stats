@@ -1,11 +1,11 @@
-// CategoriesList -------------------------------------------------------------
+// CategoryOptions -------------------------------------------------------------
 
 // List Categories that match search criteria, offering callbacks for adding,
 // editing, and removing Categories.
 
 // External Modules ----------------------------------------------------------
 
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
@@ -14,9 +14,12 @@ import Table from "react-bootstrap/Table";
 
 // Internal Modules ----------------------------------------------------------
 
+import FacilityContext from "../facilities/FacilityContext";
 import CheckBox from "../general/CheckBox";
+import LoadingProgress from "../general/LoadingProgress";
+import LoginContext from "../login/LoginContext";
 import SectionSelector from "../sections/SectionSelector";
-import {HandleBoolean, HandleCategory, HandleSection, OnAction} from "../../types";
+import {HandleAction, HandleBoolean, HandleCategory, HandleSection} from "../../types";
 import useFetchCategories from "../../hooks/useFetchCategories";
 import Section from "../../models/Section";
 import * as Abridgers from "../../util/Abridgers";
@@ -26,40 +29,52 @@ import {listValue} from "../../util/Transformations";
 // Incoming Properties -------------------------------------------------------
 
 export interface Props {
-    canInsert: boolean;                 // Can this user add Categories?
-    canRemove: boolean;                 // Can this user remove Categories?
-    canUpdate: boolean;                 // Can this user update Categories?
-    handleAdd: OnAction;                // Handle request to add a Category
-    handleCategory: HandleCategory;     // Handle request to select a Category
+    handleAdd?: HandleAction;           // Handle request to add a Category [not allowed]
+    handleEdit?: HandleCategory;        // Handle request to edit a Category [not allowed]
     handleSection: HandleSection;       // Handle request to select a Section
 }
 
 // Component Details ---------------------------------------------------------
 
-const CategoriesList = (props: Props) => {
+const CategoryOptions = (props: Props) => {
+
+    const facilityContext = useContext(FacilityContext);
+    const loginContext = useContext(LoginContext);
 
     const [active, setActive] = useState<boolean>(false);
     const [section, setSection] = useState<Section>(new Section());
 
     const fetchCategories = useFetchCategories({
         active: active,
+        alertPopup: false,
         section: section,
     });
 
     useEffect(() => {
         logger.info({
-            context: "CategoriesList.useEffect",
+            context: "CategoryOptions.useEffect",
+            facility: Abridgers.FACILITY(facilityContext.facility),
             section: Abridgers.SECTION(section),
+            active: active,
         });
-    }, [fetchCategories.categories, section]);
+    }, [facilityContext.facility, facilityContext.facility.id,
+        loginContext.data.loggedIn,
+        active, section,
+        fetchCategories.categories]);
 
     const handleActive: HandleBoolean = (theActive) => {
         setActive(theActive);
     }
 
+    const handleEdit: HandleCategory = (theCategory) => {
+        if (props.handleEdit) {
+            props.handleEdit(theCategory);
+        }
+    }
+
     const handleSection: HandleSection = (theSection) => {
         logger.info({
-            context: "CategoriesList.handleSection",
+            context: "CategoryOptions.handleSection",
             section: Abridgers.SECTION(theSection),
         })
         setSection(theSection);
@@ -67,7 +82,20 @@ const CategoriesList = (props: Props) => {
     }
 
     return (
-        <Container fluid id="CategoriesList">
+        <Container fluid id="CategoryOptions">
+
+            <LoadingProgress
+                error={fetchCategories.error}
+                loading={fetchCategories.loading}
+                title="Selected Categories"
+            />
+
+            <Row className="mb-3 ml-1 mr-1">
+                <Col className="text-left">
+                    <span><strong>Manage Categories for Facility:&nbsp;</strong></span>
+                    <span className="text-info"><strong>{facilityContext.facility.name}</strong></span>
+                </Col>
+            </Row>
 
             <Row className="mb-3 ml-1 mr-1">
                 <Col className="col-6">
@@ -87,7 +115,7 @@ const CategoriesList = (props: Props) => {
                 </Col>
                 <Col className="text-right">
                     <Button
-                        disabled={!props.canInsert}
+                        disabled={!props.handleAdd}
                         onClick={props.handleAdd}
                         size="sm"
                         variant="primary"
@@ -113,8 +141,8 @@ const CategoriesList = (props: Props) => {
                         <th scope="col">Service</th>
 {/*
                         <th scope="col">Description</th>
-                        <th scope="col">Notes</th>
 */}
+                        <th scope="col">Notes</th>
                         <th scope="col">Slug</th>
                     </tr>
                     </thead>
@@ -124,7 +152,7 @@ const CategoriesList = (props: Props) => {
                         <tr
                             className="table-default"
                             key={1000 + (rowIndex * 100)}
-                            onClick={() => props.handleCategory(category)}
+                            onClick={props.handleEdit ? (() => handleEdit(category)) : undefined}
                         >
                             <td key={1000 + (rowIndex * 100) + 1}>
                                 {category.ordinal}
@@ -144,10 +172,10 @@ const CategoriesList = (props: Props) => {
                             <td key={1000 + (rowIndex * 100) + 5}>
                                 {category.description}
                             </td>
+*/}
                             <td key={1000 + (rowIndex * 100) + 6}>
                                 {category.notes}
                             </td>
-*/}
                             <td key={1000 + (rowIndex * 100) + 7}>
                                 {category.slug}
                             </td>
@@ -163,4 +191,4 @@ const CategoriesList = (props: Props) => {
 
 }
 
-export default CategoriesList;
+export default CategoryOptions;

@@ -33,8 +33,8 @@ export const ANY = (model: object): object => {
 export const CATEGORY = (category: Category): object => {
     return {
         id: category.id,
-        facilityId: category.facilityId,
         ordinal: category.ordinal,
+        sectionId: category.sectionId,
         slug: category.slug,
     };
 }

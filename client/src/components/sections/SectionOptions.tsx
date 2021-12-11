@@ -1,11 +1,11 @@
-// SectionsList -------------------------------------------------------------
+// SectionOptions ------------------------------------------------------------
 
 // List Sections that match search criteria, offering callbacks for adding,
 // editing, and removing Sections.
 
 // External Modules ----------------------------------------------------------
 
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
@@ -14,76 +14,75 @@ import Table from "react-bootstrap/Table";
 
 // Internal Modules ----------------------------------------------------------
 
+import FacilityContext from "../facilities/FacilityContext";
 import CheckBox from "../general/CheckBox";
-import Pagination from "../general/Pagination";
-import SearchBar from "../general/SearchBar";
-import {HandleBoolean, HandleSection, HandleValue, OnAction} from "../../types";
+import LoadingProgress from "../general/LoadingProgress";
+import LoginContext from "../login/LoginContext";
+import {HandleAction, HandleBoolean, HandleSection} from "../../types";
 import useFetchSections from "../../hooks/useFetchSections";
+import * as Abridgers from "../../util/Abridgers";
 import logger from "../../util/ClientLogger";
 import {listValue} from "../../util/Transformations";
 
 // Incoming Properties -------------------------------------------------------
 
 export interface Props {
-    canInsert: boolean;                 // Can this user add Sections?
-    canRemove: boolean;                 // Can this user remove Sections?
-    canUpdate: boolean;                 // Can this user update Sections?
-    handleAdd: OnAction;                // Handle request to add a Section
-    handleSelect: HandleSection;        // Handle request to select a Section
+    handleAdd?: HandleAction;           // Handle request to add a Section [not allowed]
+    handleEdit?: HandleSection;         // Handle request to edit a Section [not allowed]
 }
 
 // Component Details ---------------------------------------------------------
 
-const SectionsList = (props: Props) => {
+const SectionOptions = (props: Props) => {
+
+    const facilityContext = useContext(FacilityContext);
+    const loginContext = useContext(LoginContext);
 
     const [active, setActive] = useState<boolean>(false);
-    const [currentPage, setCurrentPage] = useState<number>(1);
-    const [pageSize] = useState<number>(100);
-    const [searchText, setSearchText] = useState<string>("");
 
     const fetchSections = useFetchSections({
         active: active,
-        currentPage: currentPage,
-        ordinal: (searchText.length > 0) ? Number(searchText) : undefined,
-        pageSize: pageSize,
+        alertPopup: false,
     });
 
     useEffect(() => {
-
-        logger.debug({
-            context: "SectionsList.useEffect"
+        logger.info({
+            context: "SectionOptions.useEffect",
+            facility: Abridgers.FACILITY(facilityContext.facility),
+            active: active,
         });
-
-    }, [fetchSections.sections]);
+    }, [facilityContext.facility, facilityContext.facility.id,
+        loginContext.data.loggedIn,
+        active,
+        fetchSections.sections]);
 
     const handleActive: HandleBoolean = (theActive) => {
         setActive(theActive);
     }
 
-    const handleChange: HandleValue = (theSearchText) => {
-        setSearchText(theSearchText);
-    }
-
-    const onNext: OnAction = () => {
-        setCurrentPage(currentPage + 1);
-    }
-
-    const onPrevious: OnAction = () => {
-        setCurrentPage(currentPage - 1);
+    const handleEdit: HandleSection = (theSection) => {
+        if (props.handleEdit) {
+            props.handleEdit(theSection);
+        }
     }
 
     return (
-        <Container fluid id="SectionsList">
+        <Container fluid id="SectionOptions">
+
+            <LoadingProgress
+                error={fetchSections.error}
+                loading={fetchSections.loading}
+                title="Selected Sections"
+            />
 
             <Row className="mb-3 ml-1 mr-1">
-                <Col className="col-6">
-                    <SearchBar
-                        autoFocus
-                        handleChange={handleChange}
-                        label="Search For Sections:"
-                        placeholder="Search by all or part of ordinal"
-                    />
+                <Col className="text-left">
+                    <span><strong>Manage Sections for Facility:&nbsp;</strong></span>
+                    <span className="text-info"><strong>{facilityContext.facility.name}</strong></span>
                 </Col>
+            </Row>
+
+            <Row className="mb-3 ml-1 mr-1">
                 <Col>
                     <CheckBox
                         handleChange={handleActive}
@@ -93,18 +92,8 @@ const SectionsList = (props: Props) => {
                     />
                 </Col>
                 <Col className="text-right">
-                    <Pagination
-                        currentPage={currentPage}
-                        lastPage={(fetchSections.sections.length === 0) ||
-                        (fetchSections.sections.length < pageSize)}
-                        onNext={onNext}
-                        onPrevious={onPrevious}
-                        variant="secondary"
-                    />
-                </Col>
-                <Col className="text-right">
                     <Button
-                        disabled={!props.canInsert}
+                        disabled={!props.handleAdd}
                         onClick={props.handleAdd}
                         size="sm"
                         variant="primary"
@@ -125,7 +114,7 @@ const SectionsList = (props: Props) => {
                         <th scope="col">Ordinal</th>
                         <th scope="col">Active</th>
                         <th scope="col">Title</th>
-                        {/*<th scope="col">Notes</th>*/}
+                        <th scope="col">Notes</th>
                         <th scope="col">Slug</th>
                         <th scope="col">Scope</th>
                     </tr>
@@ -136,7 +125,7 @@ const SectionsList = (props: Props) => {
                         <tr
                             className="table-default"
                             key={1000 + (rowIndex * 100)}
-                            onClick={() => props.handleSelect(section)}
+                            onClick={props.handleEdit ? (() => handleEdit(section)) : undefined}
                         >
                             <td key={1000 + (rowIndex * 100) + 1}>
                                 {section.ordinal}
@@ -147,11 +136,9 @@ const SectionsList = (props: Props) => {
                             <td key={1000 + (rowIndex * 100) + 3}>
                                 {section.title}
                             </td>
-{/*
                             <td key={1000 + (rowIndex * 100) + 4}>
                                 {section.notes}
                             </td>
-*/}
                             <td key={1000 + (rowIndex * 100) + 5}>
                                 {section.slug}
                             </td>
@@ -170,4 +157,4 @@ const SectionsList = (props: Props) => {
 
 }
 
-export default SectionsList;
+export default SectionOptions;

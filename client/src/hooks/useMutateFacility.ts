@@ -8,7 +8,7 @@ import {useEffect, useState} from "react";
 
 // Internal Modules ----------------------------------------------------------
 
-import {HandleFacility} from "../types";
+import {ProcessFacility} from "../types";
 import Api from "../clients/Api";
 import Facility, {FACILITIES_BASE} from "../models/Facility";
 import * as Abridgers from "../util/Abridgers";
@@ -19,20 +19,22 @@ import * as ToModel from "../util/ToModel";
 // Incoming Properties and Outgoing State ------------------------------------
 
 export interface Props {
+    alertPopup?: boolean;               // Pop up browser alert on error? [true]
 }
 
 export interface State {
     error: Error | null;                // I/O error (if any)
     executing: boolean;                 // Are we currently executing?
-    insert: HandleFacility;             // Function to insert a new Facility
-    remove: HandleFacility;             // Function to remove an existing Facility
-    update: HandleFacility;             // Function to update an existing Facility
+    insert: ProcessFacility;            // Function to insert a new Facility
+    remove: ProcessFacility;            // Function to remove an existing Facility
+    update: ProcessFacility;            // Function to update an existing Facility
 }
 
 // Component Details ---------------------------------------------------------
 
 const useMutateFacility = (props: Props = {}): State => {
 
+    const [alertPopup] = useState<boolean>((props.alertPopup !== undefined) ? props.alertPopup : true);
     const [error, setError] = useState<Error | null>(null);
     const [executing, setExecuting] = useState<boolean>(false);
 
@@ -42,7 +44,7 @@ const useMutateFacility = (props: Props = {}): State => {
         });
     });
 
-    const insert: HandleFacility = async (theFacility): Promise<Facility> => {
+    const insert: ProcessFacility = async (theFacility) => {
 
         setError(null);
         setExecuting(true);
@@ -62,7 +64,7 @@ const useMutateFacility = (props: Props = {}): State => {
             ReportError("useMutateFacility.insert", error, {
                 url: url,
                 facility: theFacility,
-            });
+            }, alertPopup);
         }
 
         setExecuting(false);
@@ -70,7 +72,7 @@ const useMutateFacility = (props: Props = {}): State => {
 
     }
 
-    const remove: HandleFacility = async (theFacility): Promise<Facility> => {
+    const remove: ProcessFacility = async (theFacility) => {
 
         setError(null);
         setExecuting(true);
@@ -90,7 +92,7 @@ const useMutateFacility = (props: Props = {}): State => {
             ReportError("useMutateFcility.remove", error, {
                 url: url,
                 facility: theFacility,
-            });
+            }, alertPopup);
         }
 
         setExecuting(false);
@@ -98,7 +100,7 @@ const useMutateFacility = (props: Props = {}): State => {
 
     }
 
-    const update: HandleFacility = async (theFacility): Promise<Facility> => {
+    const update: ProcessFacility = async (theFacility) => {
 
         setError(null);
         setExecuting(true);
@@ -118,7 +120,7 @@ const useMutateFacility = (props: Props = {}): State => {
             ReportError("useMutateFacility.update", error, {
                 url: url,
                 facility: theFacility,
-            });
+            }, alertPopup);
         }
 
         setExecuting(false);

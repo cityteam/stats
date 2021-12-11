@@ -21,6 +21,7 @@ import * as ToModel from "../util/ToModel";
 // Incoming Properties and Outgoing State ------------------------------------
 
 export interface Props {
+    alertPopup?: boolean;               // Pop up browser alert on error? [true]
     date: string;                       // Date for which to retrieve Summaries
     section: Section;                   // Section for which to retrieve Summaries
 }
@@ -38,6 +39,7 @@ const useFetchSummary = (props: Props): State => {
     const facilityContext = useContext(FacilityContext);
     const loginContext = useContext(LoginContext);
 
+    const [alertPopup] = useState<boolean>((props.alertPopup !== undefined) ? props.alertPopup : true);
     const [error, setError] = useState<Error | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [summary, setSummary] = useState<Summary>(new Summary());
@@ -79,7 +81,7 @@ const useFetchSummary = (props: Props): State => {
                 ReportError("useFetchSummary.fetchSummary", error, {
                     loggedIn: loginContext.data.loggedIn,
                     url: url,
-                });
+                }, alertPopup);
             }
 
             setLoading(false);
@@ -90,7 +92,8 @@ const useFetchSummary = (props: Props): State => {
         fetchSummary();
 
     }, [facilityContext.facility, loginContext.data.loggedIn,
-        props.date, props.section]);
+        props.date, props.section,
+        alertPopup]);
 
     return {
         error: error ? error : null,

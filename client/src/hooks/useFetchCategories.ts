@@ -23,6 +23,7 @@ import * as ToModel from "../util/ToModel";
 
 export interface Props {
     active?: boolean;                   // Select only active Categories? [false]
+    alertPopup?: boolean;               // Pop up browser alert on error? [true]
     currentPage?: number;               // One-relative current page number [1]
     ordinal?: number;                   // Select Categories with matching ordinal [none]
     pageSize?: number;                  // Number of entries per page [100]
@@ -43,6 +44,7 @@ const useFetchCategories = (props: Props): State => {
     const facilityContext = useContext(FacilityContext);
     const loginContext = useContext(LoginContext);
 
+    const [alertPopup] = useState<boolean>((props.alertPopup !== undefined) ? props.alertPopup : true);
     const [categories, setCategories] = useState<Category[]>([]);
     const [error, setError] = useState<Error | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
@@ -89,7 +91,7 @@ const useFetchCategories = (props: Props): State => {
                 ReportError("useFetchCategories.fetchCategories", error, {
                     loggedIn: loginContext.data.loggedIn,
                     url: url,
-                });
+                }, alertPopup);
             }
 
             setLoading(false);
@@ -101,7 +103,8 @@ const useFetchCategories = (props: Props): State => {
 
     }, [facilityContext, loginContext,
         props.active, props.currentPage, props.ordinal,
-        props.pageSize, props.section, props.withSection]);
+        props.pageSize, props.section, props.withSection,
+        alertPopup]);
 
     return {
         categories: categories,

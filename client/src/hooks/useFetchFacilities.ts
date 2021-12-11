@@ -21,6 +21,7 @@ import * as ToModel from "../util/ToModel";
 
 export interface Props {
     active?: boolean;                   // Select only active Facilities? [false]
+    alertPopup?: boolean;               // Pop up browser alert on error? [true]
     currentPage?: number;               // One-relative current page number [1]
     pageSize?: number;                  // Number of entries per page [25]
     name?: string;                      // Select Facilities matching pattern [none]
@@ -37,6 +38,7 @@ export interface State {
 
 const useFetchFacilities = (props: Props): State => {
 
+    const [alertPopup] = useState<boolean>((props.alertPopup !== undefined) ? props.alertPopup : true);
     const [error, setError] = useState<Error | null>(null);
     const [facilities, setFacilities] = useState<Facility[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
@@ -77,7 +79,7 @@ const useFetchFacilities = (props: Props): State => {
                 setError(error as Error);
                 ReportError("useFetchFacilities.fetchFacilities", error, {
                     url: url,
-                });
+                }, alertPopup);
             }
 
             setLoading(false);
@@ -88,7 +90,8 @@ const useFetchFacilities = (props: Props): State => {
         fetchFacilities();
 
     }, [props.active, props.currentPage,
-        props.pageSize, props.name, props.withSections]);
+        props.pageSize, props.name, props.withSections,
+        alertPopup]);
 
     return {
         error: error ? error : null,

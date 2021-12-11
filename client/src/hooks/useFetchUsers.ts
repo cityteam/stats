@@ -21,6 +21,7 @@ import * as ToModel from "../util/ToModel";
 
 export interface Props {
     active?: boolean;                   // Select only active Users? [false]
+    alertPopup?: boolean;               // Pop up browser alert on error? [true]
     currentPage?: number;               // One-relative current page number [1]
     pageSize?: number;                  // Number of entries per page [25]
     username?: string;                  // Select Users matching pattern [none]
@@ -38,6 +39,7 @@ export interface State {
 
 const useFetchUsers = (props: Props): State => {
 
+    const [alertPopup] = useState<boolean>((props.alertPopup !== undefined) ? props.alertPopup : true);
     const [error, setError] = useState<Error | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [users, setUsers] = useState<User[]>([]);
@@ -83,7 +85,7 @@ const useFetchUsers = (props: Props): State => {
                 setError(error as Error);
                 ReportError("useFetchUsers.fetchUsers", error, {
                     url: url,
-                });
+                }, alertPopup);
             }
 
             setLoading(false);
@@ -94,7 +96,8 @@ const useFetchUsers = (props: Props): State => {
         fetchUsers();
 
     }, [props.active, props.currentPage, props.pageSize, props.username,
-        props.withAccessTokens, props.withRefreshTokens]);
+        props.withAccessTokens, props.withRefreshTokens,
+        alertPopup]);
 
     return {
         error: error ? error : null,

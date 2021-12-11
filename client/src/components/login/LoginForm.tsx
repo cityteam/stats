@@ -4,17 +4,19 @@
 
 // External Modules ----------------------------------------------------------
 
-import React, {useState} from "react";
-import {Formik, FormikValues} from "formik";
+import React from "react";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
+import {SubmitHandler, useForm} from "react-hook-form";
+import {yupResolver} from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 
 // Internal Modules ----------------------------------------------------------
 
+import TextField from "../general/TextField";
 import Credentials from "../../models/Credentials";
 
 // Property Details ----------------------------------------------------------
@@ -29,118 +31,66 @@ export interface Props {
 
 export const LoginForm = (props: Props) => {
 
-    const [initialValues] = useState({
-        password: "",
-        username: ""
-    });
-
-    const handleSubmit = async (values: FormikValues) => {
+    const onSubmit: SubmitHandler<Credentials> = (values) => {
         props.handleLogin({
-            password: values.password,
-            username: values.username,
+            ...values
         });
     }
 
-    const validationSchema = () => {
-        return Yup.object().shape({
-            password: Yup.string()
-                .required("Password is required"),
-            username: Yup.string()
-                .required("Username is required")
-        })
-    }
+    const validationSchema = Yup.object().shape({
+        password: Yup.string()
+            .required("Password is required"),
+        username: Yup.string()
+            .required("Username is required")
+    });
+
+    const {formState: {errors}, handleSubmit, register} = useForm<Credentials>({
+        defaultValues: { password: "", username: "" },
+        mode: "onBlur",
+        resolver: yupResolver(validationSchema)
+    });
 
     return (
-
         <Container id="LoginForm">
+                <Form
+                    noValidate
+                    onSubmit={handleSubmit(onSubmit)}
+                >
 
-            <Formik
-                initialValues={initialValues}
-                onSubmit={(values) => {
-                    handleSubmit(values);
-                }}
-                validateOnBlur={true}
-                validateOnChange={false}
-                validationSchema={validationSchema}
-            >
+                    <Form.Row id="usernameRow">
+                        <TextField
+                            autoFocus={(props.autoFocus !== undefined) ? props.autoFocus : undefined}
+                            errors={errors}
+                            label="Username:"
+                            name="username"
+                            register={register}
+                            valid="Enter your login username."
+                        />
+                    </Form.Row>
 
-                {( {
-                       errors,
-                       handleBlur,
-                       handleChange,
-                       handleSubmit,
-                       isSubmitting,
-                       isValid,
-                       touched,
-                       values,
-                   }) => (
+                    <Form.Row id="passwordRow">
+                        <TextField
+                            errors={errors}
+                            label="Password:"
+                            name="password"
+                            register={register}
+                            type="password"
+                            valid="Enter your login password"
+                        />
+                    </Form.Row>
 
-                    <>
+                    <Row className="mb-3">
+                        <Col>
+                            <Button
+                                size="sm"
+                                type="submit"
+                                variant="primary"
+                            >Log In</Button>
+                        </Col>
+                    </Row>
 
-                        <Form
-                            noValidate
-                            onSubmit={handleSubmit}
-                        >
-
-                            <Form.Row id="usernameRow">
-                                <Form.Group controlId="username">
-                                    <Form.Label>Username:</Form.Label>
-                                    <Form.Control
-                                        autoFocus={(props.autoFocus !== undefined) ? props.autoFocus : undefined}
-                                        isInvalid={touched.username && !!errors.username}
-                                        isValid={!errors.username}
-                                        name="username"
-                                        onBlur={handleBlur}
-                                        onChange={handleChange}
-                                        type="text"
-                                        value={values.username}
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                        {errors.username}
-                                    </Form.Control.Feedback>
-                                </Form.Group>
-                            </Form.Row>
-
-                            <Form.Row id="passwordRow">
-                                <Form.Group controlId="password">
-                                    <Form.Label>Password:</Form.Label>
-                                    <Form.Control
-                                        isInvalid={touched.password && !!errors.password}
-                                        isValid={!errors.password}
-                                        name="password"
-                                        onBlur={handleBlur}
-                                        onChange={handleChange}
-                                        type="password"
-                                        value={values.password}
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                        {errors.password}
-                                    </Form.Control.Feedback>
-                                </Form.Group>
-                            </Form.Row>
-
-                            <Row className="mb-3">
-                                <Col>
-                                    <Button
-                                        size="sm"
-                                        type="submit"
-                                        variant="primary"
-                                    >
-                                        Log In
-                                    </Button>
-                                </Col>
-                            </Row>
-
-                        </Form>
-
-                    </>
-
-                )}
-
-            </Formik>
-
+                </Form>
         </Container>
-
     )
 
 }
