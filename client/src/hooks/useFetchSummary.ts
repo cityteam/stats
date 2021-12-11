@@ -17,6 +17,7 @@ import Summary, {SUMMARIES_BASE} from "../models/Summary";
 import logger from "../util/ClientLogger";
 import ReportError from "../util/ReportError";
 import * as ToModel from "../util/ToModel";
+import {HandleAction} from "../types";
 
 // Incoming Properties and Outgoing State ------------------------------------
 
@@ -29,6 +30,7 @@ export interface Props {
 export interface State {
     error: Error | null;                // I/O error (if any)
     loading: boolean;                   // Are we currently loading?
+    refresh: HandleAction;              // Function to trigger a refresh
     summary: Summary;                   // Fetched Summary
 }
 
@@ -42,6 +44,7 @@ const useFetchSummary = (props: Props): State => {
     const [alertPopup] = useState<boolean>((props.alertPopup !== undefined) ? props.alertPopup : true);
     const [error, setError] = useState<Error | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
+    const [refresh, setRefresh] = useState<boolean>(false);
     const [summary, setSummary] = useState<Summary>(new Summary());
 
     useEffect(() => {
@@ -64,6 +67,7 @@ const useFetchSummary = (props: Props): State => {
                     theSummary = ToModel.SUMMARY((await Api.get(url)).data);
                     logger.info({
                         context: "useFetchSummary.fetchSummary",
+                        refresh: refresh,
                         url: url,
                         summary: theSummary,
                     });
@@ -72,6 +76,7 @@ const useFetchSummary = (props: Props): State => {
                         context: "useFetchSummary.fetchSummary",
                         msg: "Skipped fetching Summary",
                         loggedIn: loginContext.data.loggedIn,
+                        refresh: refresh,
                         url: url,
                     });
                 }
@@ -80,11 +85,13 @@ const useFetchSummary = (props: Props): State => {
                 setError(error as Error);
                 ReportError("useFetchSummary.fetchSummary", error, {
                     loggedIn: loginContext.data.loggedIn,
+                    refresh: refresh,
                     url: url,
                 }, alertPopup);
             }
 
             setLoading(false);
+            setRefresh(false);
             setSummary(theSummary);
 
         }
@@ -93,11 +100,16 @@ const useFetchSummary = (props: Props): State => {
 
     }, [facilityContext.facility, loginContext.data.loggedIn,
         props.date, props.section,
-        alertPopup]);
+        alertPopup, refresh]);
+
+    const handleRefresh: HandleAction = () => {
+        setRefresh(true);
+    }
 
     return {
         error: error ? error : null,
         loading: loading,
+        refresh: handleRefresh,
         summary: summary,
     }
 

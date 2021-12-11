@@ -36,15 +36,13 @@ export interface Props {
 
 const PREFIX = "value_";
 type VALUES = {
-//    [name: string]: string;
     [name: string]: number | null;
 }
 
 const EntriesSection = (props: Props) => {
 
     const [categories, setCategories] = useState<Category[]>([]);
-//    const [disabled, setDisabled] = useState<boolean>(true);
-    const [initials, setInitials] = useState<VALUES>({});
+//    const [initials, setInitials] = useState<VALUES>({});
 
     const fetchSummary = useFetchSummary({
         date: props.date,
@@ -72,20 +70,13 @@ const EntriesSection = (props: Props) => {
         setCategories(theCategories);
 
         // Calculate the initial values to be displayed
+/*
         const theInitials: VALUES = {};
         theCategories.forEach(category => {
-/*
-            let value = "";
-            if (fetchSummary.summary.values[category.id]) {
-                value = "" + fetchSummary.summary.values[category.id];
-            } else if (fetchSummary.summary.values[category.id] === 0) {
-                value = "0";
-            }
-            theInitials[name(category)] = value;
-*/
             theInitials[name(category)] = fetchSummary.summary.values[category.id];
         });
         setInitials(theInitials);
+*/
 
         // Report our configuration information
         logger.info({
@@ -95,7 +86,7 @@ const EntriesSection = (props: Props) => {
             section: Abridgers.SECTION(props.section),
             categories: Abridgers.CATEGORIES(theCategories),
             summary: fetchSummary.summary,
-            initials: theInitials,
+//            initials: theInitials,
         });
 
     }, [props.active, props.date, props.section,
@@ -133,14 +124,6 @@ const EntriesSection = (props: Props) => {
             values: {}
         });
         categories.forEach(category => {
-/*
-            const value: string = values[name(category)];
-            if (value === "") {
-                summary.values[category.id] = null;
-            } else {
-                summary.values[category.id] = Number(value);
-            }
-*/
             summary.values[category.id] = values[name(category)];
         });
         logger.info({
@@ -164,7 +147,6 @@ const EntriesSection = (props: Props) => {
                 type: "danger",
             });
         } else {
-//            setDisabled(true);
             notifications.addNotification({
                 container: "top-right",
                 dismiss: {
@@ -176,81 +158,26 @@ const EntriesSection = (props: Props) => {
                 type: "success",
             });
         }
+        fetchSummary.refresh();
 
     }
 
-/*
-    // Handle a "Save" button click
-    const onSave: OnAction = async () => {
-
-        // Calculate a Summary to send to the server
-        const summary = new Summary({
-            date: props.date,
-            sectionId: props.section.id,
-            values: {}
-        });
+    const toValues = (summary: Summary): VALUES => {
+        const results: VALUES = {};
         categories.forEach(category => {
-            const value: string = values[name(category)];
-            if (value === "") {
-                summary.values[category.id] = null;
-            } else {
-                summary.values[category.id] = Number(value);
-            }
+            results[name(category)] = summary.values[category.id];
         });
         logger.info({
-            context: "EntriesSection.onSave",
-            section: Abridgers.SECTION(props.section),
-            values: values,
-            summary: summary,
+            context: "EntriesSection.toValues",
+            summary: fetchSummary.summary,
+            values: results,
         });
-
-        // Send the Summary and process the results
-        await mutateSummary.write(summary);
-        if (mutateSummary.error) {
-            notifications.addNotification({
-                container: "top-right",
-                dismiss: {
-                    duration: 0,
-                },
-                insert: "top",
-                message: `${(mutateSummary.error as Error).message}`,
-                title: props.section.slug,
-                type: "danger",
-            });
-        } else {
-            setDisabled(true);
-            notifications.addNotification({
-                container: "top-right",
-                dismiss: {
-                    duration: 5000,
-                },
-                insert: "bottom",
-                message: "Data entries have been saved",
-                title: props.section.slug,
-                type: "success",
-            });
-        }
-
+        return results;
     }
-*/
-
-/*
-    // Handle a change in the value of an input field
-    const onUpdate = (name: string, event: ChangeEvent<HTMLInputElement>): void => {
-        logger.info({
-            context: "EventSection.onUpdate",
-            name: name,
-            value: event.target.value,
-        });
-        const theValues = values;
-        theValues[name] = event.target.value;
-        setValues(theValues);
-        setDisabled(false);
-    }
-*/
 
     const {formState: {isDirty}, handleSubmit, register, reset} = useForm<VALUES>({
-        defaultValues: initials,
+//        defaultValues: initials,
+        defaultValues: toValues(fetchSummary.summary),
         mode: "onBlur",
     });
 
@@ -299,18 +226,6 @@ const EntriesSection = (props: Props) => {
                             id={`ES-S${props.section.id}-R${ri}-input`}
                             key={`ES-S${props.section.id}-R${ri}-input`}
                         >
-{/*
-                            <input
-                                id={name(category)}
-                                inputMode="numeric"
-                                key={`ES-S${props.section.id}-R${ri}-input`}
-                                name={name(category)}
-                                onChange={event => onUpdate(name(category), event)}
-                                pattern="[0-9]*"
-                                type="number"
-                                value={values[name(category)]}
-                            />
-*/}
                             <InputField
                                 inputMode="numeric"
                                 name={name(category)}
