@@ -7,15 +7,12 @@
 
 import React, {useEffect, useState} from "react";
 import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
 import Table from "react-bootstrap/Table";
-import {SubmitHandler, useForm} from "react-hook-form";
 import {store as notifications} from "react-notifications-component";
 
 // Internal Modules ----------------------------------------------------------
 
-import InputField from "../general/InputField";
-import {OnAction} from "../../types";
+import {HandleAction, OnChangeInput} from "../../types";
 import useFetchSummary from "../../hooks/useFetchSummary";
 import useMutateSummary from "../../hooks/useMutateSummary";
 import Category from "../../models/Category";
@@ -36,13 +33,15 @@ export interface Props {
 
 const PREFIX = "value_";
 type VALUES = {
-//    [name: string]: number | null;
     [name: string]: string;
 }
 
 const EntriesSection = (props: Props) => {
 
     const [categories, setCategories] = useState<Category[]>([]);
+    const [dirty, setDirty] = useState<boolean>(false);
+    const [refresh, setRefresh] = useState<boolean>(false);
+    const [values, setValues] = useState<VALUES>({});
 
     const fetchSummary = useFetchSummary({
         date: props.date,
@@ -54,7 +53,7 @@ const EntriesSection = (props: Props) => {
 
     useEffect(() => {
 
-        // Calculate the Categories we will be reporting over
+        // Calculate the Categories we will be entering values for
         let theCategories: Category[] = [];
         if (props.section.categories) {
             if (props.active) {
@@ -69,6 +68,18 @@ const EntriesSection = (props: Props) => {
         }
         setCategories(theCategories);
 
+        // Record the initial values for our categories
+        const theValues: VALUES = {};
+        theCategories.forEach(category => {
+            const value = fetchSummary.summary.values[category.id];
+            if (value === null) {
+                theValues[name(category)] = "";
+            } else {
+                theValues[name(category)] = "" + value;
+            }
+        });
+        setValues(theValues);
+
         // Report our configuration information
         logger.info({
             context: "EntriesSection.useEffect",
@@ -77,9 +88,13 @@ const EntriesSection = (props: Props) => {
             section: Abridgers.SECTION(props.section),
             categories: Abridgers.CATEGORIES(theCategories),
             summary: fetchSummary.summary,
+            values: theValues,
         });
+        setDirty(false);
+        setRefresh(false);
 
     }, [props.active, props.date, props.section,
+        refresh,
         fetchSummary.summary]);
 
     // Calculate the field name for the value associated with this Category
@@ -87,19 +102,31 @@ const EntriesSection = (props: Props) => {
         return PREFIX + category.id;
     }
 
-    // Handle a "Reset" button click
-    const onReset: OnAction = () => {
-        logger.info({
-            context: "EntriesSection.onReset",
+    // Handle a "Change" event
+    const onChange: OnChangeInput = (event) => {
+        const theValues: VALUES = {};
+        categories.forEach(category => {
+            const theName = name(category);
+            theValues[theName] = values[theName];
         });
-        reset();
+        theValues[event.target.name] = event.target.value;
+        setDirty(true);
+        setValues(theValues);
     }
 
-    // Handle a "Save" button click
-    const onSubmit: SubmitHandler<VALUES> = async (values) => {
+    // Handle a "Reset" button click
+    const onReset: HandleAction = () => {
+        setRefresh(true);
+    }
+
+    // Handle a "Submit" button click
+    const onSubmit = async (event: any) => {
+
+        // Prevent the usual HTML form submit
+        event.preventDefault();
 
         // Calculate a Summary to send to the server
-        const summary = new Summary({
+        const theSummary = new Summary({
             date: props.date,
             sectionId: props.section.id,
             values: {}
@@ -107,20 +134,14 @@ const EntriesSection = (props: Props) => {
         categories.forEach(category => {
             const value = values[name(category)];
             if (value.length > 0) {
-                summary.values[category.id] = Number(value);
+                theSummary.values[category.id] = Number(value);
             } else {
-                summary.values[category.id] = null;
+                theSummary.values[category.id] = null;
             }
-        });
-        logger.info({
-            context: "EntriesSection.onSubmit",
-            section: Abridgers.SECTION(props.section),
-            values: values,
-            summary: summary,
         });
 
         // Send the Summary and process the results
-        await mutateSummary.write(summary);
+        await mutateSummary.write(theSummary);
         if (mutateSummary.error) {
             notifications.addNotification({
                 container: "top-right",
@@ -143,45 +164,28 @@ const EntriesSection = (props: Props) => {
                 title: props.section.slug,
                 type: "success",
             });
+            logger.info({
+                context: "EntriesSection.onSubmit",
+                values: values,
+                summary: theSummary,
+            });
+            setDirty(false);
         }
-        fetchSummary.refresh();
 
     }
-
-    const toValues = (summary: Summary): VALUES => {
-        const results: VALUES = {};
-        categories.forEach(category => {
-            const value = summary.values[category.id];
-            if (value === null) {
-                results[name(category)] = "";
-            } else {
-                results[name(category)] = "" + value;
-            }
-        });
-        logger.info({
-            context: "EntriesSection.toValues",
-            summary: fetchSummary.summary,
-            values: results,
-        });
-        return results;
-    }
-
-    const {formState: {isDirty}, handleSubmit, register, reset} = useForm<VALUES>({
-//        defaultValues: initials,
-        defaultValues: toValues(fetchSummary.summary),
-        mode: "onBlur",
-    });
 
     return (
-        <Form
+        <form
             id={`ES-${props.section.id}-Form`}
+            key={`ES-${props.section.id}-Form`}
             noValidate
-            onSubmit={handleSubmit(onSubmit)}
+            onReset={onReset}
+            onSubmit={onSubmit}
         >
 
             <Table
                 bordered={true}
-                id={`ES-S${props.section.id}-Table`}
+                //id={`ES-S${props.section.id}-Table`}
                 hover={true}
                 key={`ES-S${props.section.id}-Table`}
                 size="sm"
@@ -204,7 +208,7 @@ const EntriesSection = (props: Props) => {
                 {categories.map((category, ri) => (
                     <tr
                         className="table-default"
-                        id={`ES-S${props.section.id}-R${ri}-tr`}
+                        //id={`ES-S${props.section.id}-R${ri}-tr`}
                         key={`ES-S${props.section.id}-R${ri}-tr`}
                     >
                         <td
@@ -214,15 +218,16 @@ const EntriesSection = (props: Props) => {
                             <label htmlFor={name(category)}>{category.slug}</label>
                         </td>
                         <td
-                            id={`ES-S${props.section.id}-R${ri}-input`}
+                            //id={`ES-S${props.section.id}-R${ri}-input`}
                             key={`ES-S${props.section.id}-R${ri}-input`}
                         >
-                            <InputField
+                            <input
                                 inputMode="numeric"
                                 name={name(category)}
+                                onChange={onChange}
                                 pattern="[0-9]*"
-                                register={register}
                                 type="number"
+                                value={values[name(category)]}
                             />
                         </td>
                     </tr>
@@ -231,19 +236,16 @@ const EntriesSection = (props: Props) => {
                     <td>&nbsp;</td>
                     <td>
                         <Button
-                            className="align-content-start"
-                            disabled={!isDirty}
+                            disabled={!dirty}
                             size="sm"
                             type="submit"
                             variant="primary"
                         >Save</Button>
                         &nbsp;&nbsp;&nbsp;&nbsp;
                         <Button
-                            className="align-content-end"
-                            disabled={!isDirty}
-                            onClick={onReset}
+                            disabled={!dirty}
                             size="sm"
-                            type="button"
+                            type="reset"
                             variant="secondary"
                         >Reset</Button>
                     </td>
@@ -252,7 +254,7 @@ const EntriesSection = (props: Props) => {
 
             </Table>
 
-        </Form>
+        </form>
     )
 
 }
