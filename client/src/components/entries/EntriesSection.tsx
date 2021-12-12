@@ -36,13 +36,13 @@ export interface Props {
 
 const PREFIX = "value_";
 type VALUES = {
-    [name: string]: number | null;
+//    [name: string]: number | null;
+    [name: string]: string;
 }
 
 const EntriesSection = (props: Props) => {
 
     const [categories, setCategories] = useState<Category[]>([]);
-//    const [initials, setInitials] = useState<VALUES>({});
 
     const fetchSummary = useFetchSummary({
         date: props.date,
@@ -69,15 +69,6 @@ const EntriesSection = (props: Props) => {
         }
         setCategories(theCategories);
 
-        // Calculate the initial values to be displayed
-/*
-        const theInitials: VALUES = {};
-        theCategories.forEach(category => {
-            theInitials[name(category)] = fetchSummary.summary.values[category.id];
-        });
-        setInitials(theInitials);
-*/
-
         // Report our configuration information
         logger.info({
             context: "EntriesSection.useEffect",
@@ -86,7 +77,6 @@ const EntriesSection = (props: Props) => {
             section: Abridgers.SECTION(props.section),
             categories: Abridgers.CATEGORIES(theCategories),
             summary: fetchSummary.summary,
-//            initials: theInitials,
         });
 
     }, [props.active, props.date, props.section,
@@ -97,21 +87,12 @@ const EntriesSection = (props: Props) => {
         return PREFIX + category.id;
     }
 
-/*
-    // Handle a change on input, even if the field is not committed yet
-    const onChange: OnChangeInput = (event) => {
-        setDisabled(false);
-    }
-*/
-
     // Handle a "Reset" button click
     const onReset: OnAction = () => {
         logger.info({
             context: "EntriesSection.onReset",
         });
-        //setValues(initials);
         reset();
-//        setDisabled(true);
     }
 
     // Handle a "Save" button click
@@ -124,7 +105,12 @@ const EntriesSection = (props: Props) => {
             values: {}
         });
         categories.forEach(category => {
-            summary.values[category.id] = values[name(category)];
+            const value = values[name(category)];
+            if (value.length > 0) {
+                summary.values[category.id] = Number(value);
+            } else {
+                summary.values[category.id] = null;
+            }
         });
         logger.info({
             context: "EntriesSection.onSubmit",
@@ -165,7 +151,12 @@ const EntriesSection = (props: Props) => {
     const toValues = (summary: Summary): VALUES => {
         const results: VALUES = {};
         categories.forEach(category => {
-            results[name(category)] = summary.values[category.id];
+            const value = summary.values[category.id];
+            if (value === null) {
+                results[name(category)] = "";
+            } else {
+                results[name(category)] = "" + value;
+            }
         });
         logger.info({
             context: "EntriesSection.toValues",
