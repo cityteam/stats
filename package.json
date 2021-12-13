@@ -13,6 +13,7 @@
     "heroku:start": "node dist/server.js",
     "preheroku:local": "tsc",
     "preheroku:start": "node_modules/.bin/tsc",
+    "postinstall": "tsc",
     "run": "cross-env NODE_ENV=production node dist/server.js",
     "run:dev": "cross-env NODE_ENV=development node dist/server.js",
     "run:prod": "cross-env NODE_ENV=production node dist/server.js",
