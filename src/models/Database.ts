@@ -33,7 +33,10 @@ const options: any = {
     }
 }
 if (DATABASE_SSL === "true") {
-    options.dialectOptions = { ssl: true }
+    options.dialectOptions = {
+        rejectUnauthorized: false,
+        ssl: true,
+    }
 }
 
 export const Database = new Sequelize(DATABASE_URL, options);
