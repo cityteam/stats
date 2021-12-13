@@ -8,10 +8,10 @@
 import React, {useEffect, useState} from "react";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
-import {store as notifications} from "react-notifications-component";
 
 // Internal Modules ----------------------------------------------------------
 
+import SavingProgress from "../general/SavingProgress";
 import {HandleAction, OnChangeInput} from "../../types";
 import useFetchSummary from "../../hooks/useFetchSummary";
 import useMutateSummary from "../../hooks/useMutateSummary";
@@ -41,6 +41,7 @@ const EntriesSection = (props: Props) => {
     const [categories, setCategories] = useState<Category[]>([]);
     const [dirty, setDirty] = useState<boolean>(false);
     const [refresh, setRefresh] = useState<boolean>(false);
+    const [title, setTitle] = useState<string>("");
     const [values, setValues] = useState<VALUES>({});
 
     const fetchSummary = useFetchSummary({
@@ -140,8 +141,13 @@ const EntriesSection = (props: Props) => {
             }
         });
 
-        // Send the Summary and process the results
+        // Send the Summary and handle the results
+        setTitle(props.section.slug);
         await mutateSummary.write(theSummary);
+        if (!mutateSummary.error) {
+            setDirty(false);
+        }
+/*
         if (mutateSummary.error) {
             notifications.addNotification({
                 container: "top-right",
@@ -171,90 +177,100 @@ const EntriesSection = (props: Props) => {
             });
             setDirty(false);
         }
+*/
 
     }
 
     return (
-        <form
-            id={`ES-${props.section.id}-Form`}
-            key={`ES-${props.section.id}-Form`}
-            noValidate
-            onReset={onReset}
-            onSubmit={onSubmit}
-        >
+        <>
 
-            <Table
-                bordered={true}
-                //id={`ES-S${props.section.id}-Table`}
-                hover={true}
-                key={`ES-S${props.section.id}-Table`}
-                size="sm"
-                striped={true}
+            <SavingProgress
+                error={mutateSummary.error}
+                executing={mutateSummary.executing}
+                title={title}
+            />
+
+            <form
+                id={`ES-${props.section.id}-Form`}
+                key={`ES-${props.section.id}-Form`}
+                noValidate
+                onReset={onReset}
+                onSubmit={onSubmit}
             >
 
-                <thead>
-                <tr className="table-warning">
-                    <th className="text-center" colSpan={2}>
-                        {props.section.slug}
-                    </th>
-                </tr>
-                <tr>
-                    <th>Statistic</th>
-                    <th>Value</th>
-                </tr>
-                </thead>
+                <Table
+                    bordered={true}
+                    //id={`ES-S${props.section.id}-Table`}
+                    hover={true}
+                    key={`ES-S${props.section.id}-Table`}
+                    size="sm"
+                    striped={true}
+                >
 
-                <tbody>
-                {categories.map((category, ri) => (
-                    <tr
-                        className="table-default"
-                        //id={`ES-S${props.section.id}-R${ri}-tr`}
-                        key={`ES-S${props.section.id}-R${ri}-tr`}
-                    >
-                        <td
-                            id={`ES-S${props.section.id}-R${ri}-label`}
-                            key={`ES-S${props.section.id}-R${ri}-label`}
+                    <thead>
+                    <tr className="table-warning">
+                        <th className="text-center" colSpan={2}>
+                            {props.section.slug}
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>Statistic</th>
+                        <th>Value</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {categories.map((category, ri) => (
+                        <tr
+                            className="table-default"
+                            //id={`ES-S${props.section.id}-R${ri}-tr`}
+                            key={`ES-S${props.section.id}-R${ri}-tr`}
                         >
-                            <label htmlFor={name(category)}>{category.slug}</label>
-                        </td>
-                        <td
-                            //id={`ES-S${props.section.id}-R${ri}-input`}
-                            key={`ES-S${props.section.id}-R${ri}-input`}
-                        >
-                            <input
-                                inputMode="numeric"
-                                name={name(category)}
-                                onChange={onChange}
-                                pattern="[0-9]*"
-                                type="number"
-                                value={values[name(category)]}
-                            />
+                            <td
+                                id={`ES-S${props.section.id}-R${ri}-label`}
+                                key={`ES-S${props.section.id}-R${ri}-label`}
+                            >
+                                <label htmlFor={name(category)}>{category.slug}</label>
+                            </td>
+                            <td
+                                //id={`ES-S${props.section.id}-R${ri}-input`}
+                                key={`ES-S${props.section.id}-R${ri}-input`}
+                            >
+                                <input
+                                    inputMode="numeric"
+                                    name={name(category)}
+                                    onChange={onChange}
+                                    pattern="[0-9]*"
+                                    type="number"
+                                    value={values[name(category)]}
+                                />
+                            </td>
+                        </tr>
+                    ))}
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>
+                            <Button
+                                disabled={!dirty}
+                                size="sm"
+                                type="submit"
+                                variant="primary"
+                            >Save</Button>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <Button
+                                disabled={!dirty}
+                                size="sm"
+                                type="reset"
+                                variant="secondary"
+                            >Reset</Button>
                         </td>
                     </tr>
-                ))}
-                <tr>
-                    <td>&nbsp;</td>
-                    <td>
-                        <Button
-                            disabled={!dirty}
-                            size="sm"
-                            type="submit"
-                            variant="primary"
-                        >Save</Button>
-                        &nbsp;&nbsp;&nbsp;&nbsp;
-                        <Button
-                            disabled={!dirty}
-                            size="sm"
-                            type="reset"
-                            variant="secondary"
-                        >Reset</Button>
-                    </td>
-                </tr>
-                </tbody>
+                    </tbody>
 
-            </Table>
+                </Table>
 
-        </form>
+            </form>
+        </>
     )
 
 }
