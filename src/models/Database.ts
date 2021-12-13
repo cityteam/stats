@@ -34,8 +34,10 @@ const options: any = {
 }
 if (DATABASE_SSL === "true") {
     options.dialectOptions = {
-        rejectUnauthorized: false,
-        ssl: true,
+        ssl: {
+            rejectUnauthorized: false,
+            require: true,
+        }
     }
 }
 
