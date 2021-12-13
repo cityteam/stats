@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Daily statistics collection for CityTeam Facilities",
   "main": "dist/server.js",
+  "engines": {
+    "node": "16.x"
+  },
   "scripts": {
     "develop:dev": "concurrently \"npm:server:build:watch\" \"npm:start:dev\"",
     "develop:prod": "concurrently \"npm:server:build:watch\" \"npm:start:prod\"",
