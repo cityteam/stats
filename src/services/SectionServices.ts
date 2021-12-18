@@ -12,6 +12,7 @@ import BaseChildServices from "./BaseChildServices";
 import CategoryServices from "./CategoryServices";
 import FacilityServices from "./FacilityServices";
 import Category from "../models/Category";
+import Daily from "../models/Daily";
 import Facility from "../models/Facility";
 import Section from "../models/Section";
 import {appendPaginationOptions} from "../util/QueryParameters";
@@ -75,6 +76,9 @@ class SectionServices extends BaseChildServices<Section, Facility> {
         const include: any = options.include ? options.include : [];
         if ("" === query.withCategories) {
             include.push(Category);
+        }
+        if ("" === query.withDailies) {
+            include.push(Daily);
         }
         if ("" === query.withFacility) {
             include.push(Facility);

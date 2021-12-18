@@ -105,7 +105,7 @@ const YearlyReportSection = (props: Props) => {
                             const rowIndex = calculateRowIndex(Number(key), theRows);
                             if (rowIndex >= 0) {
                                 theRows[rowIndex].values[colIndex] = value;
-                                theRows[rowIndex].total += value;
+                                theRows[rowIndex].total += Number(value);
                             }
                         }
                     }

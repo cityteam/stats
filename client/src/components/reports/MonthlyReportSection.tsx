@@ -112,7 +112,7 @@ const MonthlyReportSection = (props: Props) => {
                         if (colIndex >= 0) {
                             theRows[rowIndex].values[colIndex] = value;
                             if (value) {
-                                theTotals[colIndex] += value;
+                                theTotals[colIndex] += Number(value);
                             }
                         }
                     }

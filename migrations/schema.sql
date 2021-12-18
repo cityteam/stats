@@ -91,6 +91,18 @@ ALTER SEQUENCE public.categories_id_seq OWNED BY public.categories.id;
 
 
 --
+-- Name: dailies; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.dailies (
+    category_ids integer[] NOT NULL,
+    category_values numeric[],
+    date date NOT NULL,
+    section_id integer NOT NULL
+);
+
+
+--
 -- Name: details; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -331,6 +343,14 @@ ALTER TABLE ONLY public.categories
 
 
 --
+-- Name: dailies dailies_pk; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.dailies
+    ADD CONSTRAINT dailies_pk PRIMARY KEY (date, section_id);
+
+
+--
 -- Name: details details_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -440,6 +460,14 @@ ALTER TABLE ONLY public.access_tokens
 
 ALTER TABLE ONLY public.categories
     ADD CONSTRAINT categories_section_id_fkey FOREIGN KEY (section_id) REFERENCES public.sections(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: dailies dailies_section_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.dailies
+    ADD CONSTRAINT dailies_section_id_fkey FOREIGN KEY (section_id) REFERENCES public.sections(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --

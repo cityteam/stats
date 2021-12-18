@@ -11,6 +11,7 @@ import {Sequelize} from "sequelize-typescript";
 
 import AccessToken from "./AccessToken";
 import Category from "./Category";
+import Daily from "./Daily";
 import Detail from "./Detail";
 import Facility from "./Facility";
 import RefreshToken from "./RefreshToken";
@@ -47,6 +48,7 @@ Database.addModels([
     Facility,
     Section,
     Category,
+    Daily,
     Detail,
     User,
     AccessToken,

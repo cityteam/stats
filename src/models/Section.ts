@@ -10,6 +10,7 @@ import {BelongsTo, Column, DataType, ForeignKey, HasMany, Model, Table} from "se
 // Internal Modules ----------------------------------------------------------
 
 import Category from "./Category";
+import Daily from "./Daily";
 import Facility from "./Facility";
 import {validateFacilityId, validateSectionOrdinalUnique} from "../util/AsyncValidators";
 import {BadRequest} from "../util/HttpErrors";
@@ -63,6 +64,10 @@ class Section extends Model<Section> {
     @HasMany(() => Category)
     // Categories that are reported in this Section
     categories!: Category[];
+
+    @HasMany(() => Daily)
+    // Dailies reported for this Section
+    dailies!: Daily[];
 
     @BelongsTo(() => Facility, {
         onDelete: "CASCADE",
