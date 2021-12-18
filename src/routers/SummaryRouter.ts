@@ -43,6 +43,7 @@ SummaryRouter.get("/:facilityId/dailies/:dateFrom/:dateTo",
         ));
     });
 
+/*
 // GET /:facilityId/dailies/:dateFrom/:dateTo/old
 SummaryRouter.get("/:facilityId/dailies/:dateFrom/:dateTo/old",
     requireRegular,
@@ -64,6 +65,7 @@ SummaryRouter.get("/:facilityId/dailies/:dateFrom/:dateTo/old",
             sectionIds.length > 0 ? sectionIds : undefined,
         ));
     });
+*/
 
 // GET /:facilityId/monthlies/:dateFrom/:dateTo
 SummaryRouter.get("/:facilityId/monthlies/:dateFrom/:dateTo",
@@ -87,6 +89,7 @@ SummaryRouter.get("/:facilityId/monthlies/:dateFrom/:dateTo",
         ));
     });
 
+/*
 // GET /:facilityId/monthlies/:dateFrom/:dateTo/old
 SummaryRouter.get("/:facilityId/monthlies/:dateFrom/:dateTo/old",
     requireRegular,
@@ -108,6 +111,7 @@ SummaryRouter.get("/:facilityId/monthlies/:dateFrom/:dateTo/old",
             sectionIds.length > 0 ? sectionIds : undefined,
         ));
     });
+*/
 
 // GET /:facilityId/:sectionId/:date - Retrieve Summary for Section and date
 SummaryRouter.get("/:facilityId/:sectionId/:date",
@@ -120,6 +124,7 @@ SummaryRouter.get("/:facilityId/:sectionId/:date",
         ));
     });
 
+/*
 // GET /:facilityId/:sectionId/:date/old - Retrieve Summary for Section and date (old style)
 SummaryRouter.get("/:facilityId/:sectionId/:date/old",
     requireRegular,
@@ -130,6 +135,7 @@ SummaryRouter.get("/:facilityId/:sectionId/:date/old",
             req.params.date
         ));
     });
+*/
 
 // POST /:facilityId/:sectionId/:date - Persist Summary for Section and date
 SummaryRouter.post("/:facilityId/:sectionId/:date",
@@ -143,6 +149,7 @@ SummaryRouter.post("/:facilityId/:sectionId/:date",
         ));
     });
 
+/*
 // POST /:facilityId/:sectionId/:date - Persist Summary for Section and date (old style)
 SummaryRouter.post("/:facilityId/:sectionId/:date/old",
     requireRegular,
@@ -154,8 +161,10 @@ SummaryRouter.post("/:facilityId/:sectionId/:date/old",
             req.body
         ));
     });
+*/
 
 // POST /:facilityId/migrate/:dateFrom/:dateTo - Migrate old to new database table
+/*
 SummaryRouter.post("/:facilityId/migrate/:dateFrom/:dateTo",
     requireSuperuser,
     async (req: Request, res: Response) => {
@@ -165,4 +174,5 @@ SummaryRouter.post("/:facilityId/migrate/:dateFrom/:dateTo",
             req.params.dateTo
         ));
     });
+*/
 

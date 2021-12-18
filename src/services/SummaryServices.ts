@@ -8,7 +8,7 @@
 
 // Internal Modules ----------------------------------------------------------
 
-import DetailServices from "./DetailServices";
+//import DetailServices from "./DetailServices";
 import SectionServices from "./SectionServices";
 import Category from "../models/Category";
 import Daily from "../models/Daily";
@@ -75,6 +75,7 @@ class SummaryServices {
      * @param sectionIds                Comma-delimited list of section IDs
      *                                  for which to return results [all sections]
      */
+/*
     public async dailiesOld(facilityId: number, dateFrom: string, dateTo: string, active: boolean, sectionIds?: number[]): Promise<Summary[]> {
 
         // Retrieve the requested information
@@ -99,10 +100,12 @@ class SummaryServices {
         });
 
     }
+*/
 
     /**
      * Migrate old "details" contents to new "dailies" instead.
      */
+/*
     public async migrate(facilityId: number, dateFrom: string, dateTo: string): Promise<object> {
 
         // Get old-style summaries (from the details table)
@@ -122,6 +125,7 @@ class SummaryServices {
         };
 
     }
+*/
 
     /**
      * Retrieve monthly Summary rows that match the requested criteria.  Dates in
@@ -196,6 +200,7 @@ class SummaryServices {
      * @param sectionIds                Comma-delimited list of section IDs
      *                                  for which to return results [all sections]
      */
+/*
     public async monthliesOld(facilityId: number, dateFrom: string, dateTo: string, active: boolean, sectionIds?: number[]): Promise<Summary[]> {
 
         // Retrieve the requested information
@@ -220,6 +225,7 @@ class SummaryServices {
         });
 
     }
+*/
 
     /**
      * Synthesize and return a Summary object for the specified parameters.
@@ -238,12 +244,6 @@ class SummaryServices {
         const section = await SectionServices.find(facilityId, sectionId, {
             withCategories: "",
         });
-/*
-        const categoriesMap: Map<number, Category> = new Map<number, Category>();
-        section.categories.forEach(category => {
-            categoriesMap.set(category.id, category);
-        });
-*/
         const categoriesMap = this.categoriesToMap(section.categories);
 
         // Read the corresponding Daily row (if there is one)
@@ -271,6 +271,7 @@ class SummaryServices {
      * @param sectionId                 Section ID for which to return data
      * @param date                      Date for which to return data
      */
+/*
     public async readOld(facilityId: number, sectionId: number, date: string): Promise<Summary> {
 
         // Retrieve the specified Section and related Categories
@@ -305,6 +306,7 @@ class SummaryServices {
         return summary;
 
     }
+*/
 
     /**
      * Insert or update the Daily object that records the specified information.
@@ -320,12 +322,6 @@ class SummaryServices {
         const section = await SectionServices.find(facilityId, sectionId, {
             withCategories: "",
         });
-/*
-        const categoriesMap: Map<number, Category> = new Map<number, Category>();
-        section.categories.forEach(category => {
-            categoriesMap.set(category.id, category);
-        });
-*/
         const categoriesMap = this.categoriesToMap(section.categories);
 
         // Read the corresponding Daily row (if there is one)
@@ -379,6 +375,7 @@ class SummaryServices {
      *
      * @returns Summary reflecting what was recorded
      */
+/*
     public async writeOld(facilityId: number, sectionId: number, date: string, summary: Summary): Promise<Summary> {
 
         // Retrieve the specified Section and related Categories
@@ -416,6 +413,7 @@ class SummaryServices {
         return result;
 
     }
+*/
 
     // Private Methods -------------------------------------------------------
 
@@ -464,6 +462,7 @@ class SummaryServices {
 
     }
 
+/*
     // Is the specified Category ID in this list of Categories?
     private included(categoryId: number, categories: Category[]): boolean {
         let found = false;
@@ -474,6 +473,7 @@ class SummaryServices {
         });
         return found;
     }
+*/
 
     /**
      * Return the requested Sections (with nested Categories and Details)
