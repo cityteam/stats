@@ -1,4 +1,4 @@
-// client-logger -------------------------------------------------------------
+// ClientLogger --------------------------------------------------------------
 
 // Configure and return a Pino logger for this browser-based application.
 
@@ -53,7 +53,8 @@ export const logger = require("pino")({
             warn:       (object: any) => { write(object, 40) },
         },
     },
-    timestamp: false, // Server will timestamp for us
+    level: "trace",     // write() will ignore things based on dynamic level set
+    timestamp: false,   // Server will timestamp for us
 });
 
 export const setLevel = (newName: string): void => {
