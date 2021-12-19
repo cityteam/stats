@@ -91,7 +91,7 @@ const EntriesView = () => {
             <Row className="ml-1 mr-1">
                 {fetchSections.sections.map((section, rowIndex) => (
                     <Col
-                        id={`EV-S${section.id}-Col`}
+                        //id={`EV-S${section.id}-Col`}
                         key={`EV-S${section.id}-Col`}
                     >
                         <EntriesSection

@@ -154,7 +154,7 @@ const MonthlyReportSection = (props: Props) => {
                     {categories.map((category, ci) => (
                         <th
                             className="text-center"
-                            id={`MRS-S${props.section.id}-C${ci}-th`}
+                            //id={`MRS-S${props.section.id}-C${ci}-th`}
                             key={`MRS-S${props.section.id}-C${ci}-th`}
                         >
                             {category.slug}
@@ -166,16 +166,16 @@ const MonthlyReportSection = (props: Props) => {
                 <tbody>
                 {rows.map((row, ri) => (
                     <tr className="table-default"
-                        id={`MRS-S${props.section.id}-R${ri}-tr`}
+                        //id={`MRS-S${props.section.id}-R${ri}-tr`}
                         key={`MRS-S${props.section.id}-R${ri}-tr`}
                     >
                         <td className="text-center"
-                            id={`MRS-S${props.section.id}-R${ri}-td-date`}
+                            //id={`MRS-S${props.section.id}-R${ri}-td-date`}
                             key={`MRS-S${props.section.id}-R${ri}-td-date`}
                         >{row.date}</td>
                         {row.values.map((value, ci) => (
                             <td className="text-center"
-                                id={`MRS-S${props.section.id}-R${ri}-C${ci}-td`}
+                                //id={`MRS-S${props.section.id}-R${ri}-C${ci}-td`}
                                 key={`MRS-S${props.section.id}-R${ri}-C${ci}-td`}
                             >{value}</td>
                         ))}
@@ -183,12 +183,12 @@ const MonthlyReportSection = (props: Props) => {
                 ))}
                 <tr className="table-dark">
                     <td className="text-center"
-                        id={`MRS-S${props.section.id}-td-tot`}
+                        //id={`MRS-S${props.section.id}-td-tot`}
                         key={`MRS-S${props.section.id}-td-tot`}
                     >TOTALS</td>
                     {totals.map((total, ci) => (
                         <td className="text-center"
-                            id={`MRS-S${props.section.id}-C${ci}-td-tot`}
+                            //id={`MRS-S${props.section.id}-C${ci}-td-tot`}
                             key={`MRS-S${props.section.id}-C${ci}-td-tot`}
                         >{total}</td>
                     ))}

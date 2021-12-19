@@ -113,7 +113,7 @@ const MonthlyReport = () => {
                 {fetchSections.sections.map((section, tabIndex) => (
                     <Tab
                         eventKey={section.id}
-                        id={`MR-S${section.id}-Tab`}
+                        //id={`MR-S${section.id}-Tab`}
                         key={`MR-S${section.id}-Tab`}
                         title={section.slug}
                     >
