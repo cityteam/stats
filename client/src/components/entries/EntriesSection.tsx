@@ -82,7 +82,7 @@ const EntriesSection = (props: Props) => {
         setValues(theValues);
 
         // Report our configuration information
-        logger.info({
+        logger.debug({
             context: "EntriesSection.useEffect",
             active: props.active,
             date: props.date,
@@ -147,37 +147,6 @@ const EntriesSection = (props: Props) => {
         if (!mutateSummary.error) {
             setDirty(false);
         }
-/*
-        if (mutateSummary.error) {
-            notifications.addNotification({
-                container: "top-right",
-                dismiss: {
-                    duration: 0,
-                },
-                insert: "top",
-                message: `${(mutateSummary.error as Error).message}`,
-                title: props.section.slug,
-                type: "danger",
-            });
-        } else {
-            notifications.addNotification({
-                container: "top-right",
-                dismiss: {
-                    duration: 5000,
-                },
-                insert: "bottom",
-                message: "Data entries have been saved",
-                title: props.section.slug,
-                type: "success",
-            });
-            logger.info({
-                context: "EntriesSection.onSubmit",
-                values: values,
-                summary: theSummary,
-            });
-            setDirty(false);
-        }
-*/
 
     }
 

@@ -37,7 +37,7 @@ const EntriesView = () => {
     });
 
     useEffect(() => {
-        logger.info({
+        logger.debug({
             context: "EntriesView.useEffect",
             facility: Abridgers.FACILITY(facilityContext.facility),
             active: active,
@@ -52,7 +52,7 @@ const EntriesView = () => {
     }
 
     const handleDate: HandleDate = (theDate) => {
-        logger.info({
+        logger.debug({
             context: "EntriesView.handleDate",
             date: theDate,
         });

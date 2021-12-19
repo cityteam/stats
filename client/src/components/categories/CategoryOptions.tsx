@@ -51,7 +51,7 @@ const CategoryOptions = (props: Props) => {
     });
 
     useEffect(() => {
-        logger.info({
+        logger.debug({
             context: "CategoryOptions.useEffect",
             facility: Abridgers.FACILITY(facilityContext.facility),
             section: Abridgers.SECTION(section),
@@ -73,7 +73,7 @@ const CategoryOptions = (props: Props) => {
     }
 
     const handleSection: HandleSection = (theSection) => {
-        logger.info({
+        logger.debug({
             context: "CategoryOptions.handleSection",
             section: Abridgers.SECTION(theSection),
         })

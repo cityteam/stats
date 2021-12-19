@@ -42,7 +42,7 @@ const MonthlyReportSection = (props: Props) => {
 
     useEffect(() => {
 
-        logger.info({
+        logger.debug({
             context: "MonthlyReportSection.useEffect",
             active: props.active,
             dateFrom: props.dateFrom,

@@ -82,13 +82,13 @@ const useFetchSections = (props: Props): State => {
                             theSections.push(allSection);
                         }
                     });
-                    logger.info({
+                    logger.debug({
                         context: "useFetchSections.fetchSections",
                         url: url,
                         sections: Abridgers.SECTIONS(theSections),
                     });
                 } else {
-                    logger.info({
+                    logger.debug({
                         context: "useFetchSections.fetchSections",
                         msg: "Skipped fetching Sections",
                         loggedIn: loginContext.data.loggedIn,

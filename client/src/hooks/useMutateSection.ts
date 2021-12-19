@@ -42,7 +42,7 @@ const useMutateSection = (props: Props = {}): State => {
     const [executing, setExecuting] = useState<boolean>(false);
 
     useEffect(() => {
-        logger.info({
+        logger.debug({
             context: "useMutateSection.useEffect",
         });
     });
@@ -58,7 +58,7 @@ const useMutateSection = (props: Props = {}): State => {
 
         try {
             inserted = ToModel.SECTION((await Api.post(url, theSection)).data);
-            logger.info({
+            logger.debug({
                 context: "useMutateSection.insert",
                 url: url,
                 section: Abridgers.SECTION(inserted),
@@ -87,7 +87,7 @@ const useMutateSection = (props: Props = {}): State => {
 
         try {
             removed = ToModel.SECTION((await Api.delete(url)).data);
-            logger.info({
+            logger.debug({
                 context: "useMutateSection.remove",
                 url: url,
                 section: Abridgers.SECTION(removed),
@@ -116,7 +116,7 @@ const useMutateSection = (props: Props = {}): State => {
 
         try {
             updated = ToModel.SECTION((await Api.put(url, theSection)).data);
-            logger.info({
+            logger.debug({
                 context: "useMutateSection.update",
                 url: url,
                 section: Abridgers.SECTION(updated),

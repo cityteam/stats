@@ -44,7 +44,7 @@ const useMutateCategory = (props: Props): State => {
     const [executing, setExecuting] = useState<boolean>(false);
 
     useEffect(() => {
-        logger.info({
+        logger.debug({
             context: "useMutateCategory.useEffect",
             section: Abridgers.SECTION(props.section),
         });
@@ -61,7 +61,7 @@ const useMutateCategory = (props: Props): State => {
 
         try {
             inserted = ToModel.CATEGORY((await Api.post(url, theCategory)).data);
-            logger.info({
+            logger.debug({
                 context: "useMutateCategory.insert",
                 url: url,
                 category: Abridgers.CATEGORY(inserted),
@@ -90,7 +90,7 @@ const useMutateCategory = (props: Props): State => {
 
         try {
             removed = ToModel.CATEGORY((await Api.delete(url)).data);
-            logger.info({
+            logger.debug({
                 context: "useMutateCategory.remove",
                 url: url,
                 category: Abridgers.CATEGORY(removed),
@@ -119,7 +119,7 @@ const useMutateCategory = (props: Props): State => {
 
         try {
             updated = ToModel.CATEGORY((await Api.put(url, theCategory)).data);
-            logger.info({
+            logger.debug({
                 context: "useMutateCategory.update",
                 url: url,
                 category: Abridgers.CATEGORY(updated),

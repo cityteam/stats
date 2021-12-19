@@ -46,7 +46,7 @@ const SectionOptions = (props: Props) => {
     });
 
     useEffect(() => {
-        logger.info({
+        logger.debug({
             context: "SectionOptions.useEffect",
             facility: Abridgers.FACILITY(facilityContext.facility),
             active: active,

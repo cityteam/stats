@@ -39,7 +39,7 @@ const SectionSelector = (props: Props) => {
     });
 
     useEffect(() => {
-        logger.info({
+        logger.debug({
             context: "SectionSelector.useEffect",
             index: index
         })

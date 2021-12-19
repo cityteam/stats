@@ -57,7 +57,7 @@ const useMutateSummary = (props: Props = {}): State => {
 
         try {
             result = ToModel.SUMMARY((await Api.post(url, theSummary)).data);
-            logger.info({
+            logger.debug({
                 context: "useMutateSummary.write",
                 url: url,
                 summary: result,

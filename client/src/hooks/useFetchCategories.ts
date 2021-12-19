@@ -73,13 +73,13 @@ const useFetchCategories = (props: Props): State => {
             try {
                 if (loginContext.data.loggedIn && (facilityContext.facility.id > 0) && (props.section.id > 0)) {
                     theCategories = ToModel.CATEGORIES((await Api.get(url)).data);
-                    logger.info({
+                    logger.debug({
                         context: "useFetchCategories.fetchCategories",
                         url: url,
                         categories: Abridgers.CATEGORIES(theCategories),
                     });
                 } else {
-                    logger.info({
+                    logger.debug({
                         context: "useFetchCategories.fetchCategories",
                         msg: "Skipped fetching Categories",
                         loggedIn: loginContext.data.loggedIn,

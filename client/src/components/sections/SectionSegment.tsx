@@ -44,7 +44,7 @@ const SectionSegment = () => {
 
     useEffect(() => {
 
-        logger.info({
+        logger.debug({
             context: "SectionSegment.useEffect",
             facility: Abridgers.FACILITY(facilityContext.facility),
             section: Abridgers.SECTION(section),
@@ -71,7 +71,7 @@ const SectionSegment = () => {
             slug: null,
             title: null,
         });
-        logger.info({
+        logger.debug({
             context: "SectionSegment.handleAdd",
             section: theSection,
         });
@@ -86,7 +86,7 @@ const SectionSegment = () => {
 
     // Handle selection of a Section to edit details
     const handleEdit: HandleSection = (theSection) => {
-        logger.info({
+        logger.debug({
             context: "SectionSegment.handleEdit",
             section: Abridgers.SECTION(theSection),
         });
@@ -98,7 +98,7 @@ const SectionSegment = () => {
     const handleInsert: HandleSection = async (theSection) => {
         setTitle(theSection.title);
         const inserted = await mutateSection.insert(theSection);
-        logger.info({
+        logger.debug({
             context: "SectionSegment.handleInsert",
             section: Abridgers.SECTION(inserted),
         });
@@ -109,7 +109,7 @@ const SectionSegment = () => {
     const handleRemove: HandleSection = async (theSection) => {
         setTitle(theSection.title);
         const removed = await mutateSection.remove(theSection);
-        logger.info({
+        logger.debug({
             context: "SectionSegment.handleRemove",
             section: Abridgers.SECTION(removed),
         });
@@ -120,7 +120,7 @@ const SectionSegment = () => {
     const handleUpdate: HandleSection = async (theSection) => {
         setTitle(theSection.title);
         const updated = await mutateSection.update(theSection);
-        logger.info({
+        logger.debug({
             context: "SectionSegment.handleUpdate",
             section: Abridgers.SECTION(updated),
         });

@@ -40,7 +40,7 @@ const YearlyReportSection = (props: Props) => {
 
     useEffect(() => {
 
-        logger.info({
+        logger.debug({
             context: "YearlyReportSection.useEffect",
             active: props.active,
             section: Abridgers.SECTION(props.section),

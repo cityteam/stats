@@ -75,13 +75,13 @@ const useFetchSummaries = (props: Props): State => {
             try {
                 if (loginContext.data.loggedIn && (facilityContext.facility.id > 0)) {
                     theSummaries = ToModel.SUMMARIES((await Api.get(url)).data);
-                    logger.info({
+                    logger.debug({
                         context: "useFetchSummaries.fetchSummaries",
                         url: url,
                         summaries: Abridgers.SUMMARIES(theSummaries),
                     });
                 } else {
-                    logger.info({
+                    logger.debug({
                         context: "useFetchSummaries.fetchSummaries",
                         msg: "Skipped fetching Summaries",
                         loggedIn: loginContext.data.loggedIn,

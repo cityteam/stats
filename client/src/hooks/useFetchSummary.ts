@@ -65,14 +65,14 @@ const useFetchSummary = (props: Props): State => {
             try {
                 if (loginContext.data.loggedIn && (facilityContext.facility.id > 0) && (props.section.id > 0)) {
                     theSummary = ToModel.SUMMARY((await Api.get(url)).data);
-                    logger.info({
+                    logger.debug({
                         context: "useFetchSummary.fetchSummary",
                         refresh: refresh,
                         url: url,
                         summary: theSummary,
                     });
                 } else {
-                    logger.info({
+                    logger.debug({
                         context: "useFetchSummary.fetchSummary",
                         msg: "Skipped fetching Summary",
                         loggedIn: loginContext.data.loggedIn,

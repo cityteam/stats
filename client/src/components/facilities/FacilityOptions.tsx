@@ -48,7 +48,7 @@ const FacilityOptions = (props: Props) => {
 
     useEffect(() => {
 
-        logger.info({
+        logger.debug({
             context: "FacilityOptions.useEffect"
         });
 

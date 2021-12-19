@@ -70,7 +70,7 @@ const useFetchFacilities = (props: Props): State => {
                         theFacility.sections = Sorters.SECTIONS(theFacility.sections);
                     }
                 });
-                logger.info({
+                logger.debug({
                     context: "useFetchFacilities.fetchFacilities",
                     url: url,
                     facilities: Abridgers.FACILITIES(theFacilities),

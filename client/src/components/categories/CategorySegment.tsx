@@ -47,7 +47,7 @@ const CategorySegment = () => {
 
     useEffect(() => {
 
-        logger.info({
+        logger.debug({
             context: "CategorySegment.useEffect",
             facility: Abridgers.FACILITY(facilityContext.facility),
             section: Abridgers.SECTION(section),
@@ -76,7 +76,7 @@ const CategorySegment = () => {
             service: null,
             slug: null,
         });
-        logger.info({
+        logger.debug({
             context: "CategorySegment.handleAdd",
             category: category,
         });
@@ -91,7 +91,7 @@ const CategorySegment = () => {
 
     // Handle selection of a Category to edit details
     const handleEdit: HandleCategory = (theCategory) => {
-        logger.info({
+        logger.debug({
             context: "CategorySegment.handleEdit",
             category: Abridgers.CATEGORY(theCategory),
         })
@@ -103,7 +103,7 @@ const CategorySegment = () => {
     const handleInsert: HandleCategory = async (theCategory) => {
         setTitle(theCategory.service);
         const inserted = await mutateCategory.insert(theCategory);
-        logger.info({
+        logger.debug({
             context: "CategorySegment.handleInsert",
             category: Abridgers.CATEGORY(inserted),
         });
@@ -114,7 +114,7 @@ const CategorySegment = () => {
     const handleRemove: HandleCategory = async (theCategory) => {
         setTitle(theCategory.service);
         const removed = await mutateCategory.remove(theCategory);
-        logger.info({
+        logger.debug({
             context: "CategorySegment.handleRemove",
             category: Abridgers.CATEGORY(removed),
         });
@@ -123,7 +123,7 @@ const CategorySegment = () => {
 
     // Handle request to select a specific Section
     const handleSection: HandleSection = (theSection) => {
-        logger.info({
+        logger.debug({
             context: "CategorySegment.handleSection",
             section: Abridgers.SECTION(theSection),
         });
@@ -134,7 +134,7 @@ const CategorySegment = () => {
     const handleUpdate: HandleCategory = async (theCategory) => {
         setTitle(theCategory.service);
         const updated = await mutateCategory.update(theCategory);
-        logger.info({
+        logger.debug({
             context: "CategorySegment.handleUpdate",
             category: Abridgers.CATEGORY(updated),
         });

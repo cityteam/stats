@@ -52,7 +52,7 @@ const MonthlyReport = () => {
         setDateFrom(startDate(month));
         setDateTo(endDate(month));
 
-        logger.info({
+        logger.debug({
             context: "MonthlyReport.useEffect",
             facility: Abridgers.FACILITY(facilityContext.facility),
             active: active,
@@ -68,7 +68,7 @@ const MonthlyReport = () => {
     }
 
     const handleMonth: HandleMonth = (theMonth) => {
-        logger.info({
+        logger.debug({
             context: "MonthlyReport.handleMonth",
             summariesMonth: theMonth,
         });

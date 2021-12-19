@@ -39,7 +39,7 @@ const useMutateFacility = (props: Props = {}): State => {
     const [executing, setExecuting] = useState<boolean>(false);
 
     useEffect(() => {
-        logger.info({
+        logger.debug({
             context: "useMutateFacility.useEffect",
         });
     });
@@ -54,7 +54,7 @@ const useMutateFacility = (props: Props = {}): State => {
 
         try {
             inserted = ToModel.FACILITY((await Api.post(url, theFacility)).data);
-            logger.info({
+            logger.debug({
                 context: "useMutateFacility.insert",
                 url: url,
                 facility: Abridgers.FACILITY(inserted),
@@ -82,7 +82,7 @@ const useMutateFacility = (props: Props = {}): State => {
 
         try {
             removed = ToModel.FACILITY((await Api.delete(url)).data);
-            logger.info({
+            logger.debug({
                 context: "useMutateFacility.remove",
                 url: url,
                 facility: Abridgers.FACILITY(removed),
@@ -110,7 +110,7 @@ const useMutateFacility = (props: Props = {}): State => {
 
         try {
             updated = ToModel.FACILITY((await Api.put(url, theFacility)).data);
-            logger.info({
+            logger.debug({
                 context: "useMutateFacility.update",
                 url: url,
                 facility: Abridgers.FACILITY(updated),

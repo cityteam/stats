@@ -75,7 +75,7 @@ const useFetchUsers = (props: Props): State => {
                         theUser.refreshTokens = Sorters.REFRESH_TOKENS(theUser.refreshTokens);
                     }
                 });
-                logger.info({
+                logger.debug({
                     context: "useFetchUsers.fetchUsers",
                     url: url,
                     users: Abridgers.USERS(theUsers),

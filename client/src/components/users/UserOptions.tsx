@@ -46,7 +46,7 @@ const UserOptions = (props: Props) => {
 
     useEffect(() => {
 
-        logger.info({
+        logger.debug({
             context: "UserList.useEffect",
             active: active,
         });
