@@ -19,12 +19,12 @@ class Section extends SectionData {
 
         super(data);
 
-        this.categories = data.categories ? ToModel.CATEGORIES(data.categories) : undefined;
+        this.categories = data.categories ? ToModel.CATEGORIES(data.categories) : [];
         this.facility = data.facility ? ToModel.FACILITY(data.facility) : undefined;
 
     }
 
-    categories?: Category[];
+    categories: Category[];
     facility?: Facility;
 
 }

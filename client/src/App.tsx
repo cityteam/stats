@@ -23,6 +23,7 @@ import EntriesView from "./components/entries/EntriesView";
 import FacilitySegment from "./components/facilities/FacilitySegment";
 import HomeView from "./components/general/HomeView";
 import LoggedInUser from "./components/login/LoggedInUser";
+import ConfigurationReport from "./components/reports/ConfigurationReport";
 import MonthlyReport from "./components/reports/MonthlyReport";
 import YearlyReport from "./components/reports/YearlyReport";
 import SectionSegment from "./components/sections/SectionSegment";
@@ -72,6 +73,9 @@ function App() {
                                       <LinkContainer to="/report-year">
                                           <NavDropdown.Item>Yearly Summary</NavDropdown.Item>
                                       </LinkContainer>
+                                      <LinkContainer to="/report-configuration">
+                                          <NavDropdown.Item>Configuration Report</NavDropdown.Item>
+                                      </LinkContainer>
                                   </NavDropdown>
                                   <NavDropdown id="admin" title="Admin">
                                       <LinkContainer to="/admin-database">
@@ -116,6 +120,9 @@ function App() {
                           </Route>
                           <Route exact path="/admin-users">
                               <UserSegment/>
+                          </Route>
+                          <Route exact path="/report-configuration">
+                              <ConfigurationReport/>
                           </Route>
                           <Route exact path="/report-month">
                               <MonthlyReport/>

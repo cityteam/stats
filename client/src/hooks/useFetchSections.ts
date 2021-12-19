@@ -78,6 +78,8 @@ const useFetchSections = (props: Props): State => {
                         if (loginContext.validateFacility(facilityContext.facility, allSection.scope)) {
                             if (allSection.categories && (allSection.categories.length > 1)) {
                                 allSection.categories = Sorters.CATEGORIES(allSection.categories);
+                            } else {
+                                allSection.categories = [];
                             }
                             theSections.push(allSection);
                         }

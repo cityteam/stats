@@ -112,7 +112,7 @@ const YearlyReport = () => {
                         label="Active Sections/Categories Only?"
                     />
                 </Col>
-                <Col className="col-5 text-right">
+                <Col>
                     <MonthSelector
                         actionLabel="Go"
                         autoFocus
@@ -121,6 +121,12 @@ const YearlyReport = () => {
                         required
                         value={month}
                     />
+                </Col>
+                <Col className="text-right">
+                    <span><strong>Report Date:&nbsp;</strong></span>
+                    <span className="text-info">
+                        <strong>{(new Date()).toLocaleString()}</strong>
+                    </span>
                 </Col>
             </Row>
 
