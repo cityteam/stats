@@ -6,11 +6,11 @@
 // External Modules ----------------------------------------------------------
 
 import {Request, Response, Router} from "express";
-import Generator from "../openapi/Generator";
 
 // Internal Modules ----------------------------------------------------------
 
-import application from "../openapi/Application";
+import generator from "../openapi/generator/Generator";
+import Application from "../openapi/Application";
 
 // Public Objects ------------------------------------------------------------
 
@@ -22,7 +22,12 @@ export default OpenApiRouter;
 
 // OpenApiRouter Routes ------------------------------------------------------
 
+let OPEN_API = "";
+
 OpenApiRouter.get("/", (req: Request, res: Response) => {
+    if (OPEN_API === "") {
+        OPEN_API = generator(Application);
+    }
     res.header("Content-Type", "application/json")
-        .send(Generator(application));
+        .send(OPEN_API);
 });
