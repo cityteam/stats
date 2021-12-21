@@ -12,6 +12,7 @@ const pluralize = require("pluralize");
 // Internal Modules ----------------------------------------------------------
 
 import AbstractModel from "./AbstractModel";
+import {TagsObject} from "@craigmcc/openapi-builders";
 
 // Public Objects ------------------------------------------------------------
 
@@ -52,6 +53,17 @@ export abstract class AbstractApplication {
      * for this application.
      */
     public abstract parameters(): ob.ParametersObjectBuilder;
+
+    /**
+     * Generate a PathsObjectBuilder containing all of the defined paths
+     * (with their nested operations).
+     *
+     * The default implementation returns an empty builder.
+     */
+    public paths(): ob.PathsObjectBuilder {
+        const builder = new ob.PathsObjectBuilder();
+        return builder;
+    }
 
     /**
      * Generate a RequestBodiesObjectBuilder containing required request bodies
@@ -102,12 +114,16 @@ export abstract class AbstractApplication {
     }
 
     /**
-     * Append application specific tags to the specified OpenApiObjectBuilder.
+     * Generate a TagsObjectBuilder containing tag descriptions for this
+     * application.
      *
-     * @param builder                   OpenApiObjectBuilder to append to
+     * // TODO - Add TagsObjectBuilder and switch when available
+     *
+     * The default implementation returns an empty builder.
      */
-    public tags(builder: ob.OpenApiObjectBuilder): void {
-        ; // No changes
+    public tags(): ob.TagsObject {
+        const tags: TagsObject = {};
+        return tags;
     }
 
 }

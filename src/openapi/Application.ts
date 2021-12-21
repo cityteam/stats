@@ -78,22 +78,22 @@ class Application extends AbstractApplication {
         return builder;
     }
 
-    public tags(builder: ob.OpenApiObjectBuilder) {
-
+    public tags(): ob.TagsObject {
+        const tags: ob.TagsObject = {};
         // Permission constraints on operations
-        builder.tag(new ob.TagObjectBuilder(REQUIRE_ADMIN)
+        tags[REQUIRE_ADMIN] = new ob.TagObjectBuilder(REQUIRE_ADMIN)
             .description("Requires 'admin' permission on the associated Facility")
-            .build())
-        builder.tag(new ob.TagObjectBuilder(REQUIRE_ANY)
+            .build();
+        tags[REQUIRE_ANY] = new ob.TagObjectBuilder(REQUIRE_ANY)
             .description("Requires logged in user")
-            .build())
-        builder.tag(new ob.TagObjectBuilder(REQUIRE_REGULAR)
+            .build();
+        tags[REQUIRE_REGULAR] = new ob.TagObjectBuilder(REQUIRE_REGULAR)
             .description("Requires 'regular' permission on the associated Facility")
-            .build())
-        builder.tag(new ob.TagObjectBuilder(REQUIRE_SUPERUSER)
+            .build();
+        tags[REQUIRE_SUPERUSER] = new ob.TagObjectBuilder(REQUIRE_SUPERUSER)
             .description("Requires 'superuser' permission")
-            .build());
-
+            .build();
+        return tags;
     }
 
 }

@@ -23,10 +23,10 @@ import AbstractApplication from "./AbstractApplication";
 export function generator(application: AbstractApplication, asYaml: boolean = false): string {
     const builder = new ob.OpenApiObjectBuilder(application.info().build())
         .components(application.components().build())
-        // TODO - pathItems
+        .paths(application.paths().build())
+        .tags(application.tags())
         // TODO - anything else that is missing
     ;
-    application.tags(builder);
     return asYaml ? builder.asYaml() : builder.asJson();
 }
 

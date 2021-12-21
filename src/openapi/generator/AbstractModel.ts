@@ -130,6 +130,9 @@ export abstract class AbstractModel {
             .response(NOT_FOUND, responseRef(NOT_FOUND))
             .summary(`The specified ${this.name()}`)
         ;
+        if (tag) {
+            builder.tag(tag);
+        }
         return builder;
     }
 
@@ -151,6 +154,9 @@ export abstract class AbstractModel {
             .response(FORBIDDEN, responseRef(FORBIDDEN))
             .summary(`The inserted ${this.name()}`)
         ;
+        if (tag) {
+            builder.tag(tag);
+        }
         return builder;
     }
 
@@ -171,6 +177,9 @@ export abstract class AbstractModel {
             .response(NOT_FOUND, responseRef(NOT_FOUND))
             .summary(`The removed ${this.name()}`)
         ;
+        if (tag) {
+            builder.tag(tag);
+        }
         return builder;
     }
 
@@ -193,6 +202,9 @@ export abstract class AbstractModel {
             .response(NOT_FOUND, responseRef(NOT_FOUND))
             .summary(`The updated ${this.name()}`)
         ;
+        if (tag) {
+            builder.tag(tag);
+        }
         return builder;
     }
 
