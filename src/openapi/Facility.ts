@@ -12,8 +12,8 @@ const pluralize = require("pluralize");
 // Internal Modules ----------------------------------------------------------
 
 import {
-    ACTIVE, ADDRESS1, ADDRESS2, CITY, EMAIL, ID,
-    MATCH_ACTIVE, MATCH_NAME, MATCH_SCOPE,
+    ACTIVE, ADDRESS1, ADDRESS2, CITY, EMAIL, FACILITY_ID, ID,
+    MATCH_ACTIVE, MATCH_NAME, MATCH_SCOPE, REQUIRE_ADMIN, REQUIRE_ANY, REQUIRE_REGULAR, REQUIRE_SUPERUSER,
     SCOPE, STATE, WITH_SECTIONS, ZIPCODE
 } from "./Constants";
 
@@ -23,12 +23,37 @@ class Facility extends AbstractModel {
 
     public NAME = "Facility";
 
+    public apiPathId(): string {
+        return FACILITY_ID;
+    }
+
     public name(): string {
         return this.NAME;
     }
 
     public names(): string {
         return pluralize(this.NAME);
+    }
+
+    public operationAll(): ob.OperationObjectBuilder {
+        return super.operationAllBuilder(REQUIRE_ANY,
+            this.parametersIncludes(), this.parametersMatches());
+    }
+
+    public operationFind(): ob.OperationObjectBuilder {
+        return super.operationFindBuilder(REQUIRE_REGULAR, this.parametersIncludes());
+    }
+
+    public operationInsert(): ob.OperationObjectBuilder {
+        return super.operationInsertBuilder(REQUIRE_SUPERUSER);
+    }
+
+    public operationRemove(): ob.OperationObjectBuilder {
+        return super.operationRemoveBuilder(REQUIRE_SUPERUSER);
+    }
+
+    public operationUpdate(): ob.OperationObjectBuilder {
+        return super.operationUpdateBuilder(REQUIRE_ADMIN);
     }
 
     public parametersIncludes(): ob.ParametersObjectBuilder {
@@ -43,6 +68,15 @@ class Facility extends AbstractModel {
             .parameter(MATCH_ACTIVE, parameterRef(MATCH_ACTIVE))
             .parameter(MATCH_NAME, parameterRef(MATCH_NAME))
             .parameter(MATCH_SCOPE, parameterRef(MATCH_SCOPE))
+        ;
+        return builder;
+    }
+
+    public paths(): ob.PathsObjectBuilder {
+        const builder = new ob.PathsObjectBuilder()
+            .path(this.apiCollection(), this.pathCollection().build())
+            .path(this.apiDetail(), this.pathDetail().build())
+            // TODO - sections children thing
         ;
         return builder;
     }

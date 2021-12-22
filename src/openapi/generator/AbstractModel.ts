@@ -25,7 +25,6 @@ import {
     schemaRef,
     UNAUTHORIZED
 } from "./Helpers";
-import {parametersPaginations} from "../Application";
 
 // Public Objects ------------------------------------------------------------
 
@@ -33,6 +32,58 @@ import {parametersPaginations} from "../Application";
  * Abstract base class describing a particular application data model.
  */
 export abstract class AbstractModel {
+
+    /**
+     * Return the API path to the collection endpoint for the specified
+     * children of the specified model.
+     *
+     * @param child                     The child model
+     *
+     * The default implementation returns
+     * `${this.apiDetail(this.apiPathId())}/${child.names().toLowerCase()}`
+     */
+    public apiChildren(child: AbstractModel) {
+        return `${this.apiDetail()}/${child.names().toLowerCase()}`;
+    }
+
+    /**
+     * Return the API path to the collection endpoint for this model.
+     *
+     * The default implementation returns
+     * `${this.apiPrefix()}/${this.names())}`
+     */
+    public apiCollection(): string {
+        return `${this.apiPrefix()}/${this.names().toLowerCase()}`;
+    }
+
+    /**
+     * Return the API path to the detail endpoint for the specified model.
+     *
+     * The default implementation returns
+     * `${this.apiPrefix()}/${pluralize(this.names())}/{${this.apiPathId()}}`
+     */
+    public apiDetail(): string {
+        return `${this.apiCollection()}/{${this.apiPathId()}}`;
+    }
+
+    /**
+     * Return the name of the ID parameter for detail paths.
+     *
+     * The default implementation returns "id".
+     */
+    public apiPathId(): string {
+        return "id";
+    }
+
+    /**
+     * Return the API prefix (starting with a slash) for all API paths for this
+     * application's APIs for this model.
+     *
+     * The default implementation returns "/api".
+     */
+    public apiPrefix(): string {
+        return "/api";
+    }
 
     /**
      * Return the singular capitalized name for instances of this model.
@@ -49,6 +100,12 @@ export abstract class AbstractModel {
     }
 
     /**
+     * Generate a configured OperationObjectBuilder that describes a request
+     * to return all model objects that match the specified criteria
+     */
+    public abstract operationAll(): ob.OperationObjectBuilder;
+
+    /**
      * Generate an OperationObjectBuilder that describes a request
      * to return all model objects that match the specified criteria.
      *
@@ -58,13 +115,12 @@ export abstract class AbstractModel {
      * @param includes                  Optional builder for include query parameters
      * @param matches                   Optional builder for matches query parameters
      */
-    public operationAll(tag: string | null,
-                        includes: ob.ParametersObjectBuilder | null,
-                        matches: ob.ParametersObjectBuilder | null)
+    public operationAllBuilder(tag: string | null,
+                               includes: ob.ParametersObjectBuilder | null,
+                               matches: ob.ParametersObjectBuilder | null)
         : ob.OperationObjectBuilder {
         const builder = new ob.OperationObjectBuilder()
             .description(`Return all matching ${this.names()}`)
-            .parameters(parametersPaginations().build())
             .parameters(includes ? includes.build() : {})
             .parameters(matches ? matches.build() : {})
             .response(OK, responseRef(this.names()))
@@ -78,6 +134,8 @@ export abstract class AbstractModel {
         return builder;
     }
 
+    // TODO - operationChildren(child) ???
+
     /**
      * Generate an OperationObjectBuilder that describes a request
      * to return all model objects of children of this parent model
@@ -90,10 +148,10 @@ export abstract class AbstractModel {
      * @param includes                  Optional builder for include query parameters
      * @param matches                   Optional builder for matches query parameters
      */
-    public operationChildren(model: AbstractModel, tag: string | null,
-                             includes: ob.ParametersObjectBuilder | null,
-                             matches: ob.ParametersObjectBuilder | null)
-    :ob.OperationObjectBuilder {
+    public operationChildrenBuilder(model: AbstractModel, tag: string | null,
+                                    includes: ob.ParametersObjectBuilder | null,
+                                    matches: ob.ParametersObjectBuilder | null)
+        : ob.OperationObjectBuilder {
         const builder = new ob.OperationObjectBuilder()
             .description(`Return matching ${model.names()} for this ${this.name()}`)
             .parameters(includes ? includes.build() : {})
@@ -111,6 +169,12 @@ export abstract class AbstractModel {
     }
 
     /**
+     * Generate a configured OperationObjectBuilder that describes a request
+     * to return the specified model object by ID.
+     */
+    public abstract operationFind(): ob.OperationObjectBuilder;
+
+    /**
      * Generate an OperationObjectBuilder that describes a request
      * to return the specified model object by ID.
      *
@@ -119,8 +183,9 @@ export abstract class AbstractModel {
      * @param tag                       Optional tag for this operation
      * @param includes                  Optional builder for include query parameters
      */
-    public operationFind(tag: string | null, includes: ob.ParametersObjectBuilder | null)
-    : ob.OperationObjectBuilder {
+    public operationFindBuilder(tag: string | null,
+                                includes: ob.ParametersObjectBuilder | null)
+        : ob.OperationObjectBuilder {
         const builder = new ob.OperationObjectBuilder()
             .description(`Find the specified ${this.name()} by ID`)
             .parameters(includes ? includes.build() : {})
@@ -137,6 +202,12 @@ export abstract class AbstractModel {
     }
 
     /**
+     * Generate a configured OperationObjectBuilder that describes a request
+     * to insert a new model, and return the inserted model with ID.
+     */
+    public abstract operationInsert(): ob.OperationObjectBuilder;
+
+    /**
      * Generate an OperationObjectBuilder that describes a request
      * to insert a new model, and return the inserted model with ID.
      *
@@ -144,7 +215,7 @@ export abstract class AbstractModel {
      *
      * @param tag                       Optional tag for this operation
      */
-    public operationInsert(tag: string | null): ob.OperationObjectBuilder {
+    public operationInsertBuilder(tag: string | null): ob.OperationObjectBuilder {
         const builder = new ob.OperationObjectBuilder()
             .description(`Insert and return the specified ${this.name()}`)
             .requestBody(requestBodyRef(`${this.name()}`))
@@ -161,6 +232,12 @@ export abstract class AbstractModel {
     }
 
     /**
+     * Generate a configured OperationObjectBuilder that describes a request
+     * to remove an existing model, and return the removed model.
+     */
+    public abstract operationRemove(): ob.OperationObjectBuilder;
+
+    /**
      * Generate an OperationObjectBuilder that describes a request
      * to remove an existing model, and return the removed model.
      *
@@ -168,7 +245,7 @@ export abstract class AbstractModel {
      *
      * @param tag                       Optional tag for this operation
      */
-    public operationRemove(tag: string | null): ob.OperationObjectBuilder {
+    public operationRemoveBuilder(tag: string | null): ob.OperationObjectBuilder {
         const builder = new ob.OperationObjectBuilder()
             .description(`Remove and return the specified ${this.name()}`)
             .response(OK, responseRef(`${this.name()}`))
@@ -184,6 +261,12 @@ export abstract class AbstractModel {
     }
 
     /**
+     * Generate a configured OperationObjectBuilder that describes a request
+     * to update an existing model, and return the updated model.
+     */
+    public abstract operationUpdate(): ob.OperationObjectBuilder;
+
+    /**
      * Generate an OperationObjectBuilder that describes a request
      * to update an existing model, and return the updated model.
      *
@@ -191,7 +274,7 @@ export abstract class AbstractModel {
      *
      * @param tag                       Optional tag for this operation
      */
-    public operationUpdate(tag: string | null): ob.OperationObjectBuilder {
+    public operationUpdateBuilder(tag: string | null): ob.OperationObjectBuilder {
         const builder = new ob.OperationObjectBuilder()
             .description(`Update and return the specified ${this.name()}`)
             .requestBody(requestBodyRef(this.name()))
@@ -208,9 +291,29 @@ export abstract class AbstractModel {
         return builder;
     }
 
-    // TODO - parametersIncludes
+    /**
+     * Generate a ParametersObjectBuilder for query parameters that
+     * specify inclusion of parent and/or children for retrieval of this model.
+     *
+     * The default implementation returns an empty builder
+     */
+    public parametersIncludes(): ob.ParametersObjectBuilder {
+        const builder = new ob.ParametersObjectBuilder()
+        ;
+        return builder;
+    }
 
-    // TODO - parametersMatches
+    /**
+     * Generate a ParametersObjectBuilder for query parameters that
+     * specify match conditions for retrieval of this model.
+     *
+     * The default implementation returns an empty builder
+     */
+    public parametersMatches(): ob.ParametersObjectBuilder {
+        const builder = new ob.ParametersObjectBuilder()
+        ;
+        return builder;
+    }
 
     /**
      * Generate a ParametersObjectBuilder for query parameters that
@@ -222,6 +325,56 @@ export abstract class AbstractModel {
         const builder = new ob.ParametersObjectBuilder()
             .parameter(LIMIT, parameterRef(LIMIT))
             .parameter(OFFSET, parameterRef(OFFSET))
+        ;
+        return builder;
+    }
+
+    /**
+     * Generate a PathItemObjectBuilder for the "collection" path
+     * for this model.
+     *
+     * The default implementation will return a builder configured
+     * with a GET for operationAll() and a POST for operationInsert()
+     */
+    public pathCollection(): ob.PathItemObjectBuilder {
+        const builder = new ob.PathItemObjectBuilder()
+            .description(`Collection operations for ${this.names()}`)
+            .get(this.operationAll().build())
+            .post(this.operationInsert().build())
+        ;
+        return builder;
+    }
+
+    /**
+     * Generate a PathItemObjectBuilder for the "detail" path
+     * for this model.
+     *
+     * The default implementation will return a builder configured
+     * with a GET for operationFind(), a DELETE for operationRemove(),
+     * and a PUT for operationUpdate()
+     */
+    public pathDetail(): ob.PathItemObjectBuilder {
+        const builder = new ob.PathItemObjectBuilder()
+                .description(`Detail operations for this ${this.name()}`)
+                .get(this.operationFind().build())
+                .delete(this.operationRemove().build())
+                .put(this.operationUpdate().build())
+        ;
+        return builder;
+    }
+
+    // TODO - path(s) for children???
+
+    /**
+     * Generate a PathsObjectBuilder for all of the paths for this model.
+     *
+     * The default implementation will return the results of pathCollection()
+     * and pathDetail().
+     */
+    public paths(): ob.PathsObjectBuilder {
+        const builder = new ob.PathsObjectBuilder()
+            .path(this.apiCollection(), this.pathCollection().build())
+            .path(this.apiDetail(), this.pathDetail().build())
         ;
         return builder;
     }

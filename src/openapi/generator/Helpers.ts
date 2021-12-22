@@ -12,6 +12,7 @@ const pluralize = require("pluralize");
 // ***** General Constants *****
 
 export const APPLICATION_JSON = "application/json";
+export const ERROR = "Error";
 export const LIMIT = "limit";
 export const OFFSET = "offset";
 export const STRING = "String";
@@ -60,6 +61,23 @@ export function parameterQuery(name: string, description: string, allowEmptyValu
         .schema(schemaRef(STRING))
     ;
     return builder.build();
+}
+
+// ***** ResponseObjectBuilder Helpers *****
+
+/**
+ * Generate a ResponseObjectBuilder for the specified error description.
+ *
+ * @param description                   Description of this error
+ */
+export function responseError(description: string): ob.ResponseObjectBuilder {
+    const builder = new ob.ResponseObjectBuilder(description)
+        .content(APPLICATION_JSON, new ob.MediaTypeObjectBuilder()
+            .schema(schemaRef(ERROR))
+            .build())
+    ;
+    return builder;
+
 }
 
 // ***** SchemaObjectBuilder Helpers *****

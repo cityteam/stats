@@ -58,10 +58,17 @@ export abstract class AbstractApplication {
      * Generate a PathsObjectBuilder containing all of the defined paths
      * (with their nested operations).
      *
-     * The default implementation returns an empty builder.
+     * The default implementation iterates through the models() and
+     * calls model.paths() for each, combining the results.
      */
     public paths(): ob.PathsObjectBuilder {
         const builder = new ob.PathsObjectBuilder();
+        this.models().forEach(model => {
+            const paths = model.paths().build();
+            for (const key in paths) {
+                builder.path(key, paths[key]);
+            }
+        });
         return builder;
     }
 
