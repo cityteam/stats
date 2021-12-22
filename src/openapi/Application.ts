@@ -5,7 +5,6 @@
 // External Modules ----------------------------------------------------------
 
 import * as ob from "@craigmcc/openapi-builders";
-const pluralize = require("pluralize");
 import AbstractApplication from "./generator/AbstractApplication";
 import AbstractModel from "./generator/AbstractModel";
 import {
@@ -15,7 +14,8 @@ import {
     parameterRef,
     requestBodyRef,
     responseError,
-    responseRef
+    responseRef,
+    STRING,
 } from "./generator/Helpers";
 
 // Internal Modules ----------------------------------------------------------
@@ -102,6 +102,7 @@ class Application extends AbstractApplication {
     public schemas(): ob.SchemasObjectBuilder {
         const builder = super.schemas()
             .schema(ERROR, schemaError().build())
+            .schema(STRING, new ob.SchemaObjectBuilder("string").build())
         ;
         return builder;
     }

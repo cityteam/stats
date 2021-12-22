@@ -31,6 +31,7 @@ import UserSegment from "./components/users/UserSegment";
 import {FacilityContextProvider} from "./components/facilities/FacilityContext";
 import FacilitySelector from "./components/facilities/FacilitySelector";
 import {LoginContextProvider} from "./components/login/LoginContext";
+import OpenApiView from "./components/general/OpenApiView";
 
 function App() {
   return (
@@ -129,6 +130,9 @@ function App() {
                           </Route>
                           <Route exact path="/report-year">
                               <YearlyReport/>
+                          </Route>
+                          <Route exact path="/openapi">
+                              <OpenApiView/>
                           </Route>
                           <Route path="/">
                               <HomeView/>
