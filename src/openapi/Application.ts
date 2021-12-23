@@ -28,6 +28,7 @@ import {
     WITH_CATEGORIES, WITH_DAILIES, WITH_FACILITY, WITH_SECTIONS
 } from "./Constants";
 import Facility from "./Facility";
+import Section from "./Section";
 
 // Application Object --------------------------------------------------------
 
@@ -47,6 +48,7 @@ class Application extends AbstractApplication {
     public models(): AbstractModel[] {
         return [
             Facility,
+            Section,
         ];
     }
 

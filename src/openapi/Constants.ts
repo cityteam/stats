@@ -24,6 +24,7 @@ export const WITH_SECTIONS = "withSections";
 
 export const MATCH_ACTIVE = "active";
 export const MATCH_NAME = "name";
+export const MATCH_ORDINAL = "ordinal";
 export const MATCH_SCOPE = "scope";
 
 // Parameter Names (Pagination) ----------------------------------------------
@@ -49,10 +50,14 @@ export const CITY = "city";
 export const EMAIL = "email";
 export const ID = "id";
 export const NAME = "name";
+export const NOTES = "notes";
+export const ORDINAL = "ordinal";
 export const PHONE = "phone";
 export const SCOPE = "scope";
 export const SECTIONS = "sections";
+export const SLUG = "slug";
 export const STATE = "state";
+export const TITLE = "title";
 export const ZIPCODE = "zipCode";
 
 // Tag Names -----------------------------------------------------------------

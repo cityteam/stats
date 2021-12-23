@@ -1,6 +1,6 @@
-// Facility ------------------------------------------------------------------
+// Section -------------------------------------------------------------------
 
-// OpenAPI definition of a Facility model.
+// OpenAPI definition of a Section model.
 
 // External Modules ----------------------------------------------------------
 
@@ -12,19 +12,25 @@ const pluralize = require("pluralize");
 // Internal Modules ----------------------------------------------------------
 
 import {
-    ACTIVE, ADDRESS1, ADDRESS2, CITY, EMAIL, FACILITY_ID, ID,
-    MATCH_ACTIVE, MATCH_NAME, MATCH_SCOPE, REQUIRE_ADMIN, REQUIRE_ANY, REQUIRE_REGULAR, REQUIRE_SUPERUSER,
-    SCOPE, STATE, WITH_SECTIONS, ZIPCODE
+    ACTIVE, FACILITY_ID, ID,
+    MATCH_ACTIVE, MATCH_ORDINAL, NOTES, ORDINAL,
+    REQUIRE_ADMIN, REQUIRE_REGULAR, REQUIRE_SUPERUSER, SCOPE,
+    SECTION_ID, SLUG, TITLE,
+    WITH_CATEGORIES, WITH_DAILIES, WITH_FACILITY,
 } from "./Constants";
 
 // Public Objects ------------------------------------------------------------
 
-class Facility extends AbstractModel {
+class Section extends AbstractModel {
 
-    public NAME = "Facility";
+    public NAME = "Section";
+
+    public apiCollection(): string {
+        return super.apiCollection() + `/{${FACILITY_ID}}`;
+    }
 
     public apiPathId(): string {
-        return FACILITY_ID;
+        return SECTION_ID;
     }
 
     public name(): string {
@@ -36,7 +42,7 @@ class Facility extends AbstractModel {
     }
 
     public operationAll(): ob.OperationObjectBuilder {
-        return super.operationAllBuilder(REQUIRE_ANY,
+        return super.operationAllBuilder(REQUIRE_REGULAR,
             this.parametersIncludes(), this.parametersMatches());
     }
 
@@ -45,7 +51,7 @@ class Facility extends AbstractModel {
     }
 
     public operationInsert(): ob.OperationObjectBuilder {
-        return super.operationInsertBuilder(REQUIRE_SUPERUSER);
+        return super.operationInsertBuilder(REQUIRE_ADMIN);
     }
 
     public operationRemove(): ob.OperationObjectBuilder {
@@ -58,7 +64,9 @@ class Facility extends AbstractModel {
 
     public parametersIncludes(): ob.ParametersObjectBuilder {
         const builder = new ob.ParametersObjectBuilder()
-            .parameter(WITH_SECTIONS, parameterRef(WITH_SECTIONS))
+            .parameter(WITH_CATEGORIES, parameterRef(WITH_CATEGORIES))
+            .parameter(WITH_DAILIES, parameterRef(WITH_DAILIES))
+            .parameter(WITH_FACILITY, parameterRef(WITH_FACILITY))
         ;
         return builder;
     }
@@ -66,18 +74,18 @@ class Facility extends AbstractModel {
     public parametersMatches(): ob.ParametersObjectBuilder {
         const builder = new ob.ParametersObjectBuilder()
             .parameter(MATCH_ACTIVE, parameterRef(MATCH_ACTIVE))
-            .parameter(MATCH_NAME, parameterRef(MATCH_NAME))
-            .parameter(MATCH_SCOPE, parameterRef(MATCH_SCOPE))
+            .parameter(MATCH_ORDINAL, parameterRef(MATCH_ORDINAL))
         ;
         return builder;
     }
 
     public paths(): ob.PathsObjectBuilder {
         const builder = new ob.PathsObjectBuilder()
-            .path(this.apiCollection(), this.pathCollection().build())
-            .path(this.apiDetail(), this.pathDetail().build())
+                .path(this.apiCollection(), this.pathCollection().build())
+                .path(this.apiDetail(), this.pathDetail().build())
             // TODO - exact
-            // TODO - sections children thing
+            // TODO - categories children thing
+            // TODO - dailies children thing
         ;
         return builder;
     }
@@ -86,39 +94,34 @@ class Facility extends AbstractModel {
         const builder = new ob.SchemaObjectBuilder()
             .property(ID, schemaId(this.name()).build())
             .property(ACTIVE, schemaActive(this.name()).build())
-            .property(ADDRESS1, new ob.SchemaObjectBuilder(
+            .property(FACILITY_ID, new ob.SchemaObjectBuilder(
+                "integer",
+                "ID of the Facility to which this Section belongs",
+                false).build())
+            .property(NOTES, new ob.SchemaObjectBuilder(
                 "string",
-                "First line of the Facility address",
+                "Miscellaneous notes about this Section",
                 true).build())
-            .property(ADDRESS2, new ob.SchemaObjectBuilder(
-                "string",
-                "Second line of the Facility address",
-                true).build())
-            .property(CITY, new ob.SchemaObjectBuilder(
-                "string",
-                "City of Facility address",
-                true).build())
-            .property(EMAIL, new ob.SchemaObjectBuilder(
-                "string",
-                "Email address of this Facility",
-                true).build())
+            .property(ORDINAL, new ob.SchemaObjectBuilder(
+                "integer",
+                "Sort order specifier for Sections belonging to its Facility",
+                false).build())
             .property(SCOPE, new ob.SchemaObjectBuilder(
                 "string",
-                "OAuth scope prefix required to access this Facility",
+                "Permission scope suffix required to access this Section",
                 false).build())
-            // TODO - SECTIONS
-            .property(STATE, new ob.SchemaObjectBuilder(
+            .property(SLUG, new ob.SchemaObjectBuilder(
                 "string",
-                "State abbreviation of the Facility address",
-                true).build())
-            .property(ZIPCODE, new ob.SchemaObjectBuilder(
+                "Short title used to describe this Section",
+                false).build())
+            .property(TITLE, new ob.SchemaObjectBuilder(
                 "string",
-                "Zip code of the Facility address",
-                true).build())
+                "Long title used to describe this Section (not currently used)",
+                false).build())
         ;
         return builder;
     }
 
 }
 
-export default new Facility();
+export default new Section();
