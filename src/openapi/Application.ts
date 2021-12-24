@@ -9,6 +9,7 @@ import AbstractApplication from "./generator/AbstractApplication";
 import AbstractModel from "./generator/AbstractModel";
 import {
     ERROR,
+    INTEGER,
     parameterPath,
     parameterQuery,
     parameterRef,
@@ -22,8 +23,8 @@ import {
 
 import {
     BAD_REQUEST, CATEGORY_ID, CREATED, DATE_FROM, DATE_TO,
-    FACILITY_ID, FORBIDDEN, LIMIT, MATCH_ACTIVE, MATCH_NAME,
-    MATCH_SCOPE, NOT_FOUND, NOT_UNIQUE, OFFSET, OK, REQUIRE_ADMIN,
+    FACILITY_ID, FORBIDDEN, LIMIT, MATCH_ACTIVE, MATCH_NAME, MATCH_ORDINAL,
+    MATCH_SCOPE, NAME_PATH, NOT_FOUND, NOT_UNIQUE, OFFSET, OK, ORDINAL, REQUIRE_ADMIN,
     REQUIRE_ANY, REQUIRE_REGULAR, REQUIRE_SUPERUSER, SECTION_ID, SERVER_ERROR, UNAUTHORIZED,
     WITH_CATEGORIES, WITH_DAILIES, WITH_FACILITY, WITH_SECTIONS
 } from "./Constants";
@@ -57,11 +58,13 @@ class Application extends AbstractApplication {
 
         // Path Parameters
         builder
-            .parameter(CATEGORY_ID, parameterPath(CATEGORY_ID, "ID of the specified Category"))
+            .parameter(CATEGORY_ID, parameterPath(CATEGORY_ID, "ID of the specified Category", INTEGER))
             .parameter(DATE_FROM, parameterPath(DATE_FROM, "From date to select relevant information"))
             .parameter(DATE_TO, parameterPath(DATE_TO, "To date to select relevant information"))
-            .parameter(FACILITY_ID, parameterPath(FACILITY_ID, "ID of the specified Facility"))
-            .parameter(SECTION_ID, parameterPath(SECTION_ID, "ID of the specified Section"))
+            .parameter(FACILITY_ID, parameterPath(FACILITY_ID, "ID of the specified Facility", INTEGER))
+            .parameter(NAME_PATH, parameterPath(NAME_PATH, "Exact name to match"))
+            .parameter(ORDINAL, parameterPath(ORDINAL, "Exact sort order ordinal to match", INTEGER))
+            .parameter(SECTION_ID, parameterPath(SECTION_ID, "ID of the specified Section", INTEGER))
         ;
 
         // Query Parameters (Includes)
@@ -81,8 +84,8 @@ class Application extends AbstractApplication {
 
         // Query Parameters (Pagination)
         builder
-            .parameter(LIMIT, parameterQuery(LIMIT, "Maximum number of rows returned (default is usually 25)", false))
-            .parameter(OFFSET, parameterQuery(OFFSET, "Zero-relative offset to the first returned row (default is 0)", false))
+            .parameter(LIMIT, parameterQuery(LIMIT, "Maximum number of rows returned (default is usually 25)", false, INTEGER))
+            .parameter(OFFSET, parameterQuery(OFFSET, "Zero-relative offset to the first returned row (default is 0)", false, INTEGER))
         ;
 
         return builder;
@@ -104,6 +107,7 @@ class Application extends AbstractApplication {
     public schemas(): ob.SchemasObjectBuilder {
         const builder = super.schemas()
             .schema(ERROR, schemaError().build())
+            .schema(INTEGER, new ob.SchemaObjectBuilder("integer").build())
             .schema(STRING, new ob.SchemaObjectBuilder("string").build())
         ;
         return builder;

@@ -38,6 +38,7 @@ export const CATEGORY_ID = "categoryId";
 export const DATE_FROM = "dateFrom";
 export const DATE_TO = "dateTo";
 export const FACILITY_ID = "facilityId";
+export const NAME_PATH = "namePath"; // Special case since also a query parameter
 export const SECTION_ID = "sectionId";
 
 // Property Names ------------------------------------------------------------

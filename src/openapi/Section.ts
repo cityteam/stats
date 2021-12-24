@@ -13,11 +13,12 @@ const pluralize = require("pluralize");
 
 import {
     ACTIVE, FACILITY_ID, ID,
-    MATCH_ACTIVE, MATCH_ORDINAL, NOTES, ORDINAL,
-    REQUIRE_ADMIN, REQUIRE_REGULAR, REQUIRE_SUPERUSER, SCOPE,
-    SECTION_ID, SLUG, TITLE,
+    MATCH_ACTIVE, NOTES, ORDINAL,
+    REQUIRE_ADMIN, REQUIRE_REGULAR, REQUIRE_SUPERUSER,
+    SCOPE, SECTION_ID, SLUG, TITLE,
     WITH_CATEGORIES, WITH_DAILIES, WITH_FACILITY,
 } from "./Constants";
+import Facility from "./Facility";
 
 // Public Objects ------------------------------------------------------------
 
@@ -44,6 +45,11 @@ class Section extends AbstractModel {
     public operationAll(): ob.OperationObjectBuilder {
         return super.operationAllBuilder(REQUIRE_REGULAR,
             this.parametersIncludes(), this.parametersMatches());
+    }
+
+    public operationExact(): ob.OperationObjectBuilder {
+        return super.operationExactBuilder(REQUIRE_REGULAR,
+            this.parametersIncludes(), ORDINAL);
     }
 
     public operationFind(): ob.OperationObjectBuilder {
@@ -74,16 +80,22 @@ class Section extends AbstractModel {
     public parametersMatches(): ob.ParametersObjectBuilder {
         const builder = new ob.ParametersObjectBuilder()
             .parameter(MATCH_ACTIVE, parameterRef(MATCH_ACTIVE))
-            .parameter(MATCH_ORDINAL, parameterRef(MATCH_ORDINAL))
         ;
         return builder;
     }
 
     public paths(): ob.PathsObjectBuilder {
         const builder = new ob.PathsObjectBuilder()
-                .path(this.apiCollection(), this.pathCollection().build())
-                .path(this.apiDetail(), this.pathDetail().build())
-            // TODO - exact
+                .path(this.apiCollection(), this.pathCollection()
+                    .parameter(parameterRef(Facility.apiPathId()))
+                    .build())
+                .path(this.apiDetail(), this.pathDetail()
+                    .parameter(parameterRef(Facility.apiPathId()))
+                    .parameter(parameterRef(this.apiPathId()))
+                    .build())
+                .path(this.apiExact(ORDINAL), this.pathExact(REQUIRE_REGULAR, ORDINAL)
+                    .parameter(parameterRef(Facility.apiPathId()))
+                    .build())
             // TODO - categories children thing
             // TODO - dailies children thing
         ;

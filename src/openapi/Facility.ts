@@ -12,10 +12,14 @@ const pluralize = require("pluralize");
 // Internal Modules ----------------------------------------------------------
 
 import {
-    ACTIVE, ADDRESS1, ADDRESS2, CITY, EMAIL, FACILITY_ID, ID,
-    MATCH_ACTIVE, MATCH_NAME, MATCH_SCOPE, REQUIRE_ADMIN, REQUIRE_ANY, REQUIRE_REGULAR, REQUIRE_SUPERUSER,
+    ACTIVE, ADDRESS1, ADDRESS2, CITY,
+    EMAIL, FACILITY_ID, ID,
+    MATCH_ACTIVE, MATCH_NAME, MATCH_SCOPE,
+    NAME_PATH,
+    REQUIRE_ADMIN, REQUIRE_ANY, REQUIRE_REGULAR, REQUIRE_SUPERUSER,
     SCOPE, STATE, WITH_SECTIONS, ZIPCODE
 } from "./Constants";
+import Section from "./Section";
 
 // Public Objects ------------------------------------------------------------
 
@@ -38,6 +42,15 @@ class Facility extends AbstractModel {
     public operationAll(): ob.OperationObjectBuilder {
         return super.operationAllBuilder(REQUIRE_ANY,
             this.parametersIncludes(), this.parametersMatches());
+    }
+
+    public operationAllSections(): ob.OperationObjectBuilder {
+        return super.operationChildren(Section, REQUIRE_REGULAR);
+    }
+
+    public operationExact(): ob.OperationObjectBuilder {
+        return super.operationExactBuilder(REQUIRE_REGULAR,
+            this.parametersIncludes());
     }
 
     public operationFind(): ob.OperationObjectBuilder {
@@ -75,9 +88,15 @@ class Facility extends AbstractModel {
     public paths(): ob.PathsObjectBuilder {
         const builder = new ob.PathsObjectBuilder()
             .path(this.apiCollection(), this.pathCollection().build())
-            .path(this.apiDetail(), this.pathDetail().build())
-            // TODO - exact
-            // TODO - sections children thing
+            .path(this.apiDetail(), this.pathDetail()
+                .parameter(parameterRef(this.apiPathId()))
+                .build())
+            .path(this.apiExact(NAME_PATH), this.pathExact(REQUIRE_REGULAR, NAME_PATH)
+                .build())
+            .path(this.apiChildren(Section),
+                this.pathChildren(Section, REQUIRE_REGULAR)
+                    .parameter(parameterRef(this.apiPathId()))
+                    .build())
         ;
         return builder;
     }

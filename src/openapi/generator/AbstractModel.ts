@@ -12,18 +12,9 @@ const pluralize = require("pluralize");
 // Internal Modules ----------------------------------------------------------
 
 import {
-    APPLICATION_JSON,
-    BAD_REQUEST,
-    CREATED,
-    FORBIDDEN,
-    LIMIT,
-    NOT_FOUND,
-    OFFSET,
-    OK, parameterRef,
-    requestBodyRef,
-    responseRef,
-    schemaRef,
-    UNAUTHORIZED
+    APPLICATION_JSON, BAD_REQUEST, CREATED, FORBIDDEN,
+    LIMIT, NOT_FOUND, OFFSET, OK, UNAUTHORIZED,
+    parameterRef, requestBodyRef, responseRef, schemaRef,
 } from "./Helpers";
 
 // Public Objects ------------------------------------------------------------
@@ -64,6 +55,18 @@ export abstract class AbstractModel {
      */
     public apiDetail(): string {
         return `${this.apiCollection()}/{${this.apiPathId()}}`;
+    }
+
+    /**
+     * Return the API path to the "exact" endpoint for the specified model.
+     *
+     * The default implementation returns apiCollection() + "/exact" +
+     * a parameter reference for the matching value.
+     *
+     * @param parameter                 Parameter name for the matching value [name]
+     */
+    public apiExact(parameter: string = "name"): string {
+        return `${this.apiCollection()}/exact/{${parameter}}`;
     }
 
     /**
@@ -114,19 +117,21 @@ export abstract class AbstractModel {
      * @param tag                       Optional tag for this operation
      * @param includes                  Optional builder for include query parameters
      * @param matches                   Optional builder for matches query parameters
+     * @param model                     Optional model for objects being retrieved [this]
      */
     public operationAllBuilder(tag: string | null,
                                includes: ob.ParametersObjectBuilder | null,
-                               matches: ob.ParametersObjectBuilder | null)
+                               matches: ob.ParametersObjectBuilder | null,
+                               model: AbstractModel = this)
         : ob.OperationObjectBuilder {
         const builder = new ob.OperationObjectBuilder()
-            .description(`Return all matching ${this.names()}`)
+            .description(`Return all matching ${model.names()}`)
             .parameters(includes ? includes.build() : {})
             .parameters(matches ? matches.build() : {})
             .response(OK, responseRef(this.names()))
             .response(UNAUTHORIZED, responseRef(UNAUTHORIZED))
             .response(FORBIDDEN, responseRef(FORBIDDEN))
-            .summary(`The requested ${this.names()}`)
+            .summary(`The requested ${model.names()}`)
         ;
         if (tag) {
             builder.tag(tag);
@@ -134,7 +139,24 @@ export abstract class AbstractModel {
         return builder;
     }
 
-    // TODO - operationChildren(child) ???
+    /**
+     * Generate an OperationObjectBuilder that describes a request
+     * to return model objects of children of this parent model
+     * that match the specified criteria.
+     *
+     * The default implementation passes the specified model and tag
+     * to operationChildrenBuilder(), along with the parametersIncludes()
+     * and parametersMatches() values from the child model.
+     *
+     * @param model                 AbstractModel of the child model
+     * @param tag                   Optional tag for this operation
+     */
+    public operationChildren(model: AbstractModel, tag: string | null) : ob.OperationObjectBuilder {
+        const builder = this.operationChildrenBuilder(model, tag,
+            model.parametersIncludes(), model.parametersMatches())
+        ;
+        return builder;
+    }
 
     /**
      * Generate an OperationObjectBuilder that describes a request
@@ -161,6 +183,35 @@ export abstract class AbstractModel {
             .response(FORBIDDEN, responseRef(FORBIDDEN))
             .response(NOT_FOUND, responseRef(NOT_FOUND))
             .summary(`The requested ${model.names()}`)
+        ;
+        if (tag) {
+            builder.tag(tag);
+        }
+        return builder;
+    }
+
+    /**
+     * Generate a configured OperationObjectBuilder that describes a request
+     * to return an exact match for the specified model object by value.
+     *
+     * The default implementation returns an OperationObjectBuilder ...
+     *
+     * @param tag                   Optional tag for this operation
+     * @param includes              Optional builder for include parameters
+     * @param parameter             Parameter name for matching value [name]
+     */
+    public operationExactBuilder(tag: string | null,
+                                 includes: ob.ParametersObjectBuilder | null,
+                                 parameter: string = "name")
+        : ob.OperationObjectBuilder {
+        const builder = new ob.OperationObjectBuilder()
+            .description(`Find the specified ${this.name()} by ${parameter}`)
+            .parameters(includes ? includes.build() : {})
+            .response(OK, responseRef(`${this.name()}`))
+            .response(UNAUTHORIZED, responseRef(UNAUTHORIZED))
+            .response(FORBIDDEN, responseRef(FORBIDDEN))
+            .response(NOT_FOUND, responseRef(NOT_FOUND))
+            .summary(`The specified ${this.name()}`)
         ;
         if (tag) {
             builder.tag(tag);
@@ -331,6 +382,26 @@ export abstract class AbstractModel {
 
     /**
      * Generate a PathItemObjectBuilder for the "collection" path
+     * to the specified children for this model.
+     *
+     * @param model                     AbstractModel of the child model
+     * @param operation                 Operation to retrieve child models
+     *
+     * The default implementation generates a PathItemObjectBuilder for a
+     * path to the detail parent model + "/" + lowercase names() of child model,
+     * along with the specified OperationBuilder, with a GET verb.
+     */
+    public pathChildren(model: AbstractModel, tag: string | null)
+        : ob.PathItemObjectBuilder {
+        const builder = new ob.PathItemObjectBuilder()
+                .description(`Collection operations for ${model.names()} children of this ${this.name()}`)
+                .get(this.operationChildren(model, tag).build())
+            ;
+        return builder;
+    }
+
+    /**
+     * Generate a PathItemObjectBuilder for the "collection" path
      * for this model.
      *
      * The default implementation will return a builder configured
@@ -363,7 +434,26 @@ export abstract class AbstractModel {
         return builder;
     }
 
-    // TODO - path(s) for children???
+    /**
+     * Generate a PathItemObjectBuilder for the "exact" path
+     * for this model.
+     *
+     * The default implementation will return a builder configured
+     * with a GET for operationExact().
+     *
+     * @param tag                       Optional tag for this operation
+     * @param parameter                 Parameter name for matching value [name]
+     */
+    public pathExact(tag: string | null,
+                     parameter: string = "name"): ob.PathItemObjectBuilder {
+        const builder = new ob.PathItemObjectBuilder()
+            .description(`Exact operation for this ${this.name()}`)
+            .get(this.operationExactBuilder(tag, this.parametersIncludes(), parameter)
+                .parameter(parameterRef(parameter))
+                .build())
+        ;
+        return builder;
+    }
 
     /**
      * Generate a PathsObjectBuilder for all of the paths for this model.

@@ -13,8 +13,10 @@ const pluralize = require("pluralize");
 
 export const APPLICATION_JSON = "application/json";
 export const ERROR = "Error";
+export const INTEGER = "Integer";
 export const LIMIT = "limit";
 export const OFFSET = "offset";
+export const NUMBER = "Number";
 export const STRING = "String";
 
 // ***** HTTP Response Codes *****
@@ -37,12 +39,16 @@ export const SERVER_ERROR = "500";
  *
  * @param name                          Name of the specified parameter
  * @param description                   Description of the specified parameter
+ * @param type                          Parameter type (STRING | INTEGER | NUMBER) [STRING]
  */
-export function parameterPath(name: string, description: string): ob.ParameterObject {
-    const builder = new ob.ParameterObjectBuilder("path", name)
+export function parameterPath(name: string,
+                              description: string,
+                              type: string = STRING): ob.ParameterObject {
+    const builder = new ob.ParameterObjectBuilder("path",
+        name === "name" ? "namePath" : name) // TODO - not generic!!!
         .description(description)
         .required(true)
-        .schema(schemaRef(STRING))
+        .schema(schemaRef(type))
     ;
     return builder.build();
 }
@@ -53,12 +59,15 @@ export function parameterPath(name: string, description: string): ob.ParameterOb
  * @param name                          Name of the specified parameter
  * @param description                   Description of the specified parameter
  * @param allowEmptyValue               Is an empty value allowed? [false]
+ * @param type                          Parameter type (STRING | INTEGER | NUMBER) [STRING]
  */
-export function parameterQuery(name: string, description: string, allowEmptyValue: boolean = false) {
+export function parameterQuery(name: string, description: string,
+                               allowEmptyValue: boolean = false,
+                               type: string = STRING) {
     const builder = new ob.ParameterObjectBuilder("query", name)
         .description(description)
         .required(false)
-        .schema(schemaRef(STRING))
+        .schema(schemaRef(type))
     ;
     return builder.build();
 }
