@@ -18,6 +18,7 @@ export const SERVER_ERROR = "500";
 export const WITH_CATEGORIES = "withCategories";
 export const WITH_DAILIES = "withDailies";
 export const WITH_FACILITY = "withFacility";
+export const WITH_SECTION = "withSection";
 export const WITH_SECTIONS = "withSections";
 
 // Parameter Names (Matches) -------------------------------------------------
@@ -43,11 +44,13 @@ export const SECTION_ID = "sectionId";
 
 // Property Names ------------------------------------------------------------
 
+export const ACCUMULATED = "accumulated";
 export const ACTIVE = "active";
 export const ADDRESS1 = "address1";
 export const ADDRESS2 = "address2";
 export const CATEGORIES = "categories";
 export const CITY = "city";
+export const DESCRIPTION = "description";
 export const EMAIL = "email";
 export const ID = "id";
 export const NAME = "name";
@@ -56,6 +59,7 @@ export const ORDINAL = "ordinal";
 export const PHONE = "phone";
 export const SCOPE = "scope";
 export const SECTIONS = "sections";
+export const SERVICE = "service";
 export const SLUG = "slug";
 export const STATE = "state";
 export const TITLE = "title";

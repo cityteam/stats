@@ -21,6 +21,7 @@ import {
 
 // Internal Modules ----------------------------------------------------------
 
+import Category from "./Category";
 import {
     BAD_REQUEST, CATEGORY_ID, CREATED, DATE_FROM, DATE_TO,
     FACILITY_ID, FORBIDDEN, LIMIT, MATCH_ACTIVE, MATCH_NAME, MATCH_ORDINAL,
@@ -48,6 +49,7 @@ class Application extends AbstractApplication {
 
     public models(): AbstractModel[] {
         return [
+            Category,
             Facility,
             Section,
         ];
