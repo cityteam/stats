@@ -12,7 +12,7 @@ const pluralize = require("pluralize");
 // Internal Modules ----------------------------------------------------------
 
 import {
-    DATE, DATE_FROM, DATE_TO, FACILITY_ID, SECTION_ID, VALUES
+    DATE, DATE_FROM, DATE_TO, FACILITY_ID, REQUIRE_REGULAR, SECTION_ID, VALUES
 } from "./Constants";
 
 // Public Objects ------------------------------------------------------------
@@ -21,12 +21,16 @@ class Summary extends AbstractModel {
 
     public NAME = "Summary";
 
-    public apiRead(): string {
-        return `${super.apiCollection()}/{${FACILITY_ID}}/{${SECTION_ID}}/{${DATE}}`
+    public apiDailies(): string {
+        return `${super.apiCollection()}/{${FACILITY_ID}}/dailies/{${DATE_FROM}}/{${DATE_TO}}`;
     }
 
-    public apiWrite(): string {
-        return this.apiRead();
+    public apiMonthlies(): string {
+        return `${super.apiCollection()}/{${FACILITY_ID}}/monthlies/{${DATE_FROM}}/{${DATE_TO}}`;
+    }
+
+    public apiReadWrite(): string {
+        return `${super.apiCollection()}/{${FACILITY_ID}}/{${SECTION_ID}}/{${DATE}}`
     }
 
     public name(): string {
@@ -41,6 +45,10 @@ class Summary extends AbstractModel {
         return new ob.OperationObjectBuilder(); // Not used
     }
 
+    public operationDailies(): ob.OperationObjectBuilder {
+        return super.operationAllBuilder(REQUIRE_REGULAR, null, null);
+    }
+
     public operationFind(): ob.OperationObjectBuilder {
         return new ob.OperationObjectBuilder(); // Not used
     }
@@ -49,11 +57,14 @@ class Summary extends AbstractModel {
         return new ob.OperationObjectBuilder(); // Not used
     }
 
+    public operationMonthlies(): ob.OperationObjectBuilder {
+        return super.operationAllBuilder(REQUIRE_REGULAR, null, null);
+    }
+
     public operationRead(): ob.OperationObjectBuilder {
-        const builder = new ob.OperationObjectBuilder()
-            // TODO
-        ;
-        return builder;
+        return super.operationFindBuilder(REQUIRE_REGULAR, null)
+            .description(`Retrieve the specified ${this.name()}`)
+            .summary(`The specified ${this.name()}`);
     }
 
     public operationRemove(): ob.OperationObjectBuilder {
@@ -65,29 +76,50 @@ class Summary extends AbstractModel {
     }
 
     public operationWrite(): ob.OperationObjectBuilder {
-        const builder = new ob.OperationObjectBuilder()
-            // TODO
+        return super.operationInsertBuilder(REQUIRE_REGULAR)
+            .description(`Insert or update the specified ${this.name()}`)
+            .summary(`The new or updated ${this.name()}`);
+    }
+
+    public pathDailies(): ob.PathItemObjectBuilder {
+        const builder = new ob.PathItemObjectBuilder()
+            .description(`Retrieve daily ${this.names()}`)
+            .get(this.operationDailies().build())
+            .parameter(parameterRef(FACILITY_ID))
+            .parameter(parameterRef(DATE_FROM))
+            .parameter(parameterRef(DATE_TO))
         ;
         return builder;
     }
 
-    public pathRead(): ob.PathItemObjectBuilder {
+    public pathMonthlies(): ob.PathItemObjectBuilder {
         const builder = new ob.PathItemObjectBuilder()
-            // TODO
+            .description(`Retrieve monthly ${this.names()}`)
+            .get(this.operationMonthlies().build())
+            .parameter(parameterRef(FACILITY_ID))
+            .parameter(parameterRef(DATE_FROM))
+            .parameter(parameterRef(DATE_TO))
         ;
         return builder;
     }
 
-    public pathWrite(): ob.PathItemObjectBuilder {
+    public pathReadWrite(): ob.PathItemObjectBuilder {
         const builder = new ob.PathItemObjectBuilder()
-            // TODO
+            .description(`Retrieve daily ${this.name()}`)
+            .get(this.operationRead().build())
+            .parameter(parameterRef(FACILITY_ID))
+            .parameter(parameterRef(SECTION_ID))
+            .parameter(parameterRef(DATE))
+            .post(this.operationWrite().build())
         ;
         return builder;
     }
 
     public paths(): ob.PathsObjectBuilder {
         const builder = new ob.PathsObjectBuilder()
-            // TODO
+                .path(this.apiDailies(), this.pathDailies().build())
+                .path(this.apiMonthlies(), this.pathMonthlies().build())
+                .path(this.apiReadWrite(), this.pathReadWrite().build())
         ;
         return builder;
     }

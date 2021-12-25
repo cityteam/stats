@@ -8,7 +8,6 @@
 
 // Internal Modules ----------------------------------------------------------
 
-//import DetailServices from "./DetailServices";
 import SectionServices from "./SectionServices";
 import Category from "../models/Category";
 import Daily from "../models/Daily";
@@ -64,68 +63,6 @@ class SummaryServices {
         });
 
     }
-
-    /**
-     * Retrieve daily Summary rows that match the requested criteria.
-     *
-     * @param facilityId                Facility ID that owns these statistics
-     * @param dateFrom                  Earliest date for which to return results
-     * @param dateTo                    Latest date for which to return results
-     * @param active                    Return only active Sections and Categories? [false]
-     * @param sectionIds                Comma-delimited list of section IDs
-     *                                  for which to return results [all sections]
-     */
-/*
-    public async dailiesOld(facilityId: number, dateFrom: string, dateTo: string, active: boolean, sectionIds?: number[]): Promise<Summary[]> {
-
-        // Retrieve the requested information
-        const sections = await this.sectionsOld(facilityId, dateFrom, dateTo, active, sectionIds);
-
-        // Merge the detailed information into Summaries
-        const summaries = this.summaries(sections, false);
-
-        // Sort and return the calculated Summaries
-        return summaries.sort(function (a, b) {
-            if (a.sectionId > b.sectionId) {
-                return 1;
-            } else if (a.sectionId < b.sectionId) {
-                return -1;
-            } else if (a.date > b.date) {
-                return 1;
-            } else if (a.date < b.date) {
-                return -1;
-            } else {
-                return 0;
-            }
-        });
-
-    }
-*/
-
-    /**
-     * Migrate old "details" contents to new "dailies" instead.
-     */
-/*
-    public async migrate(facilityId: number, dateFrom: string, dateTo: string): Promise<object> {
-
-        // Get old-style summaries (from the details table)
-        const summariesOld = await this.dailiesOld(facilityId, dateFrom, dateTo, false);
-
-        // Convert them into new-style summaries (to the dailies table
-        const summariesNew: Summary[] = [];
-        summariesOld.forEach(async summaryOld => {
-            const summaryNew = await this.write(facilityId, summaryOld.sectionId, summaryOld.date, summaryOld);
-            summariesNew.push(summaryNew);
-        })
-
-        // Return the finished results
-        return {
-            summariesOld: summariesOld.length,
-            summariesNew: summariesNew.length,
-        };
-
-    }
-*/
 
     /**
      * Retrieve monthly Summary rows that match the requested criteria.  Dates in
@@ -190,44 +127,6 @@ class SummaryServices {
     }
 
     /**
-     * Retrieve monthly Summary rows that match the requested criteria.  Dates in
-     * the returned Summaries will arbitrarily be the first of that month
-     *
-     * @param facilityId                Facility ID that owns these statistics
-     * @param dateFrom                  Earliest date for which to return results (should be BOM)
-     * @param dateTo                    Latest date for which to return results (should be EOM)
-     * @param active                    Return only active Sections and Categories? [false]
-     * @param sectionIds                Comma-delimited list of section IDs
-     *                                  for which to return results [all sections]
-     */
-/*
-    public async monthliesOld(facilityId: number, dateFrom: string, dateTo: string, active: boolean, sectionIds?: number[]): Promise<Summary[]> {
-
-        // Retrieve the requested information
-        const sections = await this.sectionsOld(facilityId, dateFrom, dateTo, active, sectionIds);
-
-        // Merge the detailed information into Summaries
-        const summaries = this.summaries(sections, true);
-
-        // Sort and return the calculated Summaries
-        return summaries.sort(function (a, b) {
-            if (a.sectionId > b.sectionId) {
-                return 1;
-            } else if (a.sectionId < b.sectionId) {
-                return -1;
-            } else if (a.date > b.date) {
-                return 1;
-            } else if (a.date < b.date) {
-                return -1;
-            } else {
-                return 0;
-            }
-        });
-
-    }
-*/
-
-    /**
      * Synthesize and return a Summary object for the specified parameters.
      * The returned "values" property will contain keys for all valid
      * Category IDs associated with this Section, along with any previously
@@ -259,54 +158,6 @@ class SummaryServices {
         return summary;
 
     }
-
-    /**
-     * Synthesize and return a Summary object for the specified parameters.
-     * The returned "values" property will contain keys for all valid
-     * Category IDs associated with this Section, along with any previously
-     * recorded statistics for those Categories.  For any Category that has
-     * never been recorded (for this date), a null value will be included.
-     *
-     * @param facilityId                Facility ID that owns this Section
-     * @param sectionId                 Section ID for which to return data
-     * @param date                      Date for which to return data
-     */
-/*
-    public async readOld(facilityId: number, sectionId: number, date: string): Promise<Summary> {
-
-        // Retrieve the specified Section and related Categories
-        const section = await SectionServices.find(facilityId, sectionId, {
-            withCategories: "",
-        });
-
-        // Seed a summary object with this information
-        const summary = new Summary({
-            date: date,
-            sectionId: sectionId,
-        });
-        const categoryIds: number[] = [];
-        section.categories.forEach(category => {
-            categoryIds.push(category.id);
-            summary.values[category.id] = null;
-        })
-
-        // Retrieve and pass on any previously recorded values
-        const details = await Detail.findAll({
-            where: {
-                categoryId: { [Op.in]: categoryIds },
-                date: date,
-            }
-        });
-        details.forEach(detail => {
-            summary.values[detail.categoryId]
-                = detail.value === null ? null : Number(detail.value);
-        });
-
-        // Return the completed summary
-        return summary;
-
-    }
-*/
 
     /**
      * Insert or update the Daily object that records the specified information.
@@ -361,60 +212,6 @@ class SummaryServices {
 
     }
 
-    /**
-     * Insert Detail objects to reflect the specified values for referenced
-     * Categories belonging to our Section, replacing any previously
-     * recorded values for those Categories.  Only Category IDs that are
-     * validly children of our Section will be recorded -- anything else
-     * will be silently ignored.
-     *
-     * @param facilityId                Facility ID that owns this Section
-     * @param sectionId                 Section ID for which to store data
-     * @param date                      Date for which to store data
-     * @param summary                   Summary containing values to be recorded
-     *
-     * @returns Summary reflecting what was recorded
-     */
-/*
-    public async writeOld(facilityId: number, sectionId: number, date: string, summary: Summary): Promise<Summary> {
-
-        // Retrieve the specified Section and related Categories
-        const section = await SectionServices.find(facilityId, sectionId, {
-            withCategories: "",
-        });
-        const result = new Summary({
-            sectionId: sectionId,
-            date: date,
-        });
-
-        // Insert or update a Detail for each presented Category ID that is valid
-        for (const [key, value] of Object.entries(summary.values)) {
-            const categoryId = Number(key);
-            if (this.included(categoryId, section.categories)) {
-                const details = await DetailServices.all(categoryId, {
-                    categoryId: categoryId,
-                    date: date
-                });
-                if (details.length > 0) {
-                    await DetailServices.update(categoryId, details[0].id, {
-                        // @ts-ignore
-                        value: (value || (value === 0)) ? value : null,
-                    });
-                } else {
-                    await DetailServices.insert(categoryId, {
-                        categoryId: categoryId,
-                        date: toDateObject(date),
-                        value: (value || (value === 0)) ? value : undefined,
-                    })
-                }
-                result.values[categoryId] = value;
-            }
-        }
-        return result;
-
-    }
-*/
-
     // Private Methods -------------------------------------------------------
 
     /**
@@ -461,19 +258,6 @@ class SummaryServices {
         return summary;
 
     }
-
-/*
-    // Is the specified Category ID in this list of Categories?
-    private included(categoryId: number, categories: Category[]): boolean {
-        let found = false;
-        categories.forEach(category => {
-            if (categoryId === category.id) {
-                found = true;
-            }
-        });
-        return found;
-    }
-*/
 
     /**
      * Return the requested Sections (with nested Categories and Details)

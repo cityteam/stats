@@ -23,7 +23,7 @@ import {
 
 import Category from "./Category";
 import {
-    BAD_REQUEST, CATEGORY_ID, CREATED, DATE_FROM, DATE_TO,
+    BAD_REQUEST, CATEGORY_ID, CREATED, DATE, DATE_FROM, DATE_TO,
     FACILITY_ID, FORBIDDEN, LIMIT, MATCH_ACTIVE, MATCH_NAME, MATCH_ORDINAL,
     MATCH_SCOPE, NAME_PATH, NOT_FOUND, NOT_UNIQUE, OFFSET, OK, ORDINAL, REQUIRE_ADMIN,
     REQUIRE_ANY, REQUIRE_REGULAR, REQUIRE_SUPERUSER, SECTION_ID, SERVER_ERROR, UNAUTHORIZED,
@@ -63,6 +63,7 @@ class Application extends AbstractApplication {
         // Path Parameters
         builder
             .parameter(CATEGORY_ID, parameterPath(CATEGORY_ID, "ID of the specified Category", INTEGER))
+            .parameter(DATE, parameterPath(DATE, "Date for which to retrieve or update information"))
             .parameter(DATE_FROM, parameterPath(DATE_FROM, "From date to select relevant information"))
             .parameter(DATE_TO, parameterPath(DATE_TO, "To date to select relevant information"))
             .parameter(FACILITY_ID, parameterPath(FACILITY_ID, "ID of the specified Facility", INTEGER))
