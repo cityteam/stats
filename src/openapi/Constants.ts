@@ -36,6 +36,7 @@ export const OFFSET = "offset";
 // Parameter Names (Path) ----------------------------------------------------
 
 export const CATEGORY_ID = "categoryId";
+export const DATE = "date";
 export const DATE_FROM = "dateFrom";
 export const DATE_TO = "dateTo";
 export const FACILITY_ID = "facilityId";
@@ -63,6 +64,7 @@ export const SERVICE = "service";
 export const SLUG = "slug";
 export const STATE = "state";
 export const TITLE = "title";
+export const VALUES = "values";
 export const ZIPCODE = "zipCode";
 
 // Tag Names -----------------------------------------------------------------

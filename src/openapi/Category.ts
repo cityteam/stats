@@ -131,6 +131,10 @@ class Category extends AbstractModel {
                 "integer",
                 "Sort order specifier for Categories belonging to its Section",
                 false).build())
+            .property(SECTION_ID, new ob.SchemaObjectBuilder(
+                "integer",
+                "ID of the Section to which this Category belongs",
+                false).build())
             .property(SERVICE, new ob.SchemaObjectBuilder(
                 "string",
                 "Service of this Category (not in use)",

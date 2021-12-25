@@ -31,6 +31,7 @@ import {
 } from "./Constants";
 import Facility from "./Facility";
 import Section from "./Section";
+import Summary from "./Summary";
 
 // Application Object --------------------------------------------------------
 
@@ -52,6 +53,7 @@ class Application extends AbstractApplication {
             Category,
             Facility,
             Section,
+            Summary,
         ];
     }
 
