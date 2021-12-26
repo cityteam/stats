@@ -6,7 +6,7 @@
 
 import * as ob from "@craigmcc/openapi-builders";
 import AbstractModel from "./generator/AbstractModel";
-import {parameterRef, schemaActive, schemaId} from "./generator/Helpers";
+import {parameterRef, schemaActive, schemaId, schemaRef} from "./generator/Helpers";
 const pluralize = require("pluralize");
 
 // Internal Modules ----------------------------------------------------------
@@ -17,7 +17,7 @@ import {
     MATCH_ACTIVE, MATCH_NAME, MATCH_SCOPE,
     NAME_PATH,
     REQUIRE_ADMIN, REQUIRE_ANY, REQUIRE_REGULAR, REQUIRE_SUPERUSER,
-    SCOPE, STATE, WITH_SECTIONS, ZIPCODE
+    SCOPE, SECTIONS, STATE, WITH_SECTIONS, ZIPCODE
 } from "./Constants";
 import Section from "./Section";
 
@@ -102,7 +102,12 @@ class Facility extends AbstractModel {
     }
 
     public schema(): ob.SchemaObjectBuilder {
-        const builder = new ob.SchemaObjectBuilder()
+        const builder = new ob.SchemaObjectBuilder(
+            "object",
+            "An individual CityTeam Facility for which statistics are " +
+            "entered and reported.  The 'sections' property will ONLY be present " +
+            "if it was explicitly included with a 'withSections' query parameter."
+        )
             .property(ID, schemaId(this.name()).build())
             .property(ACTIVE, schemaActive(this.name()).build())
             .property(ADDRESS1, new ob.SchemaObjectBuilder(
@@ -125,7 +130,7 @@ class Facility extends AbstractModel {
                 "string",
                 "OAuth scope prefix required to access this Facility",
                 false).build())
-            // TODO - SECTIONS
+            .property(SECTIONS, schemaRef(Section.names()))
             .property(STATE, new ob.SchemaObjectBuilder(
                 "string",
                 "State abbreviation of the Facility address",

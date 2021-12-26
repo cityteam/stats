@@ -6,19 +6,20 @@
 
 import * as ob from "@craigmcc/openapi-builders";
 import AbstractModel from "./generator/AbstractModel";
-import {parameterRef, schemaActive, schemaId} from "./generator/Helpers";
+import {parameterRef, schemaActive, schemaChildren, schemaId, schemaParent, schemaRef} from "./generator/Helpers";
 const pluralize = require("pluralize");
 
 // Internal Modules ----------------------------------------------------------
 
 import {
-    ACTIVE, FACILITY_ID, ID,
+    ACTIVE, CATEGORIES, FACILITY, FACILITY_ID, ID,
     MATCH_ACTIVE, NOTES, ORDINAL,
     REQUIRE_ADMIN, REQUIRE_REGULAR, REQUIRE_SUPERUSER,
     SCOPE, SECTION_ID, SLUG, TITLE,
     WITH_CATEGORIES, WITH_DAILIES, WITH_FACILITY,
 } from "./Constants";
 import Facility from "./Facility";
+import Category from "./Category";
 
 // Public Objects ------------------------------------------------------------
 
@@ -103,9 +104,27 @@ class Section extends AbstractModel {
     }
 
     public schema(): ob.SchemaObjectBuilder {
-        const builder = new ob.SchemaObjectBuilder()
+        const builder = new ob.SchemaObjectBuilder(
+            "object",
+            "A grouping of Categories that are entered or reported together.  " +
+            "The 'categories' and 'facility' properties will ONLY be present if they " +
+            "have been explicitly included with 'withCategories' or 'withFacility' " +
+            "query parameters."
+        )
             .property(ID, schemaId(this.name()).build())
             .property(ACTIVE, schemaActive(this.name()).build())
+/*
+            .property(CATEGORIES, schemaChildren(Category.name(),
+                "Child Categories (if included)",
+                true). build())
+*/
+            .property(CATEGORIES, schemaRef(Category.names()))
+/*
+            .property(FACILITY, schemaParent(Facility.name(),
+                   "Parent Facility (if included)",
+                   true).build())
+*/
+            .property(FACILITY, schemaRef(Facility.name()))
             .property(FACILITY_ID, new ob.SchemaObjectBuilder(
                 "integer",
                 "ID of the Facility to which this Section belongs",

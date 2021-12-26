@@ -6,25 +6,16 @@
 
 import * as ob from "@craigmcc/openapi-builders";
 import AbstractModel from "./generator/AbstractModel";
-import {parameterRef, schemaActive, schemaId} from "./generator/Helpers";
+import {parameterRef, schemaActive, schemaId, schemaRef} from "./generator/Helpers";
 const pluralize = require("pluralize");
 
 // Internal Modules ----------------------------------------------------------
 
 import {
-    ACCUMULATED,
-    ACTIVE, CATEGORY_ID,
-    DESCRIPTION,
-    FACILITY_ID,
-    ID,
-    MATCH_ACTIVE,
-    NOTES,
-    ORDINAL,
-    REQUIRE_ADMIN,
-    REQUIRE_REGULAR,
-    REQUIRE_SUPERUSER,
-    SECTION_ID, SERVICE, SLUG,
-    WITH_SECTION
+    ACCUMULATED, ACTIVE, CATEGORY_ID, DESCRIPTION, FACILITY_ID, ID,
+    MATCH_ACTIVE, NOTES, ORDINAL,
+    REQUIRE_ADMIN, REQUIRE_REGULAR, REQUIRE_SUPERUSER,
+    SECTION, SECTION_ID, SERVICE, SLUG, WITH_SECTION
 } from "./Constants";
 import Facility from "./Facility";
 import Section from "./Section";
@@ -106,13 +97,17 @@ class Category extends AbstractModel {
                 .parameter(parameterRef(Facility.apiPathId()))
                 .parameter(parameterRef(Section.apiPathId()))
                 .build())
-            // TODO - ???
         ;
         return builder;
     }
 
     public schema(): ob.SchemaObjectBuilder {
-        const builder = new ob.SchemaObjectBuilder()
+        const builder = new ob.SchemaObjectBuilder(
+            "object",
+            "An individual statistic that is entered or reported, as part of " +
+            "a parent Section.  The 'section' property will ONLY be present if it has " +
+            "been explicitly included with a 'withSection' query parameter."
+        )
             .property(ACCUMULATED, new ob.SchemaObjectBuilder(
                 "boolean",
                 "Are totals for this Category accumulated? (not in use)",
@@ -131,6 +126,7 @@ class Category extends AbstractModel {
                 "integer",
                 "Sort order specifier for Categories belonging to its Section",
                 false).build())
+            .property(SECTION, schemaRef(Section.name()))
             .property(SECTION_ID, new ob.SchemaObjectBuilder(
                 "integer",
                 "ID of the Section to which this Category belongs",

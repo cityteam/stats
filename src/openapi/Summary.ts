@@ -6,7 +6,7 @@
 
 import * as ob from "@craigmcc/openapi-builders";
 import AbstractModel from "./generator/AbstractModel";
-import {parameterRef, schemaActive, schemaId} from "./generator/Helpers";
+import {parameterRef} from "./generator/Helpers";
 const pluralize = require("pluralize");
 
 // Internal Modules ----------------------------------------------------------
@@ -125,7 +125,11 @@ class Summary extends AbstractModel {
     }
 
     public schema(): ob.SchemaObjectBuilder {
-        const builder = new ob.SchemaObjectBuilder()
+        const builder = new ob.SchemaObjectBuilder(
+            "object",
+            "A set of statistics collected or reported for a particular " +
+            "Section, on a particular date."
+        )
             .property(DATE, new ob.SchemaObjectBuilder(
                 "string",
                 "Date for which these statistics were collected",

@@ -107,6 +107,24 @@ export function schemaActive(model: string, nullable = true): ob.SchemaObjectBui
 }
 
 /**
+ * Generate a SchemaObjectBuilder for an array of child models
+ *
+ * @param child                         Name of the child model
+ * @param description                   Description for this object
+ * @param nullable                      Is this object nullable? [true]
+ */
+export function schemaChildren(child: string, description: string, nullable: boolean = true): ob.SchemaObjectBuilder {
+    const childrenRef = schemaRef(pluralize(child));
+    const builder = new ob.SchemaObjectBuilder(
+        "object",
+        description,
+        nullable
+    );
+    // TODO - how to embed childrenRef
+    return builder;
+}
+
+/**
  * Generate a SchemaObjectBuilder for the "id" property of the specified model.
  *
  * @param model                         Name of the specified model
@@ -118,6 +136,24 @@ export function schemaId(model: string, nullable = true): ob.SchemaObjectBuilder
         `Primary key for this ${model}`,
         nullable,
     );
+    return builder;
+}
+
+/**
+ * Generate a SchemaObjectBuilder for a parent model.
+ *
+ * @param parent                        Name of the parent model
+ * @param description                   Description for this object
+ * @param nullable                      Is this object nullable? [true]
+ */
+export function schemaParent(parent: string, description: string, nullable: boolean = true): ob.SchemaObjectBuilder {
+    const parentRef = schemaRef(parent);
+    const builder = new ob.SchemaObjectBuilder(
+        "object",
+        description,
+        nullable
+    );
+    // TODO - how to embed parentRef
     return builder;
 }
 
