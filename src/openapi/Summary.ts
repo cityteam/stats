@@ -12,7 +12,7 @@ const pluralize = require("pluralize");
 // Internal Modules ----------------------------------------------------------
 
 import {
-    DATE, DATE_FROM, DATE_TO, FACILITY_ID, REQUIRE_REGULAR, SECTION_ID, VALUES
+    DATE, DATE_FROM, DATE_TO, FACILITY_ID, MATCH_ACTIVE, MATCH_SECTION_IDS, REQUIRE_REGULAR, SECTION_ID, VALUES
 } from "./Constants";
 
 // Public Objects ------------------------------------------------------------
@@ -88,6 +88,8 @@ class Summary extends AbstractModel {
             .parameter(parameterRef(FACILITY_ID))
             .parameter(parameterRef(DATE_FROM))
             .parameter(parameterRef(DATE_TO))
+            .parameter(parameterRef(MATCH_ACTIVE))
+            .parameter(parameterRef(MATCH_SECTION_IDS))
         ;
         return builder;
     }
@@ -99,6 +101,8 @@ class Summary extends AbstractModel {
             .parameter(parameterRef(FACILITY_ID))
             .parameter(parameterRef(DATE_FROM))
             .parameter(parameterRef(DATE_TO))
+            .parameter(parameterRef(MATCH_ACTIVE))
+            .parameter(parameterRef(MATCH_SECTION_IDS))
         ;
         return builder;
     }

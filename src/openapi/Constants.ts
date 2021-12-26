@@ -26,6 +26,7 @@ export const WITH_SECTIONS = "withSections";
 export const MATCH_ACTIVE = "active";
 export const MATCH_NAME = "name";
 export const MATCH_ORDINAL = "ordinal";
+export const MATCH_SECTION_IDS = "sectionIds";
 export const MATCH_SCOPE = "scope";
 
 // Parameter Names (Pagination) ----------------------------------------------
@@ -42,6 +43,9 @@ export const DATE_TO = "dateTo";
 export const FACILITY_ID = "facilityId";
 export const NAME_PATH = "namePath"; // Special case since also a query parameter
 export const SECTION_ID = "sectionId";
+
+// Parameter Names (Query) ---------------------------------------------------
+
 
 // Property Names ------------------------------------------------------------
 

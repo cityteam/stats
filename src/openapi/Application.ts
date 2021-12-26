@@ -25,7 +25,8 @@ import Category from "./Category";
 import {
     BAD_REQUEST, CATEGORY_ID, DATE, DATE_FROM, DATE_TO,
     FACILITY_ID, FORBIDDEN, LIMIT, MATCH_ACTIVE, MATCH_NAME,
-    MATCH_SCOPE, NAME_PATH, NOT_FOUND, NOT_UNIQUE, OFFSET, OK, ORDINAL,
+    MATCH_SCOPE, MATCH_SECTION_IDS, NAME_PATH,
+    NOT_FOUND, NOT_UNIQUE, OFFSET, OK, ORDINAL,
     REQUIRE_ADMIN, REQUIRE_ANY, REQUIRE_REGULAR, REQUIRE_SUPERUSER,
     SECTION_ID, SERVER_ERROR, UNAUTHORIZED,
     WITH_CATEGORIES, WITH_DAILIES, WITH_FACILITY, WITH_SECTIONS
@@ -63,35 +64,54 @@ class Application extends AbstractApplication {
 
         // Path Parameters
         builder
-            .parameter(CATEGORY_ID, parameterPath(CATEGORY_ID, "ID of the specified Category", INTEGER))
-            .parameter(DATE, parameterPath(DATE, "Date for which to retrieve or update information"))
-            .parameter(DATE_FROM, parameterPath(DATE_FROM, "From date to select relevant information"))
-            .parameter(DATE_TO, parameterPath(DATE_TO, "To date to select relevant information"))
-            .parameter(FACILITY_ID, parameterPath(FACILITY_ID, "ID of the specified Facility", INTEGER))
-            .parameter(NAME_PATH, parameterPath(NAME_PATH, "Exact name to match"))
-            .parameter(ORDINAL, parameterPath(ORDINAL, "Exact sort order ordinal to match", INTEGER))
-            .parameter(SECTION_ID, parameterPath(SECTION_ID, "ID of the specified Section", INTEGER))
+            .parameter(CATEGORY_ID, parameterPath(CATEGORY_ID,
+                "ID of the specified Category", INTEGER))
+            .parameter(DATE, parameterPath(DATE,
+                "Date for which to retrieve or update information"))
+            .parameter(DATE_FROM, parameterPath(DATE_FROM,
+                "From date to select relevant information"))
+            .parameter(DATE_TO, parameterPath(DATE_TO,
+                "To date to select relevant information"))
+            .parameter(FACILITY_ID, parameterPath(FACILITY_ID,
+                "ID of the specified Facility", INTEGER))
+            .parameter(NAME_PATH, parameterPath(NAME_PATH,
+                "Exact name to match"))
+            .parameter(ORDINAL, parameterPath(ORDINAL,
+                "Exact sort order ordinal to match", INTEGER))
+            .parameter(SECTION_ID, parameterPath(SECTION_ID,
+                "ID of the specified Section", INTEGER))
         ;
 
         // Query Parameters (Includes)
         builder
-            .parameter(WITH_CATEGORIES, parameterQuery(WITH_CATEGORIES, "Include child Categories", true))
-            .parameter(WITH_DAILIES, parameterQuery(WITH_DAILIES, "Include child Dailies", true))
-            .parameter(WITH_FACILITY, parameterQuery(WITH_FACILITY, "Include parent Facility", true))
-            .parameter(WITH_SECTIONS, parameterQuery(WITH_SECTIONS, "Include child Sections"))
+            .parameter(WITH_CATEGORIES, parameterQuery(WITH_CATEGORIES,
+                "Include child Categories", true))
+            .parameter(WITH_DAILIES, parameterQuery(WITH_DAILIES,
+                "Include child Dailies", true))
+            .parameter(WITH_FACILITY, parameterQuery(WITH_FACILITY,
+                "Include parent Facility", true))
+            .parameter(WITH_SECTIONS, parameterQuery(WITH_SECTIONS,
+                "Include child Sections"))
         ;
 
         // Query Parameters (Matches)
         builder
-            .parameter(MATCH_ACTIVE, parameterQuery(MATCH_ACTIVE, "Match only active objects", true))
-            .parameter(MATCH_NAME, parameterQuery(MATCH_NAME, "Wildcard match on name segment", false))
-            .parameter(MATCH_SCOPE, parameterQuery(MATCH_SCOPE, "Exact match on scope value"))
+            .parameter(MATCH_ACTIVE, parameterQuery(MATCH_ACTIVE,
+                "Match only active objects (no value required)", true))
+            .parameter(MATCH_NAME, parameterQuery(MATCH_NAME,
+                "Wildcard match on name segment", false))
+            .parameter(MATCH_SCOPE, parameterQuery(MATCH_SCOPE,
+                "Exact match on scope value", false))
+            .parameter(MATCH_SECTION_IDS, parameterQuery(MATCH_SECTION_IDS,
+                "Select data for a comma-separated list of Section IDs only", false))
         ;
 
         // Query Parameters (Pagination)
         builder
-            .parameter(LIMIT, parameterQuery(LIMIT, "Maximum number of rows returned (default is usually 25)", false, INTEGER))
-            .parameter(OFFSET, parameterQuery(OFFSET, "Zero-relative offset to the first returned row (default is 0)", false, INTEGER))
+            .parameter(LIMIT, parameterQuery(LIMIT,
+                "Maximum number of rows returned (default is usually 25)", false, INTEGER))
+            .parameter(OFFSET,
+                parameterQuery(OFFSET, "Zero-relative offset to the first returned row (default is 0)", false, INTEGER))
         ;
 
         return builder;
