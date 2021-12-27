@@ -10,12 +10,11 @@ and can be installed in environments ranging from a standalone (everything
 installed on a single laptop) to a cloud based environment, supporting
 multiple Facilities.
 
-Detailed documentation can be found by following one of these links:
-* [Installating the Application](./INSTALLATION.md)
-* [Developer Support](./DEVELOPER.md)
+Detailed instructions for installing this application (for either
+production use or development):
+* [Installation Documentation](./INSTALLATION.md) - Installation.
 
-The installation process encourages you to keep track of your choices for
-configuration variables and secrets like passwords.  This form is available
-via the online help, or by printing this page:
+Additional information for application developers:
+* [Developer Documentation](./DEVELOPER.md) - Setting up your environment.
+* [Application Design Documentation](./DESIGN.md) - Architecture breakdown.
 
-![Installation Cheat Sheet](./CHEATSHEET.png)
