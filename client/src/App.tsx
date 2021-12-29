@@ -79,9 +79,6 @@ function App() {
                                       </LinkContainer>
                                   </NavDropdown>
                                   <NavDropdown id="admin" title="Admin">
-                                      <LinkContainer to="/admin-database">
-                                          <NavDropdown.Item>Backup Database</NavDropdown.Item>
-                                      </LinkContainer>
                                       <LinkContainer to="/admin-categories">
                                           <NavDropdown.Item>Categories</NavDropdown.Item>
                                       </LinkContainer>
@@ -105,11 +102,6 @@ function App() {
                           <Route exact path="/admin-categories">
                               <CategorySegment/>
                           </Route>
-{/*
-                          <Route exact path="/admin-database">
-                              <DatabaseView/>
-                          </Route>
-*/}
                           <Route exact path="/entries">
                               <EntriesView/>
                           </Route>
