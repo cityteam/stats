@@ -10,6 +10,7 @@ import {Router} from "express";
 
 import CategoryRouter from "./CategoryRouter";
 import ClientRouter from "./ClientRouter";
+import DatabaseRouter from "./DatabaseRouter";
 import DetailRouter from "./DetailRouter";
 import FacilityRouter from "./FacilityRouter";
 import SectionRouter from "./SectionRouter";
@@ -28,6 +29,7 @@ export default ApiRouter;
 
 ApiRouter.use("/categories", CategoryRouter);
 ApiRouter.use("/client", ClientRouter);
+ApiRouter.use("/database", DatabaseRouter);
 ApiRouter.use("/details", DetailRouter);
 ApiRouter.use("/facilities", FacilityRouter);
 ApiRouter.use("/sections", SectionRouter);
