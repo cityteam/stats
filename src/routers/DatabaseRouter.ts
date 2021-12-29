@@ -17,7 +17,14 @@ const DatabaseRouter = Router({
     strict: true,
 });
 
-DatabaseRouter.delete("/tokens",
+DatabaseRouter.post("/dump",
+    requireDatabase,
+    async (req: Request, res: Response) => {
+        res.header("Content-Type", "text/plain")
+            .send(await DatabaseServices.dump());
+    });
+
+DatabaseRouter.delete("/purge",
     requireDatabase,
     async (req: Request, res: Response) => {
         res.send(await DatabaseServices.purge());
