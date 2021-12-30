@@ -50,7 +50,7 @@
   "homepage": "https://github.com/cityteam/stats#readme",
   "dependencies": {
     "@craigmcc/oauth-orchestrator": "^1.0.1",
-    "@craigmcc/openapi-builders": "^1.2.0",
+    "@craigmcc/openapi-builders": "^2.0.0",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",

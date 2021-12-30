@@ -5,8 +5,6 @@
 // External Modules ----------------------------------------------------------
 
 import * as ob from "@craigmcc/openapi-builders";
-import AbstractModel from "./generator/AbstractModel";
-import {parameterRef, schemaActive, schemaChildren, schemaId, schemaParent, schemaRef} from "./generator/Helpers";
 const pluralize = require("pluralize");
 
 // Internal Modules ----------------------------------------------------------
@@ -23,7 +21,7 @@ import Category from "./Category";
 
 // Public Objects ------------------------------------------------------------
 
-class Section extends AbstractModel {
+class Section extends ob.AbstractModel {
 
     public NAME = "Section";
 
@@ -71,16 +69,16 @@ class Section extends AbstractModel {
 
     public parametersIncludes(): ob.ParametersObjectBuilder {
         const builder = new ob.ParametersObjectBuilder()
-            .parameter(WITH_CATEGORIES, parameterRef(WITH_CATEGORIES))
-            .parameter(WITH_DAILIES, parameterRef(WITH_DAILIES))
-            .parameter(WITH_FACILITY, parameterRef(WITH_FACILITY))
+            .parameter(WITH_CATEGORIES, ob.parameterRef(WITH_CATEGORIES))
+            .parameter(WITH_DAILIES, ob.parameterRef(WITH_DAILIES))
+            .parameter(WITH_FACILITY, ob.parameterRef(WITH_FACILITY))
         ;
         return builder;
     }
 
     public parametersMatches(): ob.ParametersObjectBuilder {
         const builder = new ob.ParametersObjectBuilder()
-            .parameter(MATCH_ACTIVE, parameterRef(MATCH_ACTIVE))
+            .parameter(MATCH_ACTIVE, ob.parameterRef(MATCH_ACTIVE))
         ;
         return builder;
     }
@@ -88,14 +86,14 @@ class Section extends AbstractModel {
     public paths(): ob.PathsObjectBuilder {
         const builder = new ob.PathsObjectBuilder()
                 .path(this.apiCollection(), this.pathCollection()
-                    .parameter(parameterRef(Facility.apiPathId()))
+                    .parameter(ob.parameterRef(Facility.apiPathId()))
                     .build())
                 .path(this.apiDetail(), this.pathDetail()
-                    .parameter(parameterRef(Facility.apiPathId()))
-                    .parameter(parameterRef(this.apiPathId()))
+                    .parameter(ob.parameterRef(Facility.apiPathId()))
+                    .parameter(ob.parameterRef(this.apiPathId()))
                     .build())
                 .path(this.apiExact(ORDINAL), this.pathExact(REQUIRE_REGULAR, ORDINAL)
-                    .parameter(parameterRef(Facility.apiPathId()))
+                    .parameter(ob.parameterRef(Facility.apiPathId()))
                     .build())
             // TODO - categories children thing
             // TODO - dailies children thing
@@ -111,20 +109,20 @@ class Section extends AbstractModel {
             "have been explicitly included with 'withCategories' or 'withFacility' " +
             "query parameters."
         )
-            .property(ID, schemaId(this.name()).build())
-            .property(ACTIVE, schemaActive(this.name()).build())
+            .property(ID, ob.schemaId(this.name()).build())
+            .property(ACTIVE, ob.schemaActive(this.name()).build())
 /*
             .property(CATEGORIES, schemaChildren(Category.name(),
                 "Child Categories (if included)",
                 true). build())
 */
-            .property(CATEGORIES, schemaRef(Category.names()))
+            .property(CATEGORIES, ob.schemaRef(Category.names()))
 /*
             .property(FACILITY, schemaParent(Facility.name(),
                    "Parent Facility (if included)",
                    true).build())
 */
-            .property(FACILITY, schemaRef(Facility.name()))
+            .property(FACILITY, ob.schemaRef(Facility.name()))
             .property(FACILITY_ID, new ob.SchemaObjectBuilder(
                 "integer",
                 "ID of the Facility to which this Section belongs",

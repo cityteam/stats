@@ -5,12 +5,11 @@
 
 // External Modules ----------------------------------------------------------
 
+import * as ob from "@craigmcc/openapi-builders"
 import {Request, Response, Router} from "express";
+import Application from "../openapi/Application";
 
 // Internal Modules ----------------------------------------------------------
-
-import generator from "../openapi/generator/Generator";
-import Application from "../openapi/Application";
 
 // Public Objects ------------------------------------------------------------
 
@@ -31,3 +30,15 @@ OpenApiRouter.get("/", (req: Request, res: Response) => {
     res.header("Content-Type", "application/json")
         .send(OPEN_API);
 });
+
+// Private Objects -----------------------------------------------------------
+
+export function generator(application: ob.AbstractApplication, asYaml: boolean = false): string {
+    const builder = new ob.OpenApiObjectBuilder(application.info().build())
+            .components(application.components().build())
+            .paths(application.paths().build())
+            .tags(application.tags())
+            // TODO - anything else that is missing
+    ;
+    return asYaml ? builder.asYaml() : builder.asJson();
+}

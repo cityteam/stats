@@ -5,19 +5,19 @@
 // External Modules ----------------------------------------------------------
 
 import * as ob from "@craigmcc/openapi-builders";
-import AbstractModel from "./generator/AbstractModel";
-import {parameterRef} from "./generator/Helpers";
 const pluralize = require("pluralize");
 
 // Internal Modules ----------------------------------------------------------
 
 import {
-    DATE, DATE_FROM, DATE_TO, FACILITY_ID, MATCH_ACTIVE, MATCH_SECTION_IDS, REQUIRE_REGULAR, SECTION_ID, VALUES
+    DATE, DATE_FROM, DATE_TO, FACILITY_ID,
+    MATCH_ACTIVE, MATCH_SECTION_IDS,
+    REQUIRE_REGULAR, SECTION_ID, VALUES
 } from "./Constants";
 
 // Public Objects ------------------------------------------------------------
 
-class Summary extends AbstractModel {
+class Summary extends ob.AbstractModel {
 
     public NAME = "Summary";
 
@@ -85,11 +85,11 @@ class Summary extends AbstractModel {
         const builder = new ob.PathItemObjectBuilder()
             .description(`Retrieve daily ${this.names()}`)
             .get(this.operationDailies().build())
-            .parameter(parameterRef(FACILITY_ID))
-            .parameter(parameterRef(DATE_FROM))
-            .parameter(parameterRef(DATE_TO))
-            .parameter(parameterRef(MATCH_ACTIVE))
-            .parameter(parameterRef(MATCH_SECTION_IDS))
+            .parameter(ob.parameterRef(FACILITY_ID))
+            .parameter(ob.parameterRef(DATE_FROM))
+            .parameter(ob.parameterRef(DATE_TO))
+            .parameter(ob.parameterRef(MATCH_ACTIVE))
+            .parameter(ob.parameterRef(MATCH_SECTION_IDS))
         ;
         return builder;
     }
@@ -98,11 +98,11 @@ class Summary extends AbstractModel {
         const builder = new ob.PathItemObjectBuilder()
             .description(`Retrieve monthly ${this.names()}`)
             .get(this.operationMonthlies().build())
-            .parameter(parameterRef(FACILITY_ID))
-            .parameter(parameterRef(DATE_FROM))
-            .parameter(parameterRef(DATE_TO))
-            .parameter(parameterRef(MATCH_ACTIVE))
-            .parameter(parameterRef(MATCH_SECTION_IDS))
+            .parameter(ob.parameterRef(FACILITY_ID))
+            .parameter(ob.parameterRef(DATE_FROM))
+            .parameter(ob.parameterRef(DATE_TO))
+            .parameter(ob.parameterRef(MATCH_ACTIVE))
+            .parameter(ob.parameterRef(MATCH_SECTION_IDS))
         ;
         return builder;
     }
@@ -111,9 +111,9 @@ class Summary extends AbstractModel {
         const builder = new ob.PathItemObjectBuilder()
             .description(`Retrieve daily ${this.name()}`)
             .get(this.operationRead().build())
-            .parameter(parameterRef(FACILITY_ID))
-            .parameter(parameterRef(SECTION_ID))
-            .parameter(parameterRef(DATE))
+            .parameter(ob.parameterRef(FACILITY_ID))
+            .parameter(ob.parameterRef(SECTION_ID))
+            .parameter(ob.parameterRef(DATE))
             .post(this.operationWrite().build())
         ;
         return builder;

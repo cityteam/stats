@@ -5,19 +5,6 @@
 // External Modules ----------------------------------------------------------
 
 import * as ob from "@craigmcc/openapi-builders";
-import AbstractApplication from "./generator/AbstractApplication";
-import AbstractModel from "./generator/AbstractModel";
-import {
-    ERROR,
-    INTEGER,
-    parameterPath,
-    parameterQuery,
-    parameterRef,
-    requestBodyRef,
-    responseError,
-    responseRef,
-    STRING,
-} from "./generator/Helpers";
 
 // Internal Modules ----------------------------------------------------------
 
@@ -37,7 +24,7 @@ import Summary from "./Summary";
 
 // Application Object --------------------------------------------------------
 
-class Application extends AbstractApplication {
+class Application extends ob.AbstractApplication {
 
     // Public Members --------------------------------------------------------
 
@@ -50,7 +37,7 @@ class Application extends AbstractApplication {
         return builder;
     }
 
-    public models(): AbstractModel[] {
+    public models(): ob.AbstractModel[] {
         return [
             Category,
             Facility,
@@ -64,54 +51,54 @@ class Application extends AbstractApplication {
 
         // Path Parameters
         builder
-            .parameter(CATEGORY_ID, parameterPath(CATEGORY_ID,
-                "ID of the specified Category", INTEGER))
-            .parameter(DATE, parameterPath(DATE,
+            .parameter(CATEGORY_ID, ob.parameterPath(CATEGORY_ID,
+                "ID of the specified Category", ob.INTEGER))
+            .parameter(DATE, ob.parameterPath(DATE,
                 "Date for which to retrieve or update information"))
-            .parameter(DATE_FROM, parameterPath(DATE_FROM,
+            .parameter(DATE_FROM, ob.parameterPath(DATE_FROM,
                 "From date to select relevant information"))
-            .parameter(DATE_TO, parameterPath(DATE_TO,
+            .parameter(DATE_TO, ob.parameterPath(DATE_TO,
                 "To date to select relevant information"))
-            .parameter(FACILITY_ID, parameterPath(FACILITY_ID,
-                "ID of the specified Facility", INTEGER))
-            .parameter(NAME_PATH, parameterPath(NAME_PATH,
+            .parameter(FACILITY_ID, ob.parameterPath(FACILITY_ID,
+                "ID of the specified Facility", ob.INTEGER))
+            .parameter(NAME_PATH, ob.parameterPath(NAME_PATH,
                 "Exact name to match"))
-            .parameter(ORDINAL, parameterPath(ORDINAL,
-                "Exact sort order ordinal to match", INTEGER))
-            .parameter(SECTION_ID, parameterPath(SECTION_ID,
-                "ID of the specified Section", INTEGER))
+            .parameter(ORDINAL, ob.parameterPath(ORDINAL,
+                "Exact sort order ordinal to match", ob.INTEGER))
+            .parameter(SECTION_ID, ob.parameterPath(SECTION_ID,
+                "ID of the specified Section", ob.INTEGER))
         ;
 
         // Query Parameters (Includes)
         builder
-            .parameter(WITH_CATEGORIES, parameterQuery(WITH_CATEGORIES,
+            .parameter(WITH_CATEGORIES, ob.parameterQuery(WITH_CATEGORIES,
                 "Include child Categories", true))
-            .parameter(WITH_DAILIES, parameterQuery(WITH_DAILIES,
+            .parameter(WITH_DAILIES, ob.parameterQuery(WITH_DAILIES,
                 "Include child Dailies", true))
-            .parameter(WITH_FACILITY, parameterQuery(WITH_FACILITY,
+            .parameter(WITH_FACILITY, ob.parameterQuery(WITH_FACILITY,
                 "Include parent Facility", true))
-            .parameter(WITH_SECTIONS, parameterQuery(WITH_SECTIONS,
+            .parameter(WITH_SECTIONS, ob.parameterQuery(WITH_SECTIONS,
                 "Include child Sections"))
         ;
 
         // Query Parameters (Matches)
         builder
-            .parameter(MATCH_ACTIVE, parameterQuery(MATCH_ACTIVE,
+            .parameter(MATCH_ACTIVE, ob.parameterQuery(MATCH_ACTIVE,
                 "Match only active objects (no value required)", true))
-            .parameter(MATCH_NAME, parameterQuery(MATCH_NAME,
+            .parameter(MATCH_NAME, ob.parameterQuery(MATCH_NAME,
                 "Wildcard match on name segment", false))
-            .parameter(MATCH_SCOPE, parameterQuery(MATCH_SCOPE,
+            .parameter(MATCH_SCOPE, ob.parameterQuery(MATCH_SCOPE,
                 "Exact match on scope value", false))
-            .parameter(MATCH_SECTION_IDS, parameterQuery(MATCH_SECTION_IDS,
+            .parameter(MATCH_SECTION_IDS, ob.parameterQuery(MATCH_SECTION_IDS,
                 "Select data for a comma-separated list of Section IDs only", false))
         ;
 
         // Query Parameters (Pagination)
         builder
-            .parameter(LIMIT, parameterQuery(LIMIT,
-                "Maximum number of rows returned (default is usually 25)", false, INTEGER))
+            .parameter(LIMIT, ob.parameterQuery(LIMIT,
+                "Maximum number of rows returned (default is usually 25)", false, ob.INTEGER))
             .parameter(OFFSET,
-                parameterQuery(OFFSET, "Zero-relative offset to the first returned row (default is 0)", false, INTEGER))
+                ob.parameterQuery(OFFSET, "Zero-relative offset to the first returned row (default is 0)", false, ob.INTEGER))
         ;
 
         return builder;
@@ -120,21 +107,21 @@ class Application extends AbstractApplication {
     public responses(): ob.ResponsesObjectBuilder {
         const builder = super.responses();
         // TODO - ResponsesObjectBuilder.response() is missing a "return this"
-        builder.response(BAD_REQUEST, responseError("Error in request properties").build())
-        builder.response(FORBIDDEN, responseError("Requested operation is not allowed").build())
-        builder.response(NOT_FOUND, responseError("Requested item is not found").build())
-        builder.response(NOT_UNIQUE, responseError("Requested item would violate uniqueness rules").build())
-        builder.response(SERVER_ERROR, responseError("General server error has occurred").build())
-        builder.response(UNAUTHORIZED, responseError("Missing or invalid access token").build())
+        builder.response(BAD_REQUEST, ob.responseError("Error in request properties").build())
+        builder.response(FORBIDDEN, ob.responseError("Requested operation is not allowed").build())
+        builder.response(NOT_FOUND, ob.responseError("Requested item is not found").build())
+        builder.response(NOT_UNIQUE, ob.responseError("Requested item would violate uniqueness rules").build())
+        builder.response(SERVER_ERROR, ob.responseError("General server error has occurred").build())
+        builder.response(UNAUTHORIZED, ob.responseError("Missing or invalid access token").build())
         ;
         return builder;
     }
 
     public schemas(): ob.SchemasObjectBuilder {
         const builder = super.schemas()
-            .schema(ERROR, schemaError().build())
-            .schema(INTEGER, new ob.SchemaObjectBuilder("integer").build())
-            .schema(STRING, new ob.SchemaObjectBuilder("string").build())
+            .schema(ob.ERROR, schemaError().build())
+            .schema(ob.INTEGER, new ob.SchemaObjectBuilder("integer").build())
+            .schema(ob.STRING, new ob.SchemaObjectBuilder("string").build())
         ;
         return builder;
     }

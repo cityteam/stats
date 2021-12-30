@@ -5,8 +5,6 @@
 // External Modules ----------------------------------------------------------
 
 import * as ob from "@craigmcc/openapi-builders";
-import AbstractModel from "./generator/AbstractModel";
-import {parameterRef, schemaActive, schemaId, schemaRef} from "./generator/Helpers";
 const pluralize = require("pluralize");
 
 // Internal Modules ----------------------------------------------------------
@@ -22,7 +20,7 @@ import Section from "./Section";
 
 // Public Objects ------------------------------------------------------------
 
-class Category extends AbstractModel {
+class Category extends ob.AbstractModel {
 
     public NAME = "Category";
 
@@ -71,14 +69,14 @@ class Category extends AbstractModel {
 
     public parametersIncludes(): ob.ParametersObjectBuilder {
         const builder = new ob.ParametersObjectBuilder()
-            .parameter(WITH_SECTION, parameterRef(WITH_SECTION))
+            .parameter(WITH_SECTION, ob.parameterRef(WITH_SECTION))
         ;
         return builder;
     }
 
     public parametersMatches(): ob.ParametersObjectBuilder {
         const builder = new ob.ParametersObjectBuilder()
-            .parameter(MATCH_ACTIVE, parameterRef(MATCH_ACTIVE))
+            .parameter(MATCH_ACTIVE, ob.parameterRef(MATCH_ACTIVE))
         ;
         return builder;
     }
@@ -86,16 +84,16 @@ class Category extends AbstractModel {
     public paths(): ob.PathsObjectBuilder {
         const builder = new ob.PathsObjectBuilder()
             .path(this.apiCollection(), this.pathCollection()
-                .parameter(parameterRef(Facility.apiPathId()))
-                .parameter(parameterRef(Section.apiPathId()))
+                .parameter(ob.parameterRef(Facility.apiPathId()))
+                .parameter(ob.parameterRef(Section.apiPathId()))
                 .build())
             .path(this.apiDetail(), this.pathDetail()
-                .parameter(parameterRef(Facility.apiPathId()))
-                .parameter(parameterRef(Section.apiPathId()))
+                .parameter(ob.parameterRef(Facility.apiPathId()))
+                .parameter(ob.parameterRef(Section.apiPathId()))
                 .build())
             .path(this.apiExact(ORDINAL), this.pathExact(REQUIRE_REGULAR, ORDINAL)
-                .parameter(parameterRef(Facility.apiPathId()))
-                .parameter(parameterRef(Section.apiPathId()))
+                .parameter(ob.parameterRef(Facility.apiPathId()))
+                .parameter(ob.parameterRef(Section.apiPathId()))
                 .build())
         ;
         return builder;
@@ -112,8 +110,8 @@ class Category extends AbstractModel {
                 "boolean",
                 "Are totals for this Category accumulated? (not in use)",
                 true).build())
-            .property(ID, schemaId(this.name()).build())
-            .property(ACTIVE, schemaActive(this.name()).build())
+            .property(ID, ob.schemaId(this.name()).build())
+            .property(ACTIVE, ob.schemaActive(this.name()).build())
             .property(DESCRIPTION, new ob.SchemaObjectBuilder(
                 "string",
                 "Description of this Category (not in use)",
@@ -126,7 +124,7 @@ class Category extends AbstractModel {
                 "integer",
                 "Sort order specifier for Categories belonging to its Section",
                 false).build())
-            .property(SECTION, schemaRef(Section.name()))
+            .property(SECTION, ob.schemaRef(Section.name()))
             .property(SECTION_ID, new ob.SchemaObjectBuilder(
                 "integer",
                 "ID of the Section to which this Category belongs",

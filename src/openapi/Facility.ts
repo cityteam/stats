@@ -5,8 +5,6 @@
 // External Modules ----------------------------------------------------------
 
 import * as ob from "@craigmcc/openapi-builders";
-import AbstractModel from "./generator/AbstractModel";
-import {parameterRef, schemaActive, schemaId, schemaRef} from "./generator/Helpers";
 const pluralize = require("pluralize");
 
 // Internal Modules ----------------------------------------------------------
@@ -23,7 +21,7 @@ import Section from "./Section";
 
 // Public Objects ------------------------------------------------------------
 
-class Facility extends AbstractModel {
+class Facility extends ob.AbstractModel {
 
     public NAME = "Facility";
 
@@ -71,16 +69,16 @@ class Facility extends AbstractModel {
 
     public parametersIncludes(): ob.ParametersObjectBuilder {
         const builder = new ob.ParametersObjectBuilder()
-            .parameter(WITH_SECTIONS, parameterRef(WITH_SECTIONS))
+            .parameter(WITH_SECTIONS, ob.parameterRef(WITH_SECTIONS))
         ;
         return builder;
     }
 
     public parametersMatches(): ob.ParametersObjectBuilder {
         const builder = new ob.ParametersObjectBuilder()
-            .parameter(MATCH_ACTIVE, parameterRef(MATCH_ACTIVE))
-            .parameter(MATCH_NAME, parameterRef(MATCH_NAME))
-            .parameter(MATCH_SCOPE, parameterRef(MATCH_SCOPE))
+            .parameter(MATCH_ACTIVE, ob.parameterRef(MATCH_ACTIVE))
+            .parameter(MATCH_NAME, ob.parameterRef(MATCH_NAME))
+            .parameter(MATCH_SCOPE, ob.parameterRef(MATCH_SCOPE))
         ;
         return builder;
     }
@@ -89,13 +87,13 @@ class Facility extends AbstractModel {
         const builder = new ob.PathsObjectBuilder()
             .path(this.apiCollection(), this.pathCollection().build())
             .path(this.apiDetail(), this.pathDetail()
-                .parameter(parameterRef(this.apiPathId()))
+                .parameter(ob.parameterRef(this.apiPathId()))
                 .build())
             .path(this.apiExact(NAME_PATH), this.pathExact(REQUIRE_REGULAR, NAME_PATH)
                 .build())
             .path(this.apiChildren(Section),
                 this.pathChildren(Section, REQUIRE_REGULAR)
-                    .parameter(parameterRef(this.apiPathId()))
+                    .parameter(ob.parameterRef(this.apiPathId()))
                     .build())
         ;
         return builder;
@@ -108,8 +106,8 @@ class Facility extends AbstractModel {
             "entered and reported.  The 'sections' property will ONLY be present " +
             "if it was explicitly included with a 'withSections' query parameter."
         )
-            .property(ID, schemaId(this.name()).build())
-            .property(ACTIVE, schemaActive(this.name()).build())
+            .property(ID, ob.schemaId(this.name()).build())
+            .property(ACTIVE, ob.schemaActive(this.name()).build())
             .property(ADDRESS1, new ob.SchemaObjectBuilder(
                 "string",
                 "First line of the Facility address",
@@ -130,7 +128,7 @@ class Facility extends AbstractModel {
                 "string",
                 "OAuth scope prefix required to access this Facility",
                 false).build())
-            .property(SECTIONS, schemaRef(Section.names()))
+            .property(SECTIONS, ob.schemaRef(Section.names()))
             .property(STATE, new ob.SchemaObjectBuilder(
                 "string",
                 "State abbreviation of the Facility address",
