@@ -39,7 +39,7 @@ export const validateAccessTokenTokenUnique
     }
 }
 
-export const validateCategoryId = async (categoryId: number): Promise<Boolean> => {
+export const validateCategoryId = async (categoryId: number): Promise<boolean> => {
     if (categoryId) {
         const category = await Category.findByPk(categoryId);
         return (category !== null);
@@ -68,7 +68,7 @@ export const validateCategoryOrdinalUnique
     }
 }
 
-export const validateFacilityId = async (facilityId: number): Promise<Boolean> => {
+export const validateFacilityId = async (facilityId: number): Promise<boolean> => {
     if (facilityId) {
         const facility = await Facility.findByPk(facilityId);
         return (facility !== null);
@@ -134,7 +134,7 @@ export const validateRefreshTokenTokenUnique
     }
 }
 
-export const validateSectionId = async (sectionId: number): Promise<Boolean> => {
+export const validateSectionId = async (sectionId: number): Promise<boolean> => {
     if (sectionId) {
         const section = await Section.findByPk(sectionId);
         return (section !== null);

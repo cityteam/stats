@@ -91,7 +91,7 @@ class SummaryServices {
                 if (!accumulated) {
                     accumulated = this.dailyToSummary(daily.sectionId, toDateObject(trimmedDate), categoriesMap, null);
                 }
-                // TODO - increment values for each category
+                // NOTE - increment values for each category
                 for (let i = 0; i < daily.categoryIds.length; i++) {
                     const categoryId = daily.categoryIds[i];
                     let currentValue = accumulated.values[categoryId];
@@ -154,8 +154,7 @@ class SummaryServices {
         });
 
         // Convert to a Summary and return it
-        const summary = this.dailyToSummary(section.id, toDateObject(date), categoriesMap, daily);
-        return summary;
+        return this.dailyToSummary(section.id, toDateObject(date), categoriesMap, daily);
 
     }
 
@@ -200,14 +199,12 @@ class SummaryServices {
                     "SummaryServices.write"
                 )
             }
-            const newSummary = this.dailyToSummary(daily.sectionId, daily.date, categoriesMap, results[1][0])
-            return newSummary;
+            return this.dailyToSummary(daily.sectionId, daily.date, categoriesMap, results[1][0])
         } else {
             daily = await Daily.create(newDaily, {
 //                logging: console.log,
             });
-            const newSummary = this.dailyToSummary(daily.sectionId, daily.date, categoriesMap, daily);
-            return newSummary;
+            return this.dailyToSummary(daily.sectionId, daily.date, categoriesMap, daily);
         }
 
     }
@@ -302,7 +299,7 @@ class SummaryServices {
         };
 
         // Perform the query to select the required information
-        return await Section.findAll(sectionFindOptions);
+        return Section.findAll(sectionFindOptions);
 
     }
 
@@ -350,7 +347,7 @@ class SummaryServices {
         };
 
         // Perform the query to select the required information
-        return await Section.findAll(sectionFindOptions);
+        return Section.findAll(sectionFindOptions);
 
     }
 

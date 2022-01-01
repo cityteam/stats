@@ -4,7 +4,7 @@
 
 // External Modules ----------------------------------------------------------
 
-import {FindOptions, Op} from "sequelize";
+import {FindOptions} from "sequelize";
 
 // Internal Modules ----------------------------------------------------------
 
@@ -38,12 +38,12 @@ class SectionServices extends BaseChildServices<Section, Facility> {
     // Model-Specific Methods ------------------------------------------------
 
     public async categories(facilityId: number, sectionId: number, query?: any): Promise<Category[]> {
-        const facility = await FacilityServices.read("SectionServices.categories", facilityId);
+        await FacilityServices.read("SectionServices.categories", facilityId);
         const section = await this.read("SectionServices.sections", facilityId, sectionId);
         const options: FindOptions = CategoryServices.appendMatchOptions({
             order: SortOrder.CATEGORIES,
         }, query);
-        return await section.$get("categories", options);
+        return section.$get("categories", options);
     }
 
     public async exact(facilityId: number, ordinal: number, query?: any): Promise<Section> {
@@ -85,7 +85,7 @@ class SectionServices extends BaseChildServices<Section, Facility> {
         }
         if (include.length > 0) {
             options.include = include;
-        };
+        }
         return options;
     }
 

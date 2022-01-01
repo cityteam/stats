@@ -43,7 +43,7 @@ class DetailServices extends BaseChildServices<Detail, Category> {
         }
         if (include.length > 0) {
             options.include = include;
-        };
+        }
         return options;
     }
 

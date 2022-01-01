@@ -4,7 +4,7 @@
 
 // External Modules ----------------------------------------------------------
 
-import {FindOptions, Op} from "sequelize";
+import {FindOptions} from "sequelize";
 
 // Internal Modules ----------------------------------------------------------
 
@@ -14,7 +14,6 @@ import Detail from "../models/Detail";
 import Section from "../models/Section";
 import {appendPaginationOptions} from "../util/QueryParameters";
 import * as SortOrder from "../util/SortOrder";
-//import DetailServices from "./DetailServices";
 import SectionServices from "./SectionServices";
 import {NotFound} from "../util/HttpErrors";
 import FacilityServices from "./FacilityServices";
@@ -40,13 +39,13 @@ class CategoryServices extends BaseChildServices<Category, Section> {
     // Model-Specific Methods ------------------------------------------------
 
     public async details(facilityId: number, sectionId: number, categoryId: number, query?: any): Promise<Detail[]> {
-        const facility = await FacilityServices.read("CategoryServices.details", facilityId);
-        const section = await SectionServices.read("CategoryServices.details", facilityId, sectionId);
+        await FacilityServices.read("CategoryServices.details", facilityId);
+        await SectionServices.read("CategoryServices.details", facilityId, sectionId);
         const category = await this.read("CategoryServices.details", sectionId, categoryId);
         const options: FindOptions = DetailServices.appendMatchOptions({
             order: SortOrder.DETAILS,
         }, query);
-        return await category.$get("details", options);
+        return category.$get("details", options);
     }
 
     public async exact(facilityId: number, sectionId: number, ordinal: number, query?: any): Promise<Category> {
@@ -69,7 +68,6 @@ class CategoryServices extends BaseChildServices<Category, Section> {
 
     /**
      * Supported include query parameters:
-     * * withDetails                    Include child Details
      * * withSection                    Include owning Section
      */
     public appendIncludeOptions(options: FindOptions, query?: any): FindOptions {
@@ -78,17 +76,12 @@ class CategoryServices extends BaseChildServices<Category, Section> {
         }
         options = appendPaginationOptions(options, query);
         const include: any = options.include ? options.include : [];
-/* TODO - probably need details with date range and so on
-        if ("" === query.withDetails) {
-            include.push(Detail);
-        }
-*/
         if ("" === query.withSection) {
             include.push(Section);
         }
         if (include.length > 0) {
             options.include = include;
-        };
+        }
         return options;
     }
 

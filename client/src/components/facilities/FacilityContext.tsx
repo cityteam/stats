@@ -113,9 +113,9 @@ export const FacilityContextProvider = (props: any) => {
             return;
         }
         let found = false;
-        availables.forEach(facility => {
-            if (theFacility.id === facility.id) {
-                setFacility(facility);
+        availables.forEach(aFacility => {
+            if (theFacility.id === aFacility.id) {
+                setFacility(aFacility);
                 found = true;
             }
         });

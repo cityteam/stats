@@ -38,7 +38,7 @@ export function generator(application: ob.AbstractApplication, asYaml: boolean =
             .components(application.components().build())
             .paths(application.paths().build())
             .tags(application.tags())
-            // TODO - anything else that is missing
+            // NOTE - add anything else that is missing
     ;
     return asYaml ? builder.asYaml() : builder.asJson();
 }

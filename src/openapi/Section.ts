@@ -95,8 +95,11 @@ class Section extends ob.AbstractModel {
                 .path(this.apiExact(ORDINAL), this.pathExact(REQUIRE_REGULAR, ORDINAL)
                     .parameter(ob.parameterRef(Facility.apiPathId()))
                     .build())
-            // TODO - categories children thing
-            // TODO - dailies children thing
+                .path(this.apiChildren(Category),
+                    this.pathChildren(Category, REQUIRE_REGULAR)
+                        .parameter(ob.parameterRef(Facility.apiPathId()))
+                        .parameter(ob.parameterRef(this.apiPathId()))
+                        .build())
         ;
         return builder;
     }

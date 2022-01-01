@@ -50,9 +50,9 @@ const MonthlyReportSection = (props: Props) => {
             section: Abridgers.SECTION(props.section),
         });
 
-        const calculateColIndex = (categoryId: number, theCategories: Category[]): number => {
+        const calculateColIndex = (categoryId: number, inCategories: Category[]): number => {
             let theIndex = -1;
-            theCategories.forEach((category, index) => {
+            inCategories.forEach((category, index) => {
                 if (category.id === categoryId) {
                     theIndex = index;
                 }
@@ -60,9 +60,9 @@ const MonthlyReportSection = (props: Props) => {
             return theIndex;
         }
 
-        const calculateRowIndex = (date: string, theRows: Row[]): number => {
+        const calculateRowIndex = (date: string, inRows: Row[]): number => {
             let theIndex = -1;
-            theRows.forEach((row, index) => {
+            inRows.forEach((row, index) => {
                 if (row.date === date) {
                     theIndex = index;
                 }

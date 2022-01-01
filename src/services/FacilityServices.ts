@@ -79,8 +79,7 @@ class FacilityServices extends BaseParentServices<Facility> {
                 sectionId: sectionIds.get(standardCategory.sectionId)
             });
         });
-        const categoriesOut = await Category.bulkCreate(categoriesIn as Category[]);
-        return categoriesOut;
+        return Category.bulkCreate(categoriesIn as Category[]);
 
     }
 
@@ -89,7 +88,7 @@ class FacilityServices extends BaseParentServices<Facility> {
         const options: FindOptions = SectionServices.appendMatchOptions({
             order: SortOrder.SECTIONS,
         }, query);
-        return await facility.$get("sections", options);
+        return facility.$get("sections", options);
     }
 
     // Public Helpers --------------------------------------------------------
@@ -109,7 +108,7 @@ class FacilityServices extends BaseParentServices<Facility> {
         }
         if (include.length > 0) {
             options.include = include;
-        };
+        }
         return options;
     }
 
