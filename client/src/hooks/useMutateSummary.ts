@@ -62,9 +62,9 @@ const useMutateSummary = (props: Props = {}): State => {
                 url: url,
                 summary: result,
             });
-        } catch (error) {
-            setError(error as Error);
-            ReportError("useMutateSummary.write", error, {
+        } catch (e) {
+            setError(e as Error);
+            ReportError("useMutateSummary.write", e, {
                 url: url,
                 summary: theSummary,
             }, alertPopup);

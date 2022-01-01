@@ -86,9 +86,9 @@ const useFetchCategories = (props: Props): State => {
                         url: url,
                     });
                 }
-            } catch (error) {
-                setError(error as Error);
-                ReportError("useFetchCategories.fetchCategories", error, {
+            } catch (e) {
+                setError(e as Error);
+                ReportError("useFetchCategories.fetchCategories", e, {
                     loggedIn: loginContext.data.loggedIn,
                     url: url,
                 }, alertPopup);

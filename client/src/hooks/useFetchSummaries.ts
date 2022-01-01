@@ -89,9 +89,9 @@ const useFetchSummaries = (props: Props): State => {
                     });
                 }
                 setSummaries(theSummaries);
-            } catch (error) {
-                setError(error as Error);
-                ReportError("useFetchSummaries.fetchSummaries", error, {
+            } catch (e) {
+                setError(e as Error);
+                ReportError("useFetchSummaries.fetchSummaries", e, {
                     loggedIn: loginContext.data.loggedIn,
                     url: url,
                 }, alertPopup);

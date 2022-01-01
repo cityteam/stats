@@ -26,7 +26,7 @@ import {BadRequest} from "../util/HttpErrors";
                     (`sectionId: Missing Section ${this.sectionId}`)
             }
         },
-        // TODO - Postgres does not allow declaring each categoryIds entry as an FK
+        // NOTE - Postgres does not allow declaring each categoryIds entry as an FK
     }
 })
 class Daily extends Model<Daily> {

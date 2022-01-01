@@ -81,9 +81,9 @@ const useFetchSummary = (props: Props): State => {
                     });
                 }
                 setSummary(theSummary);
-            } catch (error) {
-                setError(error as Error);
-                ReportError("useFetchSummary.fetchSummary", error, {
+            } catch (e) {
+                setError(e as Error);
+                ReportError("useFetchSummary.fetchSummary", e, {
                     loggedIn: loginContext.data.loggedIn,
                     refresh: refresh,
                     url: url,

@@ -69,8 +69,8 @@ const SectionSelector = (props: Props) => {
                 value={index}
             >
                 <option key="-1" value="-1">(Select Section)</option>
-                {fetchSections.sections.map((section, index) => (
-                    <option key={index} value={index}>
+                {fetchSections.sections.map((section, si) => (
+                    <option key={si} value={si}>
                         {section.title}
                     </option>
                 ))}

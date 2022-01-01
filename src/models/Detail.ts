@@ -15,7 +15,7 @@ import {BadRequest} from "../util/HttpErrors";
 
 // Public Objects ------------------------------------------------------------
 
-// TODO - uniqueness on categoryId + date???
+// NOTE - uniqueness on categoryId + date???
 
 @Table({
     tableName: "details",

@@ -57,8 +57,8 @@ const ValueSelector = (props: Props) => {
                 value={index}
             >
                 <option key="-1">{props.header ? props.header : "(Select Value)"}</option>
-                {props.values.map((value, index) => (
-                    <option key={index} value={index}>
+                {props.values.map((value, vi) => (
+                    <option key={vi} value={vi}>
                         {value}
                     </option>
                 ))}

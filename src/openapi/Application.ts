@@ -13,7 +13,7 @@ import {
     BAD_REQUEST, CATEGORY_ID, DATE, DATE_FROM, DATE_TO,
     FACILITY_ID, FORBIDDEN, LIMIT, MATCH_ACTIVE, MATCH_NAME,
     MATCH_SCOPE, MATCH_SECTION_IDS, NAME_PATH,
-    NOT_FOUND, NOT_UNIQUE, OFFSET, OK, ORDINAL,
+    NOT_FOUND, NOT_UNIQUE, OFFSET, ORDINAL,
     REQUIRE_ADMIN, REQUIRE_ANY, REQUIRE_REGULAR, REQUIRE_SUPERUSER,
     SECTION_ID, SERVER_ERROR, UNAUTHORIZED,
     WITH_CATEGORIES, WITH_DAILIES, WITH_FACILITY, WITH_SECTIONS
@@ -106,7 +106,7 @@ class Application extends ob.AbstractApplication {
 
     public responses(): ob.ResponsesObjectBuilder {
         const builder = super.responses();
-        // TODO - ResponsesObjectBuilder.response() is missing a "return this"
+        // NOTE - ResponsesObjectBuilder.response() is missing a "return this"
         builder.response(BAD_REQUEST, ob.responseError("Error in request properties").build())
         builder.response(FORBIDDEN, ob.responseError("Requested operation is not allowed").build())
         builder.response(NOT_FOUND, ob.responseError("Requested item is not found").build())

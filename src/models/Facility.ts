@@ -9,7 +9,6 @@ import {Column, DataType, HasMany, Model, Table}
 
 // Internal Modules ----------------------------------------------------------
 
-//import Category from "./Category";
 import Section from "./Section";
 import {
     validateFacilityNameUnique,

@@ -30,11 +30,11 @@ const YearlyReport = () => {
     // Calculate starting month of the desired fiscal year
     const START_MONTH = "09";       // September
     const yearStartMonth = (): string => {
-        let month = todayMonth();
-        while (month.substr(5, 2) !== START_MONTH) {
-            month = decrementMonth(month, 1);
+        let theMonth = todayMonth();
+        while (theMonth.substr(5, 2) !== START_MONTH) {
+            theMonth = decrementMonth(theMonth, 1);
         }
-        return month;
+        return theMonth;
     }
 
     const facilityContext = useContext(FacilityContext);

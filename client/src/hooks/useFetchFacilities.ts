@@ -75,9 +75,9 @@ const useFetchFacilities = (props: Props): State => {
                     url: url,
                     facilities: Abridgers.FACILITIES(theFacilities),
                 });
-            } catch (error) {
-                setError(error as Error);
-                ReportError("useFetchFacilities.fetchFacilities", error, {
+            } catch (e) {
+                setError(e as Error);
+                ReportError("useFetchFacilities.fetchFacilities", e, {
                     url: url,
                 }, alertPopup);
             }

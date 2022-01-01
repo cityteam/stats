@@ -90,7 +90,7 @@ const CategoryDetails = (props: Props) => {
                     if (!validateCategoryOrdinal(this.parent.ordinal)) {
                         return false;
                     }
-                    return await validateCategoryOrdinalUnique(facilityContext.facility, ToModel.CATEGORY(this.parent));
+                    return validateCategoryOrdinalUnique(facilityContext.facility, ToModel.CATEGORY(this.parent));
                 }),
         service: Yup.string()
             .required("Service is required"),

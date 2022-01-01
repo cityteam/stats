@@ -59,9 +59,9 @@ const useMutateUser = (props: Props = {}): State => {
                 url: url,
                 user: Abridgers.USER(inserted),
             });
-        } catch (error) {
-            setError(error as Error);
-            ReportError("useMutateUser.insert", error, {
+        } catch (e) {
+            setError(e as Error);
+            ReportError("useMutateUser.insert", e, {
                 url: url,
                 user: {
                     ...theUser,
@@ -90,9 +90,9 @@ const useMutateUser = (props: Props = {}): State => {
                 url: url,
                 user: Abridgers.USER(removed),
             });
-        } catch (error) {
-            setError(error as Error);
-            ReportError("useMutateUser.remove", error, {
+        } catch (e) {
+            setError(e as Error);
+            ReportError("useMutateUser.remove", e, {
                 url: url,
                 user: {
                     ...theUser,
@@ -121,9 +121,9 @@ const useMutateUser = (props: Props = {}): State => {
                 url: url,
                 user: Abridgers.USER(updated),
             });
-        } catch (error) {
-            setError(error as Error);
-            ReportError("useMutateUser.update", error, {
+        } catch (e) {
+            setError(e as Error);
+            ReportError("useMutateUser.update", e, {
                 url: url,
                 user: {
                     ...theUser,

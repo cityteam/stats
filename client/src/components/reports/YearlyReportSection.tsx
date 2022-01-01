@@ -47,7 +47,7 @@ const YearlyReportSection = (props: Props) => {
         });
 
         const calculateColIndex = (theMonth: string): number => {
-            let theIndex: number = -1;
+            let theIndex = -1;
             props.months.forEach((month, index) => {
                 if (theMonth === month) {
                     theIndex = index;
@@ -56,9 +56,9 @@ const YearlyReportSection = (props: Props) => {
             return theIndex;
         }
 
-        const calculateRowIndex = (categoryId: number, theRows: Row[]): number => {
-            let theIndex: number = -1;
-            theRows.forEach((row, index) => {
+        const calculateRowIndex = (categoryId: number, inRows: Row[]): number => {
+            let theIndex = -1;
+            inRows.forEach((row, index) => {
                 if (categoryId === row.id) {
                     theIndex = index;
                 }

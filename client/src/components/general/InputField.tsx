@@ -22,7 +22,7 @@ export interface Props {
     name: string;                       // Unique-within-form name of this field
     pattern?: string;                   // Regular expression for valid values [none]
     readOnly?: boolean;                 // Mark field as read only? [false]
-    register: UseFormRegister<any>;     // register object from useForm() // TODO - <any> ???
+    register: UseFormRegister<any>;     // register object from useForm() // NOTE - <any> ???
     type?: "date" | "hidden" | "month" | "number" | "password" | "text" | "time";
                                         // Input field type [text]
 }

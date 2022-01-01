@@ -100,7 +100,7 @@ const FacilityDetails = (props: Props) => {
             .test("unique-name",
                 "That name is already in use",
                 async function (this) {
-                    return await validateFacilityNameUnique(ToModel.FACILITY(this.parent));
+                    return validateFacilityNameUnique(ToModel.FACILITY(this.parent));
                 }
             ),
         phone: Yup.string()
@@ -120,7 +120,7 @@ const FacilityDetails = (props: Props) => {
             .test("unique-scope",
                 "That scope is already in use",
                 async function(value) {
-                    return await validateFacilityScopeUnique(ToModel.FACILITY(this.parent));
+                    return validateFacilityScopeUnique(ToModel.FACILITY(this.parent));
                 }),
         state: Yup.string()
             .nullable()

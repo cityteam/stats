@@ -59,9 +59,9 @@ const useMutateFacility = (props: Props = {}): State => {
                 url: url,
                 facility: Abridgers.FACILITY(inserted),
             });
-        } catch (error) {
-            setError(error as Error);
-            ReportError("useMutateFacility.insert", error, {
+        } catch (e) {
+            setError(e as Error);
+            ReportError("useMutateFacility.insert", e, {
                 url: url,
                 facility: theFacility,
             }, alertPopup);
@@ -87,9 +87,9 @@ const useMutateFacility = (props: Props = {}): State => {
                 url: url,
                 facility: Abridgers.FACILITY(removed),
             });
-        } catch (error) {
-            setError(error as Error);
-            ReportError("useMutateFcility.remove", error, {
+        } catch (e) {
+            setError(e as Error);
+            ReportError("useMutateFcility.remove", e, {
                 url: url,
                 facility: theFacility,
             }, alertPopup);
@@ -115,9 +115,9 @@ const useMutateFacility = (props: Props = {}): State => {
                 url: url,
                 facility: Abridgers.FACILITY(updated),
             });
-        } catch (error) {
-            setError(error as Error);
-            ReportError("useMutateFacility.update", error, {
+        } catch (e) {
+            setError(e as Error);
+            ReportError("useMutateFacility.update", e, {
                 url: url,
                 facility: theFacility,
             }, alertPopup);

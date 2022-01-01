@@ -66,9 +66,9 @@ const useMutateCategory = (props: Props): State => {
                 url: url,
                 category: Abridgers.CATEGORY(inserted),
             });
-        } catch (error) {
-            setError(error as Error);
-            ReportError("useMutateCategory.insert", error, {
+        } catch (e) {
+            setError(e as Error);
+            ReportError("useMutateCategory.insert", e, {
                 url: url,
                 category: theCategory,
             }, alertPopup);
@@ -95,9 +95,9 @@ const useMutateCategory = (props: Props): State => {
                 url: url,
                 category: Abridgers.CATEGORY(removed),
             });
-        } catch (error) {
-            setError(error as Error);
-            ReportError("useMutateCategory.remove", error, {
+        } catch (e) {
+            setError(e as Error);
+            ReportError("useMutateCategory.remove", e, {
                 url: url,
                 category: theCategory,
             }, alertPopup);
@@ -124,9 +124,9 @@ const useMutateCategory = (props: Props): State => {
                 url: url,
                 category: Abridgers.CATEGORY(updated),
             });
-        } catch (error) {
-            setError(error as Error);
-            ReportError("useMutateCategory.update", error, {
+        } catch (e) {
+            setError(e as Error);
+            ReportError("useMutateCategory.update", e, {
                 url: url,
                 category: theCategory,
             }, alertPopup);

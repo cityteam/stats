@@ -85,7 +85,7 @@ const SectionDetails = (props: Props) => {
                     if (!validateSectionOrdinal(this.parent.ordinal)) {
                         return false;
                     }
-                    return await validateSectionOrdinalUnique(ToModel.SECTION(this.parent));
+                    return validateSectionOrdinalUnique(ToModel.SECTION(this.parent));
                 }),
         scope: Yup.string()
             .required("Scope is required"),

@@ -84,9 +84,9 @@ export const FacilitySelector = (props: Props) => {
                 value={index}
             >
                 <option key="-1" value="-1">{placeholder}</option>
-                {facilityContext.facilities.map((facility, index) => (
-                    <option key={index} value={index}>
-                        {facility.name}
+                {facilityContext.facilities.map((aFacility, fi) => (
+                    <option key={fi} value={fi}>
+                        {aFacility.name}
                     </option>
                 ))}
             </Form.Control>

@@ -97,9 +97,9 @@ const useFetchSections = (props: Props): State => {
                         url: url,
                     })
                 }
-            } catch (error) {
-                setError(error as Error);
-                ReportError("useFetchSections.fetchSections", error, {
+            } catch (e) {
+                setError(e as Error);
+                ReportError("useFetchSections.fetchSections", e, {
                     loggedIn: loginContext.data.loggedIn,
                     url: url,
                 }, alertPopup);

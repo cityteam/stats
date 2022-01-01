@@ -63,9 +63,9 @@ const useMutateSection = (props: Props = {}): State => {
                 url: url,
                 section: Abridgers.SECTION(inserted),
             });
-        } catch (error) {
-            setError(error as Error);
-            ReportError("useMutateSection.insert", error, {
+        } catch (e) {
+            setError(e as Error);
+            ReportError("useMutateSection.insert", e, {
                 url: url,
                 section: theSection,
             }, alertPopup);
@@ -92,9 +92,9 @@ const useMutateSection = (props: Props = {}): State => {
                 url: url,
                 section: Abridgers.SECTION(removed),
             });
-        } catch (error) {
-            setError(error as Error);
-            ReportError("useMutateSection.remove", error, {
+        } catch (e) {
+            setError(e as Error);
+            ReportError("useMutateSection.remove", e, {
                 url: url,
                 section: theSection,
             }, alertPopup);
@@ -121,9 +121,9 @@ const useMutateSection = (props: Props = {}): State => {
                 url: url,
                 section: Abridgers.SECTION(updated),
             });
-        } catch (error) {
-            setError(error as Error);
-            ReportError("useMutateSection.update", error, {
+        } catch (e) {
+            setError(e as Error);
+            ReportError("useMutateSection.update", e, {
                 url: url,
                 section: theSection,
             }, alertPopup);
