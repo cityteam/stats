@@ -28,8 +28,12 @@ export interface State {
 export const FacilityContext = createContext<State>({
     facilities: [],
     facility: new Facility({name: "Never Selected"}),
-    handleRefresh: () => {},
-    handleSelect: () => {},
+    handleRefresh: () => {
+        // Will be replaced in the real returned context information
+    },
+    handleSelect: () => {
+        // Will be replaced in the real returned context information
+    },
 });
 
 // Context Provider ----------------------------------------------------------
