@@ -58,7 +58,7 @@
     "custom-env": "^2.0.1",
     "date-fns": "^2.28.0",
     "express": "^5.0.0-alpha.8",
-    "helmet": "^4.6.0",
+    "helmet": "^5.0.0",
     "morgan": "^1.10.0",
     "pg": "^8.7.1",
     "pg-hstore": "^2.3.4",
