@@ -9,6 +9,7 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/cjs/NavDropdown";
 import NavItem from "react-bootstrap/NavItem";
+import {isMobile, useMobileOrientation} from "react-device-detect";
 import ReactNotification from "react-notifications-component";
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import {LinkContainer} from "react-router-bootstrap";
@@ -32,9 +33,19 @@ import {FacilityContextProvider} from "./components/facilities/FacilityContext";
 import FacilitySelector from "./components/facilities/FacilitySelector";
 import {LoginContextProvider} from "./components/login/LoginContext";
 import OpenApiView from "./components/general/OpenApiView";
+import logger from "./util/ClientLogger";
 
 function App() {
-  return (
+
+    const {isLandscape} = useMobileOrientation();
+    logger.info({
+        context: "App.index",
+        isLandscape: isLandscape,
+        isMobile: isMobile,
+        userAgent: window.navigator.userAgent,
+    });
+
+    return (
       <>
           <ReactNotification/>
           <LoginContextProvider>
@@ -48,52 +59,67 @@ function App() {
                           variant="light"
                       >
                           <Navbar.Brand>
-{/*
-                              <img
-                                  alt="CityTeam Logo"
-                                  height={66}
-                                  src="/CityTeamDarkBlue.png"
-                                  width={160}
-                              />
-*/}
-                              CityTeam Stats
+                              {(isLandscape) ? (
+                                  <>
+                                      <img
+                                          alt="CityTeam Logo"
+                                          height={66}
+                                          src="/CityTeamDarkBlue.png"
+                                          width={160}
+                                      />
+                                      <span>&nbsp;CityTeam Stats</span>
+                                  </>
+                              ) : null }
                           </Navbar.Brand>
-                          <Navbar.Toggle aria-controls="basic-navbar-brand"/>
-                          <Navbar.Collapse id="basic-navbar-brand">
-                              <Nav className="mr-auto">
+                          {(isLandscape) ? (
+                              <>
+                                  <Navbar.Toggle aria-controls="basic-navbar-brand"/>
+                                  <Navbar.Collapse id="basic-navbar-brand">
+                                      <Nav className="mr-auto">
+                                          <LinkContainer to="/">
+                                              <NavItem className="nav-link">Home</NavItem>
+                                          </LinkContainer>
+                                          <LinkContainer to="/entries">
+                                              <NavItem className="nav-link">Entries</NavItem>
+                                          </LinkContainer>
+                                          <NavDropdown id="reports" title="Reports">
+                                              <LinkContainer to="/report-month">
+                                                  <NavDropdown.Item>Monthly Summary</NavDropdown.Item>
+                                              </LinkContainer>
+                                              <LinkContainer to="/report-year">
+                                                  <NavDropdown.Item>Yearly Summary</NavDropdown.Item>
+                                              </LinkContainer>
+                                              <LinkContainer to="/report-configuration">
+                                                  <NavDropdown.Item>Configuration Report</NavDropdown.Item>
+                                              </LinkContainer>
+                                          </NavDropdown>
+                                          <NavDropdown id="admin" title="Admin">
+                                              <LinkContainer to="/admin-categories">
+                                                  <NavDropdown.Item>Categories</NavDropdown.Item>
+                                              </LinkContainer>
+                                              <LinkContainer to="/admin-facilities">
+                                                  <NavDropdown.Item>Facilities</NavDropdown.Item>
+                                              </LinkContainer>
+                                              <LinkContainer to="/admin-sections">
+                                                  <NavDropdown.Item>Sections</NavDropdown.Item>
+                                              </LinkContainer>
+                                              <LinkContainer to="/admin-users">
+                                                  <NavDropdown.Item>Users</NavDropdown.Item>
+                                              </LinkContainer>
+                                          </NavDropdown>
+                                      </Nav>
+                                  </Navbar.Collapse>
+                              </>
+                          ) : (
+                              <>
                                   <LinkContainer to="/">
                                       <NavItem className="nav-link">Home</NavItem>
                                   </LinkContainer>
                                   <LinkContainer to="/entries">
                                       <NavItem className="nav-link">Entries</NavItem>
                                   </LinkContainer>
-                                  <NavDropdown id="reports" title="Reports">
-                                      <LinkContainer to="/report-month">
-                                          <NavDropdown.Item>Monthly Summary</NavDropdown.Item>
-                                      </LinkContainer>
-                                      <LinkContainer to="/report-year">
-                                          <NavDropdown.Item>Yearly Summary</NavDropdown.Item>
-                                      </LinkContainer>
-                                      <LinkContainer to="/report-configuration">
-                                          <NavDropdown.Item>Configuration Report</NavDropdown.Item>
-                                      </LinkContainer>
-                                  </NavDropdown>
-                                  <NavDropdown id="admin" title="Admin">
-                                      <LinkContainer to="/admin-categories">
-                                          <NavDropdown.Item>Categories</NavDropdown.Item>
-                                      </LinkContainer>
-                                      <LinkContainer to="/admin-facilities">
-                                          <NavDropdown.Item>Facilities</NavDropdown.Item>
-                                      </LinkContainer>
-                                      <LinkContainer to="/admin-sections">
-                                          <NavDropdown.Item>Sections</NavDropdown.Item>
-                                      </LinkContainer>
-                                      <LinkContainer to="/admin-users">
-                                          <NavDropdown.Item>Users</NavDropdown.Item>
-                                      </LinkContainer>
-                                  </NavDropdown>
-                              </Nav>
-                          </Navbar.Collapse>
+                              </>
+                          ) }
                           <LoggedInUser/>
                           <span className="mr-2"/>
                           <FacilitySelector/>
