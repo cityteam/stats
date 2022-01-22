@@ -63,11 +63,11 @@ function App() {
                                   <>
                                       <img
                                           alt="CityTeam Logo"
-                                          height={66}
-                                          src="/CityTeamDarkBlue.png"
-                                          width={160}
+                                          height={64}
+                                          src="/CityTeamInitials64.png"
+                                          width={64}
                                       />
-                                      <span>&nbsp;CityTeam Stats</span>
+                                      <span>&nbsp;&nbsp;CityTeam Stats</span>
                                   </>
                               ) : null }
                           </Navbar.Brand>
