@@ -64,7 +64,7 @@ function App() {
                                       <img
                                           alt="CityTeam Logo"
                                           height={64}
-                                          src="/CityTeamInitials64.png"
+                                          src="/CityTeamInitials64-nobg.png"
                                           width={64}
                                       />
                                       <span>&nbsp;&nbsp;CityTeam Stats</span>
