@@ -1,37 +1,26 @@
-## Welcome to GitHub Pages
+# CityTeam Stats Application
 
-You can use the [editor on GitHub](https://github.com/cityteam/stats/edit/main/docs/index.md) to maintain and preview the content for your website in Markdown files.
+Welcome to the CityTeam Stats Application, designed to assist CityTeam
+Facilities in accumulating daily operational statistics that need to be
+reported to the Home Office periodically.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+[CityTeam](https://cityteam.org) offers programs for outreach to, and
+support of homeless communities, as well as recovery from addition,
+in several US cities.  See their website for more information.
 
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/cityteam/stats/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+The information covered is targeted for different user types, with
+separate pages customized to your needs:
+* [I need to enter statistics](./USER.md).  You can operate the
+  application through a standard web browser, or (on a table or mobile
+  phone) by downloading an application from the Amazon Appstore.
+* [I need to administer the statistics being recorded](./ADMIN.md).  Your
+  username and password will provide access to additional features that
+  let you set the required statistics for your CityTeam Facility.
+* [I need to install the application locally](./INSTALL.md).  Our facility
+  prefers to run the application on our local network, instead of using
+  the version on the Internet.
+* [I need to work on the software that drives this application(./DEVELOP.md)].
+  The source code for the entire application is open source, and available
+  [at GitHub](https://cityteam.github.com/stats).  You will need to install
+  a local version (see the [installation instructions](./INSTALL.md) and
+  then the extra information found here.
