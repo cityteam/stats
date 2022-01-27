@@ -19,7 +19,7 @@ separate pages customized to your needs:
 * [I need to install the application locally](./INSTALL.md).  Our facility
   prefers to run the application on our local network, instead of using
   the version on the Internet.
-* [I need to work on the software that drives this application(./DEVELOP.md)].
+* [I need to work on the software that drives this application](./DEVELOP.md).
   The source code for the entire application is open source, and available
   [at GitHub](https://cityteam.github.com/stats).  You will need to install
   a local version (see the [installation instructions](./INSTALL.md) and
