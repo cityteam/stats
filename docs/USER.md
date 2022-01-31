@@ -1,6 +1,6 @@
 [Home](./index.md)
 
-# CityTeam Stats Application - Information For Users
+# Information For Users
 
 ## How do I get to the application?
 
