@@ -51,6 +51,7 @@
   "dependencies": {
     "@craigmcc/oauth-orchestrator": "^1.0.1",
     "@craigmcc/openapi-builders": "^2.0.0",
+    "axios": "^0.25.0",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
@@ -67,7 +68,8 @@
     "reflect-metadata": "^0.1.13",
     "rotating-file-stream": "^3.0.2",
     "sequelize": "^6.15.0",
-    "sequelize-typescript": "^2.1.2"
+    "sequelize-typescript": "^2.1.2",
+    "yargs": "^17.3.1"
   },
   "devDependencies": {
     "@types/chai": "^4.3.0",
