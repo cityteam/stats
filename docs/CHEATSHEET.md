@@ -1,4 +1,5 @@
 [Home](./index.md)
+[Installation](./INSTALL.md)
 
 # Configuration Cheat Sheet
 

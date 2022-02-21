@@ -18,7 +18,9 @@ separate pages customized to your needs:
   let you set the required statistics for your CityTeam Facility.
 * [I need to install the application locally](./INSTALL.md).  Our facility
   prefers to run the application on our local network, instead of using
-  the version on the Internet.
+  the version on the Internet.  See also an empty
+  [Cheat Sheet](./CHEATSHEET.md) on which you can record configuration
+  information as you perform the installation.
 * [I need to work on the software that drives this application](./DEVELOP.md).
   The source code for the entire application is open source, and available
   [at GitHub](https://cityteam.github.com/stats).  You will need to install
