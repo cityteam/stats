@@ -1,7 +1,7 @@
 {
   "name": "client",
   "version": "0.1.0",
-  "proxy": "http://localhost:8087",
+  "proxy": "http://localhost:8082",
   "private": true,
   "dependencies": {
     "@hookform/resolvers": "^2.8.4",
