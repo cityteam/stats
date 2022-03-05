@@ -28,6 +28,7 @@ OpenApiRouter.get("/", (req: Request, res: Response) => {
         OPEN_API = generator(Application);
     }
     res.header("Content-Type", "application/json")
+        .header("Access-Control-Allow-Origin", "*")
         .send(OPEN_API);
 });
 
