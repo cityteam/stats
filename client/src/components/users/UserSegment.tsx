@@ -10,13 +10,13 @@ import React, {useContext, useEffect, useState} from "react";
 
 import UserDetails from "./UserDetails";
 import UserOptions from "./UserOptions";
+import MutatingProgress from "../general/MutatingProgress";
 import LoginContext from "../login/LoginContext";
 import {HandleAction, HandleUser, Scope} from "../../types";
 import useMutateUser from "../../hooks/useMutateUser";
 import User from "../../models/User";
 import * as Abridgers from "../../util/Abridgers";
 import logger from "../../util/ClientLogger";
-import SavingProgress from "../general/SavingProgress";
 
 // Component Details ---------------------------------------------------------
 
@@ -32,7 +32,7 @@ const UserSegment = () => {
     const [canInsert, setCanInsert] = useState<boolean>(false);
     const [canRemove, setCanRemove] = useState<boolean>(false);
     const [canUpdate, setCanUpdate] = useState<boolean>(false);
-    const [title, setTitle] = useState<string>("");
+    const [message, setMessage] = useState<string>("");
     const [user, setUser] = useState<User>(new User());
     const [view, setView] = useState<View>(View.OPTIONS);
 
@@ -89,7 +89,7 @@ const UserSegment = () => {
 
     // Handle insert of a new User
     const handleInsert: HandleUser = async (theUser) => {
-        setTitle(theUser.username);
+        setMessage(`Inserting User '${theUser.username}'`);
         const inserted = await mutateUser.insert(theUser);
         logger.info({
             context: "UserSegment.handleInsert",
@@ -100,7 +100,7 @@ const UserSegment = () => {
 
     // Handle remove of an existing User
     const handleRemove: HandleUser = async (theUser) => {
-        setTitle(theUser.username);
+        setMessage(`Removing User '${theUser.username}'`);
         const removed = await mutateUser.remove(theUser);
         logger.info({
             context: "UserSegment.handleRemove",
@@ -111,7 +111,7 @@ const UserSegment = () => {
 
     // Handle update of an existing User
     const handleUpdate: HandleUser = async (theUser) => {
-        setTitle(theUser.username);
+        setMessage(`Updating User '${theUser.username}'`);
         const updated = await mutateUser.update(theUser);
         logger.info({
             context: "UserSegment.handleUpdate",
@@ -123,10 +123,10 @@ const UserSegment = () => {
     return (
         <>
 
-            <SavingProgress
+            <MutatingProgress
                 error={mutateUser.error}
                 executing={mutateUser.executing}
-                title={title}
+                message={message}
             />
 
             {(view === View.DETAILS) ? (

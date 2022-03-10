@@ -17,6 +17,7 @@ import Tabs from "react-bootstrap/Tabs";
 import MonthlyReportSection from "./MonthlyReportSection";
 import FacilityContext from "../facilities/FacilityContext";
 import CheckBox from "../general/CheckBox";
+import FetchingProgress from "../general/FetchingProgress";
 import MonthSelector from "../general/MonthSelector";
 import {HandleBoolean, HandleMonth} from "../../types";
 import useFetchSections from "../../hooks/useFetchSections";
@@ -38,10 +39,12 @@ const MonthlyReport = () => {
 
     const fetchSections = useFetchSections({
         active: active,
+        alertPopup: false,
         withCategories: true,
     });
     const fetchSummaries = useFetchSummaries({
         active: active,
+        alertPopup: false,
         dateFrom: dateFrom,
         dateTo: dateTo,
         monthlies: false,
@@ -77,6 +80,17 @@ const MonthlyReport = () => {
 
     return (
         <Container fluid id="MonthlyReport">
+
+            <FetchingProgress
+                error={fetchSections.error}
+                loading={fetchSections.loading}
+                message="Fetching selected Sections"
+            />
+            <FetchingProgress
+                error={fetchSummaries.error}
+                loading={fetchSummaries.loading}
+                message="Fetching selected Summaries"
+            />
 
             <Row className="mb-4 ml-1 mr-1">
                 <Col className="text-left">

@@ -11,7 +11,8 @@ import Table from "react-bootstrap/Table";
 
 // Internal Modules ----------------------------------------------------------
 
-import SavingProgress from "../general/SavingProgress";
+import FetchingProgress from "../general/FetchingProgress";
+import MutatingProgress from "../general/MutatingProgress";
 import {HandleAction, OnChangeInput} from "../../types";
 import useFetchSummary from "../../hooks/useFetchSummary";
 import useMutateSummary from "../../hooks/useMutateSummary";
@@ -40,11 +41,12 @@ const EntriesSection = (props: Props) => {
 
     const [categories, setCategories] = useState<Category[]>([]);
     const [dirty, setDirty] = useState<boolean>(false);
+    const [message, setMessage] = useState<string>("");
     const [refresh, setRefresh] = useState<boolean>(false);
-    const [title, setTitle] = useState<string>("");
     const [values, setValues] = useState<VALUES>({});
 
     const fetchSummary = useFetchSummary({
+        alertPopup: false,
         date: props.date,
         section: props.section,
     });
@@ -142,7 +144,7 @@ const EntriesSection = (props: Props) => {
         });
 
         // Send the Summary and handle the results
-        setTitle(props.section.slug);
+        setMessage(`Sending Summary '${props.section.slug}'`);
         await mutateSummary.write(theSummary);
         if (!mutateSummary.error) {
             setDirty(false);
@@ -153,10 +155,15 @@ const EntriesSection = (props: Props) => {
     return (
         <>
 
-            <SavingProgress
+            <FetchingProgress
+                error={fetchSummary.error}
+                loading={fetchSummary.loading}
+                message="Fetching selected Summary"
+            />
+            <MutatingProgress
                 error={mutateSummary.error}
                 executing={mutateSummary.executing}
-                title={title}
+                message={message}
             />
 
             <form

@@ -10,12 +10,12 @@ import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/cjs/NavDropdown";
 import NavItem from "react-bootstrap/NavItem";
 import {isMobile, useMobileOrientation} from "react-device-detect";
-import ReactNotification from "react-notifications-component";
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import {LinkContainer} from "react-router-bootstrap";
+import {ToastContainer} from "react-toastify";
 
 import "bootstrap/dist/css/bootstrap.min.css";
-import "react-notifications-component/dist/theme.css";
+import "react-toastify/dist/ReactToastify.css";
 
 // Internal Modules ----------------------------------------------------------
 
@@ -46,7 +46,15 @@ function App() {
 
     return (
       <>
-          <ReactNotification/>
+          <ToastContainer
+              autoClose={5000}
+              closeOnClick={true}
+              draggable={false}
+              hideProgressBar={false}
+              newestOnTop={false}
+              position="top-right"
+              theme="colored"
+          />
           <LoginContextProvider>
               <FacilityContextProvider>
                   <Router>

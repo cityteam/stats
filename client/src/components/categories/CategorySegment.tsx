@@ -11,7 +11,7 @@ import React, {useContext, useEffect, useState} from "react";
 import CategoryDetails from "./CategoryDetails";
 import CategoryOptions from "./CategoryOptions";
 import FacilityContext from "../facilities/FacilityContext";
-import SavingProgress from "../general/SavingProgress";
+import MutatingProgress from "../general/MutatingProgress";
 import LoginContext from "../login/LoginContext";
 import {HandleAction, HandleCategory, HandleSection, Scope} from "../../types";
 import useMutateCategory from "../../hooks/useMutateCategory";
@@ -36,8 +36,8 @@ const CategorySegment = () => {
     const [canRemove, setCanRemove] = useState<boolean>(false);
     const [canUpdate, setCanUpdate] = useState<boolean>(false);
     const [category, setCategory] = useState<Category>(new Category());
+    const [message, setMessage] = useState<string>("");
     const [section, setSection] = useState<Section>(new Section());
-    const [title, setTitle] = useState<string>("");
     const [view, setView] = useState<View>(View.OPTIONS);
 
     const mutateCategory = useMutateCategory({
@@ -101,7 +101,7 @@ const CategorySegment = () => {
 
     // Handle insert of a new Category
     const handleInsert: HandleCategory = async (theCategory) => {
-        setTitle(theCategory.service);
+        setMessage(`Inserting Category '${theCategory.service}'`);
         const inserted = await mutateCategory.insert(theCategory);
         logger.debug({
             context: "CategorySegment.handleInsert",
@@ -112,7 +112,7 @@ const CategorySegment = () => {
 
     // Handle remove of an existing Category
     const handleRemove: HandleCategory = async (theCategory) => {
-        setTitle(theCategory.service);
+        setMessage(`Removing Category '${theCategory.service}'`);
         const removed = await mutateCategory.remove(theCategory);
         logger.debug({
             context: "CategorySegment.handleRemove",
@@ -132,7 +132,7 @@ const CategorySegment = () => {
 
     // Handle update of an existing Category
     const handleUpdate: HandleCategory = async (theCategory) => {
-        setTitle(theCategory.service);
+        setMessage(`Updating Category '${theCategory.service}'`);
         const updated = await mutateCategory.update(theCategory);
         logger.debug({
             context: "CategorySegment.handleUpdate",
@@ -144,10 +144,10 @@ const CategorySegment = () => {
     return (
         <>
 
-            <SavingProgress
+            <MutatingProgress
                 error={mutateCategory.error}
                 executing={mutateCategory.executing}
-                title={title}
+                message={message}
             />
 
             {(view === View.DETAILS) ? (

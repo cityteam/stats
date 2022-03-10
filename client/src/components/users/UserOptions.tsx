@@ -16,7 +16,7 @@ import Table from "react-bootstrap/Table";
 
 import LoginContext from "../login/LoginContext";
 import CheckBox from "../general/CheckBox";
-import LoadingProgress from "../general/LoadingProgress";
+import FetchingProgress from "../general/FetchingProgress";
 import {HandleAction, HandleBoolean, HandleUser, Scope} from "../../types";
 import useFetchUsers from "../../hooks/useFetchUsers";
 import User from "../../models/User";
@@ -75,10 +75,10 @@ const UserOptions = (props: Props) => {
     return (
         <Container fluid id="UserOptions">
 
-            <LoadingProgress
+            <FetchingProgress
                 error={fetchUsers.error}
                 loading={fetchUsers.loading}
-                title="Selected Users"
+                message="Fetching selected Users"
             />
 
             <Row className="mb-3 ml-1 mr-1">

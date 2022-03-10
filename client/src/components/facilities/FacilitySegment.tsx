@@ -11,7 +11,7 @@ import React, {useContext, useEffect, useState} from "react";
 import FacilityContext from "./FacilityContext";
 import FacilityDetails from "./FacilityDetails";
 import FacilityOptions from "./FacilityOptions";
-import SavingProgress from "../general/SavingProgress";
+import MutatingProgress from "../general/MutatingProgress";
 import LoginContext from "../login/LoginContext";
 import {HandleAction, HandleFacility, Scope} from "../../types";
 import useMutateFacility from "../../hooks/useMutateFacility";
@@ -35,7 +35,7 @@ const FacilitySegment = () => {
     const [canRemove, setCanRemove] = useState<boolean>(false);
     const [canUpdate, setCanUpdate] = useState<boolean>(false);
     const [facility, setFacility] = useState<Facility>(new Facility());
-    const [title, setTitle] = useState<string>("");
+    const [message, setMessage] = useState<string>("");
     const [view, setView] = useState<View>(View.OPTIONS);
 
     const mutateFacility = useMutateFacility({
@@ -97,7 +97,7 @@ const FacilitySegment = () => {
 
     // Handle insert of a new Facility
     const handleInsert: HandleFacility = async (theFacility) => {
-        setTitle(theFacility.name);
+        setMessage(`Inserting Facility '${theFacility.name}'`);
         const inserted = await mutateFacility.insert(theFacility);
         logger.info({
             context: "FacilitySegment.handleInsert",
@@ -109,7 +109,7 @@ const FacilitySegment = () => {
 
     // Handle remove of an existing Facility
     const handleRemove: HandleFacility = async (theFacility) => {
-        setTitle(theFacility.name);
+        setMessage(`Removing Facility '${theFacility.name}'`);
         const removed = await mutateFacility.remove(theFacility);
         logger.info({
             context: "FacilitySegment.handleRemove",
@@ -121,7 +121,7 @@ const FacilitySegment = () => {
 
     // Handle update of an existing Facility
     const handleUpdate: HandleFacility = async (theFacility) => {
-        setTitle(theFacility.name);
+        setMessage(`Updating Facility '${theFacility.name}'`);
         const updated = await mutateFacility.update(theFacility);
         logger.info({
             context: "FacilitySegment.handleUpdate",
@@ -135,10 +135,10 @@ const FacilitySegment = () => {
 
         <>
 
-            <SavingProgress
+            <MutatingProgress
                 error={mutateFacility.error}
                 executing={mutateFacility.executing}
-                title={title}
+                message={message}
             />
 
             {(view === View.DETAILS) ? (

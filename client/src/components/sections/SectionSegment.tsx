@@ -11,7 +11,7 @@ import React, {useContext, useEffect, useState} from "react";
 import SectionDetails from "./SectionDetails";
 import SectionOptions from "./SectionOptions";
 import FacilityContext from "../facilities/FacilityContext";
-import SavingProgress from "../general/SavingProgress";
+import MutatingProgress from "../general/MutatingProgress";
 import LoginContext from "../login/LoginContext";
 import {HandleAction, HandleSection, Scope} from "../../types";
 import useMutateSection from "../../hooks/useMutateSection";
@@ -34,8 +34,8 @@ const SectionSegment = () => {
     const [canInsert, setCanInsert] = useState<boolean>(false);
     const [canRemove, setCanRemove] = useState<boolean>(false);
     const [canUpdate, setCanUpdate] = useState<boolean>(false);
+    const [message, setMessage] = useState<string>("");
     const [section, setSection] = useState<Section>(new Section());
-    const [title, setTitle] = useState<string>("");
     const [view, setView] = useState<View>(View.OPTIONS);
 
     const mutateSection = useMutateSection({
@@ -96,7 +96,7 @@ const SectionSegment = () => {
 
     // Handle insert of a new Section
     const handleInsert: HandleSection = async (theSection) => {
-        setTitle(theSection.title);
+        setMessage(`Inserting Section '${theSection.title}'`);
         const inserted = await mutateSection.insert(theSection);
         logger.debug({
             context: "SectionSegment.handleInsert",
@@ -107,7 +107,7 @@ const SectionSegment = () => {
 
     // Handle remove of an existing Section
     const handleRemove: HandleSection = async (theSection) => {
-        setTitle(theSection.title);
+        setMessage(`Removing Section '${theSection.title}'`);
         const removed = await mutateSection.remove(theSection);
         logger.debug({
             context: "SectionSegment.handleRemove",
@@ -118,7 +118,7 @@ const SectionSegment = () => {
 
     // Handle update of an existing Section
     const handleUpdate: HandleSection = async (theSection) => {
-        setTitle(theSection.title);
+        setMessage(`Updating Section '${theSection.title}'`);
         const updated = await mutateSection.update(theSection);
         logger.debug({
             context: "SectionSegment.handleUpdate",
@@ -130,10 +130,10 @@ const SectionSegment = () => {
     return (
         <>
 
-            <SavingProgress
+            <MutatingProgress
                 error={mutateSection.error}
                 executing={mutateSection.executing}
-                title={title}
+                message={message}
             />
 
             {(view === View.DETAILS) ? (

@@ -16,7 +16,7 @@ import Table from "react-bootstrap/Table";
 
 import FacilityContext from "../facilities/FacilityContext";
 import CheckBox from "../general/CheckBox";
-import LoadingProgress from "../general/LoadingProgress";
+import FetchingProgress from "../general/FetchingProgress";
 import LoginContext from "../login/LoginContext";
 import {HandleAction, HandleBoolean, HandleSection} from "../../types";
 import useFetchSections from "../../hooks/useFetchSections";
@@ -69,10 +69,10 @@ const SectionOptions = (props: Props) => {
     return (
         <Container fluid id="SectionOptions">
 
-            <LoadingProgress
+            <FetchingProgress
                 error={fetchSections.error}
                 loading={fetchSections.loading}
-                title="Selected Sections"
+                message="Fetching selected Sections"
             />
 
             <Row className="mb-3 ml-1 mr-1">

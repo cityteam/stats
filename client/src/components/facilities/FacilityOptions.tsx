@@ -16,7 +16,7 @@ import Table from "react-bootstrap/Table";
 
 import FacilityContext from "./FacilityContext";
 import CheckBox from "../general/CheckBox";
-import LoadingProgress from "../general/LoadingProgress";
+import FetchingProgress from "../general/FetchingProgress";
 import LoginContext from "../login/LoginContext";
 import {HandleAction, HandleBoolean, HandleFacility, Scope} from "../../types";
 import Facility from "../../models/Facility";
@@ -74,10 +74,10 @@ const FacilityOptions = (props: Props) => {
     return (
         <Container fluid id="FacilityOptions">
 
-            <LoadingProgress
+            <FetchingProgress
                 error={fetchFacilities.error}
                 loading={fetchFacilities.loading}
-                title="Selected Facilities"
+                message="Fetching selected Facilities"
             />
 
             <Row className="mb-3 ml-1 mr-1">
