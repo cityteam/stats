@@ -4,7 +4,7 @@
   "proxy": "http://localhost:8082",
   "private": true,
   "dependencies": {
-    "@hookform/resolvers": "^2.8.4",
+    "@hookform/resolvers": "^2.8.8",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
