@@ -5,11 +5,10 @@
 // External Modules ----------------------------------------------------------
 
 import React, {useState} from "react";
-import Form from "react-bootstrap/Form";
 
 // Internal Modules ----------------------------------------------------------
 
-import {HandleValue, OnChangeInput} from "../../types";
+import {HandleValue, OnChangeSelect} from "../../types";
 import logger from "../../util/ClientLogger";
 
 // Incoming Properties -------------------------------------------------------
@@ -31,7 +30,7 @@ const ValueSelector = (props: Props) => {
 
     const [index, setIndex] = useState<number>(-1);
 
-    const onChange: OnChangeInput = (event): void => {
+    const onChange: OnChangeSelect = (event): void => {
         const theIndex = parseInt(event.target.value);
         setIndex(theIndex);
         logger.trace({
@@ -43,17 +42,16 @@ const ValueSelector = (props: Props) => {
     }
 
     return (
-        <Form inline>
-            <Form.Label className="mr-2" htmlFor={props.name ? props.name : "valueSelector"}>
+        <div className="form-inline">
+            <label className="me-2" htmlFor={props.name ? props.name : "valueSelector"}>
                 {props.label ? props.label : "Value:"}
-            </Form.Label>
-            <Form.Control
-                as="select"
+            </label>
+            <select
                 autoFocus={(props.autoFocus !== undefined) ? props.autoFocus : undefined}
+                className="form-control-sm me-2"
                 disabled={(props.disabled !== undefined) ? props.disabled : undefined}
                 id={props.name ? props.name : "valueSelector"}
                 onChange={onChange}
-                size="sm"
                 value={index}
             >
                 <option key="-1">{props.header ? props.header : "(Select Value)"}</option>
@@ -62,8 +60,8 @@ const ValueSelector = (props: Props) => {
                         {value}
                     </option>
                 ))}
-            </Form.Control>
-        </Form>
+            </select>
+        </div>
     )
 
 }

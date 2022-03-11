@@ -48,21 +48,25 @@ function Navigation() {
                 <Navbar.Toggle aria-controls="basic-navbar-nav"/>
 
                 <Navbar.Collapse>
-                    <Nav className="mr-auto">
+                    <Nav className="me-auto">
                         <NavLink className="nav-link" to="/">Home</NavLink>
                         <NavLink className="nav-link" to="/entries">Entries</NavLink>
                         {(isLandscape) ? (
                             <>
                                 <NavDropdown id="Reports" title="Reports">
-                                    <NavLink className="nav-link" to="/report-month">Monthly Summary</NavLink>
-                                    <NavLink className="nav-link" to="/report-year">Yearly Summary</NavLink>
-                                    <NavLink className="nav-link" to="/report-configuration">Configuration Report</NavLink>
+                                    <NavDropdown.Item>
+                                        <NavLink className="nav-link" to="/report-month">Monthly Summary</NavLink>
+                                        <NavLink className="nav-link" to="/report-year">Yearly Summary</NavLink>
+                                        <NavLink className="nav-link" to="/report-configuration">Configuration Report</NavLink>
+                                    </NavDropdown.Item>
                                 </NavDropdown>
                                 <NavDropdown id="Admin" title="Admin">
-                                    <NavLink className="nav-link" to="/admin-categories">Categories</NavLink>
-                                    <NavLink className="nav-link" to="/admin-facilities">Facilities</NavLink>
-                                    <NavLink className="nav-link" to="/admin-sections">Sections</NavLink>
-                                    <NavLink className="nav-link" to="/admin-users">Users</NavLink>
+                                    <NavDropdown.Item>
+                                        <NavLink className="nav-link" to="/admin-categories">Categories</NavLink>
+                                        <NavLink className="nav-link" to="/admin-facilities">Facilities</NavLink>
+                                        <NavLink className="nav-link" to="/admin-sections">Sections</NavLink>
+                                        <NavLink className="nav-link" to="/admin-users">Users</NavLink>
+                                    </NavDropdown.Item>
                                 </NavDropdown>
                             </>
                         ) : (
@@ -71,9 +75,9 @@ function Navigation() {
                         ) }
                     </Nav>
                     <LoggedInUser/>
-                    <span className="mr-4"/>
+                    <span className="me-4"/>
                     <FacilitySelector/>
-                    <span className="mr-2"/>
+                    <span className="me-2"/>
                 </Navbar.Collapse>
 
             </Navbar>

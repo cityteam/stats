@@ -152,7 +152,7 @@ const FacilityDetails = (props: Props) => {
             <Container id="FacilityDetails">
 
                 <Row className="mb-3">
-                    <Col className="text-left">
+                    <Col className="text-start">
                         {(adding) ? (
                             <span><strong>Add New</strong></span>
                         ) : (
@@ -160,7 +160,7 @@ const FacilityDetails = (props: Props) => {
                         )}
                         <span><strong>&nbsp;Facility</strong></span>
                     </Col>
-                    <Col className="text-right">
+                    <Col className="text-end">
                         <Button
                             onClick={props.handleBack}
                             size="sm"
@@ -176,7 +176,7 @@ const FacilityDetails = (props: Props) => {
                     onSubmit={handleSubmit(onSubmit)}
                 >
 
-                    <Form.Row id="nameScopeRow">
+                    <Row className="mb-3" id="nameScopeRow">
                         <TextField
                             autoFocus={(props.autoFocus !== undefined) ? props.autoFocus : undefined}
                             className="col-8"
@@ -193,9 +193,9 @@ const FacilityDetails = (props: Props) => {
                             register={register}
                             valid="Scope required to access this Facility."
                         />
-                    </Form.Row>
+                    </Row>
 
-                    <Form.Row id="addressRow">
+                    <Row className="mb-3" id="addressRow">
                         <TextField
                             errors={errors}
                             label="Address 1"
@@ -208,9 +208,9 @@ const FacilityDetails = (props: Props) => {
                             name="address2"
                             register={register}
                         />
-                    </Form.Row>
+                    </Row>
 
-                    <Form.Row id="cityStateZipRow">
+                    <Row className="mb-3" id="cityStateZipRow">
                         <TextField
                             className="col-7"
                             errors={errors}
@@ -232,9 +232,9 @@ const FacilityDetails = (props: Props) => {
                             name="zipCode"
                             register={register}
                         />
-                    </Form.Row>
+                    </Row>
 
-                    <Form.Row id="emailPhoneRow">
+                    <Row className="mb-3" id="emailPhoneRow">
                         <TextField
                             className="col-8"
                             errors={errors}
@@ -249,19 +249,19 @@ const FacilityDetails = (props: Props) => {
                             name="phone"
                             register={register}
                         />
-                    </Form.Row>
+                    </Row>
 
-                    <Form.Row className="mb-3" id="activeRow">
+                    <Row className="mb-3" id="activeRow">
                         <CheckBoxField
                             errors={errors}
                             label="Active?"
                             name="active"
                             register={register}
                         />
-                    </Form.Row>
+                    </Row>
 
                     <Row className="mb-3">
-                        <Col className="text-left">
+                        <Col className="text-start">
                             <Button
                                 disabled={!props.handleInsert && !props.handleUpdate}
                                 size="sm"
@@ -269,7 +269,7 @@ const FacilityDetails = (props: Props) => {
                                 variant="primary"
                             >Save</Button>
                         </Col>
-                        <Col className="text-right">
+                        <Col className="text-end">
                             <Button
                                 disabled={adding || !props.handleRemove}
                                 onClick={onConfirm}

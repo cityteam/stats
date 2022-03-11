@@ -111,8 +111,8 @@ const CategoryDetails = (props: Props) => {
             {/* Details Form */}
             <Container id="CategoryDetails">
 
-                <Row className="mb-3 ml-1 mr-1">
-                    <Col className="text-left">
+                <Row className="mb-3 ms-1 me-1">
+                    <Col className="text-start">
                         {(adding) ? (
                             <span><strong>Add New</strong></span>
                         ) : (
@@ -121,7 +121,7 @@ const CategoryDetails = (props: Props) => {
                         <span><strong>&nbsp;Category for Section:&nbsp;</strong></span>
                         <span className="text-info"><strong>{props.section.title}</strong></span>
                     </Col>
-                    <Col className="text-right">
+                    <Col className="text-end">
                         <Button
                             onClick={props.handleBack}
                             size="sm"
@@ -137,7 +137,7 @@ const CategoryDetails = (props: Props) => {
                     onSubmit={handleSubmit(onSubmit)}
                 >
 
-                    <Form.Row id="ordinalServiceRow">
+                    <Row className="mb-3" id="ordinalServiceRow">
                         <TextField
                             autoFocus={(props.autoFocus !== undefined) ? props.autoFocus : undefined}
                             className="col-4"
@@ -155,9 +155,9 @@ const CategoryDetails = (props: Props) => {
                             register={register}
                             valid="General service category."
                         />
-                    </Form.Row>
+                    </Row>
 
-                    <Form.Row id="notesRow">
+                    <Row className="mb-3" id="notesRow">
                         <TextField
                             errors={errors}
                             label="Notes:"
@@ -165,9 +165,9 @@ const CategoryDetails = (props: Props) => {
                             register={register}
                             valid="Miscellaneous notes about this Category."
                         />
-                    </Form.Row>
+                    </Row>
 
-                    <Form.Row id="slugActiveAccumulatedRow">
+                    <Row className="mb-3" id="slugActiveAccumulatedRow">
                         <TextField
                             errors={errors}
                             label="Slug:"
@@ -189,10 +189,10 @@ const CategoryDetails = (props: Props) => {
                             register={register}
                         />
 */}
-                    </Form.Row>
+                    </Row>
 
                     <Row className="mb-3">
-                        <Col className="text-left">
+                        <Col className="text-start">
                             <Button
                                 disabled={!props.handleInsert && !props.handleUpdate}
                                 size="sm"
@@ -200,7 +200,7 @@ const CategoryDetails = (props: Props) => {
                                 variant="primary"
                             >Save</Button>
                         </Col>
-                        <Col className="text-right">
+                        <Col className="text-end">
                             <Button
                                 disabled={adding || !props.handleRemove}
                                 onClick={onConfirm}

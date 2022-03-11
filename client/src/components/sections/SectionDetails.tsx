@@ -109,7 +109,7 @@ const SectionDetails = (props: Props) => {
             <Container id="SectionDetails">
 
                 <Row className="mb-3">
-                    <Col className="text-left">
+                    <Col className="text-start">
                         {(adding) ? (
                             <span><strong>Add New</strong></span>
                         ) : (
@@ -118,7 +118,7 @@ const SectionDetails = (props: Props) => {
                         <span><strong>&nbsp;Section for Facility:&nbsp;</strong></span>
                         <span className="text-info"><strong>{facilityContext.facility.name}</strong></span>
                     </Col>
-                    <Col className="text-right">
+                    <Col className="text-end">
                         <Button
                             onClick={props.handleBack}
                             size="sm"
@@ -134,7 +134,7 @@ const SectionDetails = (props: Props) => {
                     onSubmit={handleSubmit(onSubmit)}
                 >
 
-                    <Form.Row id="ordinalTitleRow">
+                    <Row className="mb-3" id="ordinalTitleRow">
                         <TextField
                             autoFocus={(props.autoFocus !== undefined) ? props.autoFocus : undefined}
                             className="col-4"
@@ -152,9 +152,9 @@ const SectionDetails = (props: Props) => {
                             register={register}
                             valid="Report title for this section."
                         />
-                    </Form.Row>
+                    </Row>
 
-                    <Form.Row id="notesRow">
+                    <Row className="mb-3" id="notesRow">
                         <TextField
                             errors={errors}
                             label="Notes:"
@@ -162,9 +162,9 @@ const SectionDetails = (props: Props) => {
                             register={register}
                             valid="Miscellaneous notes about this Section."
                         />
-                    </Form.Row>
+                    </Row>
 
-                    <Form.Row id="slugScopeRow">
+                    <Row className="mb-3" id="slugScopeRow">
                         <TextField
                             errors={errors}
                             label="Slug:"
@@ -179,19 +179,19 @@ const SectionDetails = (props: Props) => {
                             register={register}
                             valid="Permission scope required to enter data in this Section."
                         />
-                    </Form.Row>
+                    </Row>
 
-                    <Form.Row id="activeRow">
+                    <Row className="mb-3" id="activeRow">
                         <CheckBoxField
                             errors={errors}
                             label="Active?"
                             name="active"
                             register={register}
                         />
-                    </Form.Row>
+                    </Row>
 
                     <Row className="mb-3">
-                        <Col className="text-left">
+                        <Col className="text-start">
                             <Button
                                 disabled={!props.handleInsert && !props.handleUpdate}
                                 size="sm"
@@ -199,7 +199,7 @@ const SectionDetails = (props: Props) => {
                                 variant="primary"
                             >Save</Button>
                         </Col>
-                        <Col className="text-right">
+                        <Col className="text-end">
                             <Button
                                 disabled={adding || !props.handleRemove}
                                 onClick={onConfirm}

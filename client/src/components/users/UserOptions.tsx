@@ -81,19 +81,19 @@ const UserOptions = (props: Props) => {
                 message="Fetching selected Users"
             />
 
-            <Row className="mb-3 ml-1 mr-1">
-                <Col className="text-left">
+            <Row className="mb-3 ms-1 me-1">
+                <Col className="text-start">
                     <span><strong>Manage Users</strong></span>
                 </Col>
                 <Col>
                     <CheckBox
                         handleChange={handleActive}
-                        id="activeOnly"
-                        initialValue={active}
                         label="Active Users Only?"
+                        name="activeOnly"
+                        value={active}
                     />
                 </Col>
-                <Col className="text-right">
+                <Col className="text-end">
                     <Button
                         disabled={!props.handleAdd}
                         onClick={props.handleAdd}
@@ -103,7 +103,7 @@ const UserOptions = (props: Props) => {
                 </Col>
             </Row>
 
-            <Row className="ml-1 mr-1">
+            <Row className="mb-3 ms-1 me-1">
                 <Table
                     bordered={true}
                     hover={true}
@@ -146,6 +146,16 @@ const UserOptions = (props: Props) => {
                 </Table>
             </Row>
 
+            <Row className="mb-3 ms-1 me-1">
+                <Col className="text-end">
+                    <Button
+                        disabled={!props.handleAdd}
+                        onClick={props.handleAdd}
+                        size="sm"
+                        variant="primary"
+                    >Add</Button>
+                </Col>
+            </Row>
 
         </Container>
     )

@@ -1,6 +1,8 @@
 // CheckBox ------------------------------------------------------------------
 
-// General purpose standalone checkbox, with optional decorations.
+// General purpose standalone checkbox input, with optional decorations.
+
+// NOTE - Change name back to CheckBox when old version is removed.
 
 // External Modules ----------------------------------------------------------
 
@@ -16,39 +18,46 @@ import {HandleBoolean, OnChangeInput} from "../../types";
 export interface Props {
     autoFocus?: boolean;                // Should element receive autoFocus? [false]
     disabled?: boolean;                 // Should element be disabled? [false]
-    handleChange?: HandleBoolean;       // Handle new value [no handler]
-    id?: string;                        // Element ID [none]
-    initialValue: boolean;              // Initial checked state
-    label?: string;                     // Element label [none]
+    handleChange: HandleBoolean;        // Handle change in value
+    label: string;                      // Element label [NO DEFAULT]
+    name?: string;                      // Input control name [checkBox]
+    value?: boolean;                    // Initial state [false]
 }
 
 // Component Details ---------------------------------------------------------
 
 const CheckBox = (props: Props) => {
 
-    const [currentValue, setCurrentValue] = useState<boolean>(props.initialValue)
+    const [name] = useState<string>(props.name ? props.name : "checkBox");
+    const [value, setValue] = useState<boolean>(props.value !== undefined ? props.value : false);
 
     useEffect(() => {
-        // Force rerender if initialValue changes
-    }, [currentValue, props.initialValue]);
+        // Force rerender when props.value changes
+    }, [value, props.value]);
 
-    const onChange: OnChangeInput = (event): void => {
+
+    const handleChange: OnChangeInput = (event): void => {
         const theValue = event.target.checked;
-        setCurrentValue(theValue);
+        setValue(theValue);
         if (props.handleChange) {
             props.handleChange(theValue);
         }
     }
 
     return (
-        <Form inline>
-            <Form.Check
-                autoFocus={props.autoFocus ? props.autoFocus : undefined}
-                defaultChecked={currentValue}
-                id={props.id ? props.id : undefined}
-                label={props.label ? props.label : undefined}
-                onChange={onChange}
-            />
+        <Form className="align-items-center">
+            <Form.Group id={`${name}Group`}>
+                <Form.Check.Input
+                    autoFocus={props.autoFocus !== undefined ? props.autoFocus : undefined}
+                    defaultChecked={value}
+                    disabled={props.disabled !== undefined ? props.disabled : undefined}
+                    id={name}
+                    onChange={handleChange}
+                />
+                <Form.Check.Label className="ms-2" htmlFor={name}>
+                    {props.label ? props.label : "Check?"}
+                </Form.Check.Label>
+            </Form.Group>
         </Form>
     )
 

@@ -6,7 +6,6 @@
 // External Modules ----------------------------------------------------------
 
 import React, {useEffect, useState} from "react";
-import Form from "react-bootstrap/Form";
 
 // Internal Modules ----------------------------------------------------------
 
@@ -55,17 +54,16 @@ const SectionSelector = (props: Props) => {
     }
 
     return (
-        <Form inline id="sectionSelectorForm">
-            <Form.Label className="mr-2" htmlFor={name}>
+        <div className="form-inline">
+            <label className="me-2" htmlFor={name}>
                 {label}
-            </Form.Label>
-            <Form.Control
-                as="select"
+            </label>
+            <select
                 autoFocus={(props.autoFocus !== undefined) ? props.autoFocus : undefined}
+                className="form-control-sm me-2"
                 disabled={(props.disabled !== undefined) ? props.disabled : undefined}
                 id={name}
                 onChange={onChange}
-                size="sm"
                 value={index}
             >
                 <option key="-1" value="-1">(Select Section)</option>
@@ -74,8 +72,8 @@ const SectionSelector = (props: Props) => {
                         {section.title}
                     </option>
                 ))}
-            </Form.Control>
-        </Form>
+            </select>
+        </div>
     )
 
 }

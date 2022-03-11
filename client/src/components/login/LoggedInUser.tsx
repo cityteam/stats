@@ -6,7 +6,6 @@
 
 import React, {useContext, useEffect, useState} from "react";
 import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import {useNavigate} from "react-router-dom";
 
@@ -99,53 +98,44 @@ export const LoggedInUser = () => {
 
     return (
         <>
-
-            {/* Logged In Display and Controls */}
-            <Form inline>
-                <Form.Label htmlFor="loggedInUsername">
-                    {(loginContext.data.loggedIn) ? (
-                        <Button
-                            className="mr-1"
-                            onClick={handleLogout}
-                            size="sm"
-                            type="button"
-                            variant="outline-dark"
-                        >
-                            Log Out
-                        </Button>
-                    ) : (
-                        <Button
-                            className="mr-1"
-                            onClick={onShow}
-                            size="sm"
-                            type="button"
-                            variant="outline-dark"
-                        >
-                            Log In
-                        </Button>
-                    )}
-                </Form.Label>
-                <Form.Control
-                    htmlSize={10}
+            <div className="form-inline">
+                {(loginContext.data.loggedIn) ? (
+                    <Button
+                        onClick={handleLogout}
+                        size="sm"
+                        type="button"
+                        variant="outline-dark"
+                    >
+                        Log Out
+                    </Button>
+                ) : (
+                    <Button
+                        onClick={onShow}
+                        size="sm"
+                        type="button"
+                        variant="outline-dark"
+                    >
+                        Log In
+                    </Button>
+                )}
+                <input
+                    className="ms-2"
+                    disabled
                     id="loggedInUsername"
-                    readOnly={true}
-                    size="sm"
                     value={loginContext.data.username ? loginContext.data.username : "-----"}
                 />
+            </div>
 
-            </Form>
-
-            {/* Login Credentials Modal */}
             <Modal
                 animation={false}
                 backdrop="static"
                 centered
+                dialogClassName="modal-50w"
                 onHide={onHide}
                 show={showCredentials}
-                size="sm"
             >
                 <Modal.Header closeButton>
-                    <Modal.Title>Enter Credentials</Modal.Title>
+                    <Modal.Title>Enter Login Credentials</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <LoginForm autoFocus handleLogin={handleLogin}/>

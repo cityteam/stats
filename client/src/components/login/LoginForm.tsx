@@ -57,7 +57,7 @@ export const LoginForm = (props: Props) => {
                     onSubmit={handleSubmit(onSubmit)}
                 >
 
-                    <Form.Row id="usernameRow">
+                    <Row id="usernameRow">
                         <TextField
                             autoFocus={(props.autoFocus !== undefined) ? props.autoFocus : undefined}
                             errors={errors}
@@ -66,9 +66,9 @@ export const LoginForm = (props: Props) => {
                             register={register}
                             valid="Enter your login username."
                         />
-                    </Form.Row>
+                    </Row>
 
-                    <Form.Row id="passwordRow">
+                    <Row id="passwordRow">
                         <TextField
                             errors={errors}
                             label="Password:"
@@ -77,7 +77,7 @@ export const LoginForm = (props: Props) => {
                             type="password"
                             valid="Enter your login password"
                         />
-                    </Form.Row>
+                    </Row>
 
                     <Row className="mb-3">
                         <Col>

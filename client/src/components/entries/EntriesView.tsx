@@ -63,20 +63,20 @@ const EntriesView = () => {
         <Container fluid id="EntriesView">
 
             {/* Title and Entries Date Selector are always visible */}
-            <Row className="mb-4 ml-1 mr-1">
-                <Col className="text-left">
+            <Row className="mb-4 ms-1 me-1">
+                <Col className="text-start">
                     <span><strong>Entries for Facility:&nbsp;</strong></span>
                     <span className="text-info"><strong>{facilityContext.facility.name}</strong></span>
                 </Col>
                 <Col>
                     <CheckBox
                         handleChange={handleActive}
-                        id="activeOnly"
-                        initialValue={active}
                         label="Active Sections/Categories Only?"
+                        name="activeOnly"
+                        value={active}
                     />
                 </Col>
-                <Col className="col-5 text-right">
+                <Col className="col-5 text-end">
                     <DateSelector
                         actionLabel="Go"
                         autoFocus
@@ -88,7 +88,7 @@ const EntriesView = () => {
                 </Col>
             </Row>
 
-            <Row className="ml-1 mr-1">
+            <Row className="ms-1 me-1">
                 {fetchSections.sections.map((section, rowIndex) => (
                     <Col
                         //id={`EV-S${section.id}-Col`}

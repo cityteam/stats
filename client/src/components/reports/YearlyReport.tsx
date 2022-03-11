@@ -113,17 +113,17 @@ const YearlyReport = () => {
                 message="Fetching selected Summaries"
             />
 
-            <Row className="mb-4 ml-1 mr-1">
-                <Col className="text-left">
+            <Row className="mb-4 ms-1 me-1">
+                <Col className="text-start">
                     <span><strong>Yearly Report for Facility:&nbsp;</strong></span>
                     <span className="text-info"><strong>{facilityContext.facility.name}</strong></span>
                 </Col>
                 <Col>
                     <CheckBox
                         handleChange={handleActive}
-                        id="activeOnly"
-                        initialValue={active}
                         label="Active Sections/Categories Only?"
+                        name="activeOnly"
+                        value={active}
                     />
                 </Col>
                 <Col>
@@ -136,7 +136,7 @@ const YearlyReport = () => {
                         value={month}
                     />
                 </Col>
-                <Col className="text-right">
+                <Col className="text-end">
                     <span><strong>Report Date:&nbsp;</strong></span>
                     <span className="text-info">
                         <strong>{(new Date()).toLocaleString()}</strong>
@@ -145,7 +145,7 @@ const YearlyReport = () => {
             </Row>
 
             {fetchSections.sections.map((section, sectionIndex) => (
-                <Row className="mb-1 ml-1 mr-1"
+                <Row className="mb-1 ms-1 me-1"
                      //id={`YR-S${section.id}-Row`}
                      key={`YR-S${section.id}-Row`}
                 >

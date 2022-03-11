@@ -126,7 +126,7 @@ const UserDetails = (props: Props) => {
                     onSubmit={handleSubmit(onSubmit)}
                 >
 
-                    <Form.Row id="nameRow">
+                    <Row className="mb-3" id="nameRow">
                         <TextField
                             autoFocus={(props.autoFocus !== undefined) ? props.autoFocus : undefined}
                             errors={errors}
@@ -135,9 +135,9 @@ const UserDetails = (props: Props) => {
                             register={register}
                             valid="Name or description of this User."
                         />
-                    </Form.Row>
+                    </Row>
 
-                    <Form.Row id="usernamePasswordRow">
+                    <Row className="mb-3" id="usernamePasswordRow">
                         <TextField
                             errors={errors}
                             label="Username:"
@@ -152,9 +152,9 @@ const UserDetails = (props: Props) => {
                             register={register}
                             valid="Enter ONLY for a new User or if you want to change the password for an existing User."
                         />
-                    </Form.Row>
+                    </Row>
 
-                    <Form.Row id="scopeRow">
+                    <Row className="mb-3" id="scopeRow">
                         <TextField
                             errors={errors}
                             label="Scope:"
@@ -162,16 +162,16 @@ const UserDetails = (props: Props) => {
                             register={register}
                             valid="Permission(s) granted to this User."
                         />
-                    </Form.Row>
+                    </Row>
 
-                    <Form.Row className="mb-3" id="activeRow">
+                    <Row className="mb-3" id="activeRow">
                         <CheckBoxField
                             errors={errors}
                             label="Active?"
                             name="active"
                             register={register}
                         />
-                    </Form.Row>
+                    </Row>
 
                     <Row className="mb-3">
                         <Col className="col text-left">
