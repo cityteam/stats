@@ -13,7 +13,7 @@ import React, {createContext, useState} from "react";
 import {Scope} from "../../types";
 import TokenResponse from "../../models/TokenResponse";
 import Facility from "../../models/Facility";
-import logger, {setLevel} from "../../util/ClientLogger";
+import logger from "../../util/ClientLogger";
 
 // Context Properties -------------------------------------------------------
 
@@ -100,7 +100,7 @@ export const LoginContextProvider = (props: any) => {
         } else {
             setAlloweds([]);
         }
-        setLevel(logLevel);
+        logger.setLevel(logLevel);
 
         // Document this login
         logger.info({
@@ -151,7 +151,7 @@ export const LoginContextProvider = (props: any) => {
         });
         setData(theData);
 
-        setLevel(LOG_DEFAULT);
+        logger.setLevel(LOG_DEFAULT);
 
     }
 
