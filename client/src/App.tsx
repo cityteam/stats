@@ -20,6 +20,7 @@ import FacilitySegment from "./components/facilities/FacilitySegment";
 import HomeView from "./components/general/HomeView";
 import Navigation from "./components/general/Navigation";
 import ConfigurationReport from "./components/reports/ConfigurationReport";
+import MonthlyGraph from "./components/reports/MonthlyGraph";
 import MonthlyReport from "./components/reports/MonthlyReport";
 import YearlyReport from "./components/reports/YearlyReport";
 import SectionSegment from "./components/sections/SectionSegment";
@@ -59,6 +60,7 @@ function App() {
                               <Route path="admin-sections" element={<SectionSegment/>}/>
                               <Route path="admin-users" element={<UserSegment/>}/>
                               <Route path="entries" element={<EntriesView/>}/>
+                              <Route path="graph-month" element={<MonthlyGraph/>}/>
                               <Route path="report-configuration" element={<ConfigurationReport/>}/>
                               <Route path="report-month" element={<MonthlyReport/>}/>
                               <Route path="report-year" element={<YearlyReport/>}/>
