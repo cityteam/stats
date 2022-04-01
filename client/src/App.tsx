@@ -22,6 +22,7 @@ import Navigation from "./components/general/Navigation";
 import ConfigurationReport from "./components/reports/ConfigurationReport";
 import MonthlyChart from "./components/reports/MonthlyChart";
 import MonthlyReport from "./components/reports/MonthlyReport";
+import YearlyChart from "./components/reports/YearlyChart";
 import YearlyReport from "./components/reports/YearlyReport";
 import SectionSegment from "./components/sections/SectionSegment";
 import UserSegment from "./components/users/UserSegment";
@@ -61,6 +62,7 @@ function App() {
                               <Route path="admin-users" element={<UserSegment/>}/>
                               <Route path="entries" element={<EntriesView/>}/>
                               <Route path="chart-month" element={<MonthlyChart/>}/>
+                              <Route path="chart-year" element={<YearlyChart/>}/>
                               <Route path="report-configuration" element={<ConfigurationReport/>}/>
                               <Route path="report-month" element={<MonthlyReport/>}/>
                               <Route path="report-year" element={<YearlyReport/>}/>

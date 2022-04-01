@@ -1,6 +1,6 @@
-// MonthlyChartSection ------------------------------------------------------
+// YearlyChartSection --------------------------------------------------------
 
-// Monthly chart for a specific Section.
+// Yearly chart for a specific Section.
 
 // External Modules ----------------------------------------------------------
 
@@ -17,21 +17,20 @@ import Section from "../../models/Section";
 import Summary from "../../models/Summary";
 import * as Abridgers from "../../util/Abridgers";
 import logger from "../../util/ClientLogger";
-import {incrementDate} from "../../util/Dates";
 
 // Incoming Properties -------------------------------------------------------
 
 export interface Props {
-    active?: boolean;                   // Report active Categories only? [false]
-    dateFrom: string;                   // Earliest date to report
-    dateTo: string;                     // Latest date to report
+    active?: boolean;                   // Active categories only? [false]
+    labels: string[];                   // Column labels for each month
+    months: string[];                   // Months being reported
     section: Section;                   // Section (with nested Categories) to report
-    summaries: Summary[];               // Consolidated summaries to draw data from
+    summaries: Summary[];               // Summaries containing raw data
 }
 
 // Component Details ---------------------------------------------------------
 
-const MonthlyChartSection = (props: Props) => {
+const YearlyChartSection = (props: Props) => {
 
     const facilityContext = useContext(FacilityContext);
 
@@ -40,10 +39,10 @@ const MonthlyChartSection = (props: Props) => {
     useEffect(() => {
 
         logger.debug({
-            context: "MonthlyChartSection.useEffect",
+            context: "YearlyChartSection.useEffect",
             active: props.active,
-            dateFrom: props.dateFrom,
-            dateTo: props.dateTo,
+            labels: props.labels,
+            months: props.months,
             section: Abridgers.SECTION(props.section),
         });
 
@@ -63,15 +62,15 @@ const MonthlyChartSection = (props: Props) => {
             theCategoryNames.push(category.slug);
         });
 
-        // Calculate the set of dates we will be reporting
+        // Calculate the set of dates we will be reporting (YYYY-MM-01)
         const theDates: string[] = [];
-        for (let theDate = props.dateFrom; theDate <= props.dateTo; theDate = incrementDate(theDate, 1)) {
-            theDates.push(theDate);
-        }
+        props.months.forEach(month => {
+            theDates.push(month + "-01");
+        });
 
         // Prepare the data two-dimensional array.  First dimension is for
         // each reported Category, and second dimension is for each reported
-        // date for that Category
+        // date for that Category.
         const allResults: (number | null)[][] = [[]];
         theCategories.forEach((category, ci) => {
             const categoryResults: number | null[] = [];
@@ -110,7 +109,7 @@ const MonthlyChartSection = (props: Props) => {
         });
 
         // Configure and save the Apache ECharts option for rendering this chart
-        const title = `${props.section.slug} for ${facilityContext.facility.name} (${props.dateFrom} - ${props.dateTo})`;
+        const title = `${props.section.slug} for ${facilityContext.facility.name} (${props.labels[0]} - ${props.labels[props.labels.length - 1]})`;
         const theOption: EChartsOption = {
             legend: {
                 data: theCategoryNames,
@@ -131,20 +130,20 @@ const MonthlyChartSection = (props: Props) => {
             },
             xAxis: {
                 alignTicks: true,
-                axisLabel: {
-                    rotate: 90,
-                },
-                data: theDates,
+                // axisLabel: {
+                //     rotate: 90,
+                // },
+                data: props.labels,
             },
             yAxis: {},
         }
         logger.debug({
-            context: "MonthlyChartSection.option",
+            context: "YearlyChartSection.option",
             option: theOption,
         })
         setOption(theOption);
 
-    }, [facilityContext.facility, props.active, props.dateFrom, props.dateTo,
+    }, [facilityContext.facility, props.active, props.labels, props.months,
         props.section, props.summaries]);
 
     /**
@@ -182,8 +181,8 @@ const MonthlyChartSection = (props: Props) => {
     return (
         <Container
             fluid
-            id={`MCS-S${props.section.id}-Container`}
-            key={`MCS-S${props.section.id}-Container`}
+            id={`YCS-S${props.section.id}-Container`}
+            key={`YCS-S${props.section.id}-Container`}
         >
             <Row className="ms-1 me-1 mb-3">
                 <EChart
@@ -197,4 +196,4 @@ const MonthlyChartSection = (props: Props) => {
 
 }
 
-export default MonthlyChartSection;
+export default YearlyChartSection;

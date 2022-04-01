@@ -59,6 +59,7 @@ function Navigation() {
                                         <NavLink className="nav-link" to="/report-year">Yearly Summary</NavLink>
                                         <NavLink className="nav-link" to="/report-configuration">Configuration Report</NavLink>
                                         <NavLink className="nav-link" to="/chart-month">Monthly Chart</NavLink>
+                                        <NavLink className="nav-link" to="/chart-year">Yearly Chart</NavLink>
                                     </NavDropdown.Item>
                                 </NavDropdown>
                                 <NavDropdown id="Admin" title="Admin">
