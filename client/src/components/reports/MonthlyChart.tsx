@@ -1,6 +1,6 @@
-// MonthlyGraph -------------------------------------------------------------
+// MonthlyChart -------------------------------------------------------------
 
-// Monthly line graphs (for Categories).  There will be a separate tab for each
+// Monthly line charts (for Categories).  There will be a separate tab for each
 // defined Section, lines for each Category in that Section.
 
 // External Modules ----------------------------------------------------------
@@ -14,7 +14,7 @@ import Tabs from "react-bootstrap/Tabs";
 
 // Internal Modules ----------------------------------------------------------
 
-import MonthlyGraphSection from "./MonthlyGraphSection";
+import MonthlyChartSection from "./MonthlyChartSection";
 import FacilityContext from "../facilities/FacilityContext";
 import CheckBox from "../general/CheckBox";
 import FetchingProgress from "../general/FetchingProgress";
@@ -28,7 +28,7 @@ import {endDate, startDate, todayMonth} from "../../util/Months";
 
 // Component Details ---------------------------------------------------------
 
-const MonthlyGraph = () => {
+const MonthlyChart = () => {
 
     const facilityContext = useContext(FacilityContext);
 
@@ -56,7 +56,7 @@ const MonthlyGraph = () => {
         setDateTo(endDate(month));
 
         logger.debug({
-            context: "MonthlyGraph.useEffect",
+            context: "MonthlyChart.useEffect",
             facility: Abridgers.FACILITY(facilityContext.facility),
             active: active,
             month: month,
@@ -79,7 +79,7 @@ const MonthlyGraph = () => {
     }
 
     return (
-        <Container fluid id="MonthlyGraph">
+        <Container fluid id="MonthlyChart">
 
             <FetchingProgress
                 error={fetchSections.error}
@@ -94,7 +94,7 @@ const MonthlyGraph = () => {
 
             <Row className="mb-4 ms-1 me-1">
                 <Col className="text-start">
-                    <span><strong>Monthly Report for Facility:&nbsp;</strong></span>
+                    <span><strong>Monthly Chart for Facility:&nbsp;</strong></span>
                     <span className="text-info"><strong>{facilityContext.facility.name}</strong></span>
                 </Col>
                 <Col>
@@ -110,7 +110,7 @@ const MonthlyGraph = () => {
                         actionLabel="Go"
                         autoFocus
                         handleMonth={handleMonth}
-                        label="Report For Month:"
+                        label="Chart For Month:"
                         required
                         value={month}
                     />
@@ -137,7 +137,7 @@ const MonthlyGraph = () => {
                         key={`MR-S${section.id}-Tab`}
                         title={section.slug}
                     >
-                        <MonthlyGraphSection
+                        <MonthlyChartSection
                             active={active}
                             dateFrom={dateFrom}
                             dateTo={dateTo}
@@ -154,4 +154,4 @@ const MonthlyGraph = () => {
 
 }
 
-export default MonthlyGraph;
+export default MonthlyChart;

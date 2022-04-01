@@ -1,6 +1,6 @@
-// MonthlyReportSection ------------------------------------------------------
+// MonthlyChartSection ------------------------------------------------------
 
-// Monthly report for a specific Section.
+// Monthly chart for a specific Section.
 
 // External Modules ----------------------------------------------------------
 
@@ -31,7 +31,7 @@ export interface Props {
 
 // Component Details ---------------------------------------------------------
 
-const MonthlyGraphSection = (props: Props) => {
+const MonthlyChartSection = (props: Props) => {
 
     const facilityContext = useContext(FacilityContext);
 
@@ -40,7 +40,7 @@ const MonthlyGraphSection = (props: Props) => {
     useEffect(() => {
 
         logger.debug({
-            context: "MonthlyGraphSection.useEffect",
+            context: "MonthlyChartSection.useEffect",
             active: props.active,
             dateFrom: props.dateFrom,
             dateTo: props.dateTo,
@@ -139,7 +139,7 @@ const MonthlyGraphSection = (props: Props) => {
             yAxis: {},
         }
         logger.debug({
-            context: "MonthlyGraphSection.option",
+            context: "MonthlyChartSection.option",
             option: theOption,
         })
         setOption(theOption);
@@ -197,4 +197,4 @@ const MonthlyGraphSection = (props: Props) => {
 
 }
 
-export default MonthlyGraphSection;
+export default MonthlyChartSection;
