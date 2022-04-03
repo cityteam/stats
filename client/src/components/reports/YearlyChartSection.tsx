@@ -22,6 +22,7 @@ import logger from "../../util/ClientLogger";
 
 export interface Props {
     active?: boolean;                   // Active categories only? [false]
+    bar?: boolean;                      // Show as a bar chart? [false]
     labels: string[];                   // Column labels for each month
     months: string[];                   // Months being reported
     section: Section;                   // Section (with nested Categories) to report
@@ -100,11 +101,13 @@ const YearlyChartSection = (props: Props) => {
         const theSeries: object[] = [];
         theCategoryNames.forEach((categoryName, ci) => {
             theSeries.push({
+                barCategoryGap: "30%",
+                barGap: "15%",
                 data: allResults[ci],
                 name: categoryName,
                 smooth: true,
                 //stack: "byDate",
-                type: "line",
+                type: (props.bar ? "bar" : "line"),
             });
         });
 
@@ -143,7 +146,7 @@ const YearlyChartSection = (props: Props) => {
         })
         setOption(theOption);
 
-    }, [facilityContext.facility, props.active, props.labels, props.months,
+    }, [facilityContext.facility, props.active, props.bar, props.labels, props.months,
         props.section, props.summaries]);
 
     /**

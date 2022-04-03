@@ -43,6 +43,7 @@ const YearlyChart = () => {
     const facilityContext = useContext(FacilityContext);
 
     const [active, setActive] = useState<boolean>(true);
+    const [bar, setBar] = useState<boolean>(true);
     const [dateFrom, setDateFrom] = useState<string>("2021-07-04");
     const [dateTo, setDateTo] = useState<string>("2021-07-04");
     const [labels, setLabels] = useState<string[]>([]); // Column headings
@@ -93,6 +94,10 @@ const YearlyChart = () => {
         setActive(theActive);
     }
 
+    const handleBar: HandleBoolean = (theBar) => {
+        setBar(theBar);
+    }
+
     const handleMonth: HandleMonth = (theMonth) => {
         logger.debug({
             context: "MonthlyReport.handleMonth",
@@ -138,6 +143,14 @@ const YearlyChart = () => {
                         value={month}
                     />
                 </Col>
+                <Col>
+                    <CheckBox
+                        handleChange={handleBar}
+                        label="Bar Chart?"
+                        name="barChart"
+                        value={bar}
+                    />
+                </Col>
                 <Col className="text-end">
                     <span><strong>Report Date:&nbsp;</strong></span>
                     <span className="text-info">
@@ -162,6 +175,7 @@ const YearlyChart = () => {
                     >
                         <YearlyChartSection
                             active={active}
+                            bar={bar}
                             labels={labels}
                             months={months}
                             section={section}
