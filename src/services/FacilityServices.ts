@@ -128,7 +128,7 @@ class FacilityServices extends BaseParentServices<Facility> {
             where.active = true
         }
         if (query.name) {
-            where.name = { [Op.iLike]: `%${query.name}'`};
+            where.name = { [Op.iLike]: `%${query.name}%` };
         }
         if (query.scope) {
             where.scope = query.scope;
