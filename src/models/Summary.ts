@@ -12,9 +12,9 @@
 
 // External Modules ----------------------------------------------------------
 
-// Internal Modules ----------------------------------------------------------
+import {Dates} from "@craigmcc/shared-utils";
 
-import {todayDate} from "../util/Dates";
+// Internal Modules ----------------------------------------------------------
 
 // Public Objects ------------------------------------------------------------
 
@@ -26,7 +26,7 @@ export type Values = {
 class Summary {
 
     constructor (data: any = {}) {
-        this.date = data.date ? data.date : todayDate();
+        this.date = data.date ? data.date : Dates.today();
         this.sectionId = data.sectionId ? data.sectionId : -1;
         this.values = data.values ? data.values : {};
     }
