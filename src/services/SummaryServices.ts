@@ -6,6 +6,8 @@
 
 // External Modules ----------------------------------------------------------
 
+import {Dates} from "@craigmcc/shared-utils";
+
 // Internal Modules ----------------------------------------------------------
 
 import SectionServices from "./SectionServices";
@@ -14,7 +16,6 @@ import Daily from "../models/Daily";
 import Detail from "../models/Detail";
 import Section from "../models/Section";
 import Summary from "../models/Summary";
-import {fromDateObject, toDateObject} from "../util/Dates";
 import {FindOptions, IncludeOptions, Op, WhereOptions} from "sequelize";
 import {NotFound} from "../util/HttpErrors";
 
@@ -85,11 +86,17 @@ class SummaryServices {
         sections.forEach(section => {
             const categoriesMap = this.categoriesToMap(section.categories);
             section.dailies.forEach(daily => {
-                const trimmedDate = fromDateObject(daily.date).substr(0, 7) + "-01";
+                // NOTE - somehow daily.date sometimes come in as a string
+                let trimmedDate : string = "";
+                if (typeof daily.date === "string") {
+                    trimmedDate = `${(daily.date as string).substr(0, 7)}-01`;
+                } else {
+                    trimmedDate = Dates.fromObject(daily.date).substr(0, 7) + "-01";
+                }
                 const key = daily.sectionId + "|" + trimmedDate;
                 let accumulated = accumulateds.get(key);
                 if (!accumulated) {
-                    accumulated = this.dailyToSummary(daily.sectionId, toDateObject(trimmedDate), categoriesMap, null);
+                    accumulated = this.dailyToSummary(daily.sectionId, Dates.toObject(trimmedDate), categoriesMap, null);
                 }
                 // NOTE - increment values for each category
                 for (let i = 0; i < daily.categoryIds.length; i++) {
@@ -154,7 +161,7 @@ class SummaryServices {
         });
 
         // Convert to a Summary and return it
-        return this.dailyToSummary(section.id, toDateObject(date), categoriesMap, daily);
+        return this.dailyToSummary(section.id, Dates.toObject(date), categoriesMap, daily);
 
     }
 
@@ -183,7 +190,7 @@ class SummaryServices {
         });
 
         // Insert a Daily (or replace the existing one) and return the recorded Summary
-        const newDaily = this.summaryToDaily(sectionId, toDateObject(date), categoriesMap, summary);
+        const newDaily = this.summaryToDaily(sectionId, Dates.toObject(date), categoriesMap, summary);
         if (daily) {
             const results = await Daily.update(newDaily, {
 //                logging: console.log,
@@ -234,11 +241,16 @@ class SummaryServices {
      */
     private dailyToSummary(sectionId: number, date: Date, categoriesMap: Map<number, Category>, daily: Daily | null): Summary {
 
+        // NOTE - somehow date is coming in as a string sometimes
         const summary = new Summary({
-            date: fromDateObject(date),
             sectionId: sectionId,
             values: {},
         });
+        if (typeof date === "string") {
+            summary.date = date as string;
+        } else {
+            summary.date = Dates.fromObject(date);
+        }
 
         if (daily) {
             for (let i = 0; i < daily.categoryIds.length; i++) {
@@ -368,7 +380,7 @@ class SummaryServices {
         sections.forEach(section => {
             section.categories.forEach(category => {
                 category.details.forEach(detail => {
-                    const detailDate = fromDateObject(detail.date);
+                    const detailDate = Dates.fromObject(detail.date);
                     let trimmedDate = trim
                         ? detailDate.substr(0, 7) + "-01"
                         : detailDate;
