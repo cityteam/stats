@@ -13,7 +13,6 @@ import {Dates} from "@craigmcc/shared-utils";
 import SectionServices from "./SectionServices";
 import Category from "../models/Category";
 import Daily from "../models/Daily";
-import Detail from "../models/Detail";
 import Section from "../models/Section";
 import Summary from "../models/Summary";
 import {FindOptions, IncludeOptions, Op, WhereOptions} from "sequelize";
@@ -307,54 +306,6 @@ class SummaryServices {
         }
         const sectionFindOptions: FindOptions = {
             include: [categoryIncludeOptions, dailyIncludeOptions],
-            where: sectionWhereOptions,
-        };
-
-        // Perform the query to select the required information
-        return Section.findAll(sectionFindOptions);
-
-    }
-
-    /**
-     * Return the requested Sections (with nested Categories and Details)
-     * that match the specified criteria.
-     *
-     * @param facilityId                Facility ID that owns these statistics
-     * @param dateFrom                  Earliest date for which to return results
-     * @param dateTo                    Latest date for which to return results
-     * @param active                    Return only active Sections and Categories? [false]
-     * @param sectionIds                Comma-delimited list of section IDs
-     *                                  for which to return results [all sections]
-     */
-    private async sectionsOld(facilityId: number, dateFrom: string, dateTo: string, active: boolean, sectionIds?: number[]): Promise<Section[]> {
-
-        // Configure the criteria we will be using for this select
-        const detailIncludeOptions: IncludeOptions = {
-            model: Detail,
-            where: {
-                date: { [Op.between]: [dateFrom, dateTo] },
-            }
-        }
-        const categoryIncludeOptions: IncludeOptions = {
-            include: [detailIncludeOptions],
-            model: Category,
-        }
-        if (active) {
-            categoryIncludeOptions.where = {
-                active: true,
-            }
-        }
-        let sectionWhereOptions: WhereOptions = {
-            facilityId: facilityId,
-        }
-        if (active) {
-            sectionWhereOptions.active = true;
-        }
-        if (sectionIds) {
-            sectionWhereOptions.id = { [Op.in]: sectionIds };
-        }
-        const sectionFindOptions: FindOptions = {
-            include: [categoryIncludeOptions],
             where: sectionWhereOptions,
         };
 

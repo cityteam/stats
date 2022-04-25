@@ -6,7 +6,6 @@
 
 import AccessToken from "../models/AccessToken";
 import Category from "../models/Category";
-import Detail from "../models/Detail";
 import Facility from "../models/Facility";
 import RefreshToken from "../models/RefreshToken";
 import Section from "../models/Section";
@@ -35,18 +34,6 @@ export const CATEGORIES = (values: any[]): Category[] => {
     const results: Category[] = [];
     values.forEach(value => {
         results.push(new Category(value));
-    });
-    return results;
-}
-
-export const DETAIL = (value: any): Detail => {
-    return new Detail(value);
-}
-
-export const DETAILS = (values: any[]): Detail[] => {
-    const results: Detail[] = [];
-    values.forEach(value => {
-        results.push(new Detail(value));
     });
     return results;
 }

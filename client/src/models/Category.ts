@@ -5,7 +5,6 @@
 // Internal Modules ----------------------------------------------------------
 
 import CategoryData from "./CategoryData";
-import Detail from "./Detail";
 import Section from "./Section";
 import * as ToModel from "../util/ToModel";
 
@@ -19,12 +18,10 @@ class Category extends CategoryData {
 
         super(data);
 
-        this.details = data.details ? ToModel.DETAILS(data.details) : undefined;
         this.section = data.section ? ToModel.SECTION(data.section) : undefined;
 
     }
 
-    details?: Detail[];
     section?: Section;
 
 }

@@ -9,7 +9,6 @@ import React from "react";
 // Internal Modules ----------------------------------------------------------
 
 import Category from "./models/Category";
-import Detail from "./models/Detail";
 import Facility from "./models/Facility";
 import Section from "./models/Section";
 import Summary from "./models/Summary";
@@ -59,14 +58,12 @@ export type HandleValue = (newValue: string) => void;
 // Model Object Handlers -----------------------------------------------------
 
 export type HandleCategory = (category: Category) => void;
-export type HandleDetail = (detail: Detail) => void;
 export type HandleFacility = (facility: Facility) => void;
 export type HandleSection = (section: Section) => void;
 export type HandleSummary = (summary: Summary) => void;
 export type HandleUser = (user: User) => void;
 
 export type ProcessCategory = (category: Category) => Promise<Category>;
-export type ProcessDetail = (detail: Detail) => Promise<Detail>;
 export type ProcessFacility = (facility: Facility) => Promise<Facility>;
 export type ProcessSection = (section: Section) => Promise<Section>;
 export type ProcessSummary = (summary: Summary) => Promise<Summary>;
