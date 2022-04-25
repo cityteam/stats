@@ -30,7 +30,7 @@ import {BadRequest} from "../util/HttpErrors";
         isOrdinalUnique: async function(this: Section): Promise<void> {
             if (!(await validateSectionOrdinalUnique(this))) {
                 throw new BadRequest
-                (`Ordinal: Ordinal '${this.ordinal}' is already in use in this Facility`);
+                (`ordinal: Ordinal '${this.ordinal}' is already in use in this Facility`);
             }
         }
     },

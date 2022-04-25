@@ -253,6 +253,178 @@ describe("CategoryServices Functional Tests", () => {
 
     });
 
+    describe("CategoryServices.insert()", () => {
+
+        it("should fail on duplicate ordinal", async () => {
+
+            const FACILITY = await UTILS.lookupFacility(SeedData.FACILITY_NAME_FIRST);
+            const SECTION = await UTILS.lookupSection(FACILITY, SeedData.SECTION_ORDINAL_SECOND);
+            const INPUTS = await CategoryServices.all(SECTION.id);
+            const INPUT = {
+                ordinal: INPUTS[0].ordinal,
+                sectionId: SECTION.id,
+            }
+
+            try {
+                await CategoryServices.insert(SECTION.id, INPUT);
+                expect.fail("Should have thrown BadRequest");
+            } catch (error) {
+                if (error instanceof BadRequest) {
+                    expect(error.message).to.include("is already in use");
+                } else {
+                    expect.fail(`Should not have thrown '${error}'`);
+                }
+            }
+
+        });
+
+        it("should fail on empty input data", async () => {
+
+            const FACILITY = await UTILS.lookupFacility(SeedData.FACILITY_NAME_FIRST);
+            const SECTION = await UTILS.lookupSection(FACILITY, SeedData.SECTION_ORDINAL_SECOND);
+            const INPUT = {};
+
+            try {
+                await CategoryServices.insert(SECTION.id, INPUT);
+                expect.fail("Should have thrown BadRequest");
+            } catch (error) {
+                if (error instanceof BadRequest) {
+                    expect(error.message).to.include("Is required");
+                } else {
+                    expect.fail(`Should not have thrown '${error}'`);
+                }
+            }
+
+        });
+
+        it("should pass on valid input data", async () => {
+
+            const FACILITY = await UTILS.lookupFacility(SeedData.FACILITY_NAME_FIRST);
+            const SECTION = await UTILS.lookupSection(FACILITY, SeedData.SECTION_ORDINAL_SECOND);
+            const INPUT = {
+                ordinal: 9999,
+                sectionId: SECTION.id,
+                service: "New Service",
+                slug: "New Slug",
+            };
+
+            const OUTPUT = await CategoryServices.insert(SECTION.id, INPUT);
+            compareCategoryNew(OUTPUT, INPUT);
+
+        });
+
+    });
+
+    describe("CategoryServices.remove()", () => {
+
+        it("should fail on invalid section ID", async () => {
+
+            const INVALID_SECTION_ID = -1;
+
+            try {
+                await CategoryServices.remove(INVALID_SECTION_ID, -1);
+                expect.fail("Should have thrown NotFound");
+            } catch (error) {
+                if (error instanceof NotFound) {
+                    expect(error.message).to.include(`sectionId: Missing Section ${INVALID_SECTION_ID}`);
+                } else {
+                    expect.fail(`Should not have thrown '${error}'`);
+                }
+            }
+
+        });
+
+        it("should pass on valid IDs", async () => {
+
+            const FACILITY = await UTILS.lookupFacility(SeedData.FACILITY_NAME_FIRST);
+            const SECTION = await UTILS.lookupSection(FACILITY, SeedData.SECTION_ORDINAL_SECOND);
+            const INPUTS = await CategoryServices.all(SECTION.id);
+            await CategoryServices.remove(SECTION.id, INPUTS[0].id);
+
+            try {
+                await CategoryServices.remove(SECTION.id, INPUTS[0].id);
+                expect("Should have thrown NotFound after remove");
+            } catch (error) {
+                if (error instanceof NotFound) {
+                    expect(error.message).to.include(`categoryId: Missing Category ${INPUTS[0].id}`);
+                }
+            }
+
+        });
+
+    });
+
+    describe("CategoryServices.update()", () => {
+
+        it("should fail on duplicate ordinal", async () => {
+
+            const FACILITY = await UTILS.lookupFacility(SeedData.FACILITY_NAME_SECOND);
+            const SECTION = await UTILS.lookupSection(FACILITY, SeedData.SECTION_ORDINAL_THIRD);
+            const INPUTS = await CategoryServices.all(SECTION.id);
+            const INPUT = {
+                ordinal: INPUTS[1].ordinal,
+                sectionId: SECTION.id,
+            }
+
+            try {
+                await CategoryServices.update(SECTION.id, INPUTS[0].id, INPUT);
+                expect.fail("Should have thrown BadRequest");
+            } catch (error) {
+                if (error instanceof BadRequest) {
+                    expect(error.message).to.include("is already in use");
+                } else {
+                    expect.fail(`Should not have thrown '${error}'`);
+                }
+            }
+
+        });
+
+        it("should fail on invalid section ID", async () => {
+
+            const INVALID_SECTION_ID = -1;
+            const INPUT = {};
+
+            try {
+                await CategoryServices.update(INVALID_SECTION_ID, -1, INPUT);
+                expect.fail("Should have thrown NotFound");
+            } catch (error) {
+                if (error instanceof NotFound) {
+                    expect(error.message).to.include(`sectionId: Missing Section ${INVALID_SECTION_ID}`);
+                } else {
+                    expect.fail(`Should not have thrown '${error}'`);
+                }
+            }
+
+        });
+
+        it("should pass on no changed data", async () => {
+
+            const FACILITY = await UTILS.lookupFacility(SeedData.FACILITY_NAME_SECOND);
+            const SECTION = await UTILS.lookupSection(FACILITY, SeedData.SECTION_ORDINAL_THIRD);
+            const INPUTS = await CategoryServices.all(SECTION.id);
+
+            INPUTS.forEach(async INPUT => {
+                const OUTPUT = await CategoryServices.update(SECTION.id, INPUT.id, INPUT);
+                compareCategoryOld(OUTPUT, INPUT);
+            });
+
+        });
+
+        it("should pass on no updated data", async () => {
+
+            const FACILITY = await UTILS.lookupFacility(SeedData.FACILITY_NAME_SECOND);
+            const SECTION = await UTILS.lookupSection(FACILITY, SeedData.SECTION_ORDINAL_THIRD);
+            const INPUTS = await CategoryServices.all(SECTION.id);
+
+            INPUTS.forEach(async INPUT => {
+                const OUTPUT = await CategoryServices.update(SECTION.id, INPUT.id, {});
+                compareCategoryOld(OUTPUT, INPUT);
+            });
+
+        });
+
+    });
+
 });
 
 // Helper Objects ------------------------------------------------------------

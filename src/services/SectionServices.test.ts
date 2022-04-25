@@ -372,7 +372,7 @@ describe('SectionServices Functional Tests', function () {
 
             try {
                 await SectionServices.update(FACILITY.id, INPUTS[0].id, INPUT);
-                expect.fail("Should have thrown BadRequet");
+                expect.fail("Should have thrown BadRequest");
             } catch (error) {
                 if (error instanceof BadRequest) {
                     expect(error.message).to.include("is already in use");

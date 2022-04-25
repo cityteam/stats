@@ -130,7 +130,7 @@ abstract class BaseChildServices<C extends Model, P extends Model> extends BaseC
                 throw error;
             } else if (error instanceof ValidationError) {
                 throw new BadRequest(
-                    error,
+                    error as Error,
                     `${this.name}.insert`
                 );
             } else {

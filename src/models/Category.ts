@@ -10,8 +10,8 @@ import {BelongsTo, Column, DataType, ForeignKey, HasMany, Model, Table} from "se
 
 import Section from "./Section";
 import {
+    validateCategoryOrdinalUnique,
     validateSectionId,
-    validateSectionOrdinalUnique
 } from "../util/AsyncValidators";
 import {BadRequest} from "../util/HttpErrors";
 import Detail from "./Detail";
@@ -28,10 +28,10 @@ import Detail from "./Detail";
                     (`sectionId: Missing Section ${this.sectionId}`);
             }
         },
-        isOrdinalUnique: async function(this: Section): Promise<void> {
-            if (!(await validateSectionOrdinalUnique(this))) {
+        isOrdinalUnique: async function(this: Category): Promise<void> {
+            if (!(await validateCategoryOrdinalUnique(this))) {
                 throw new BadRequest
-                    (`Ordinal: Ordinal '${this.ordinal}' is already in use in this Section`);
+                    (`ordinal: Ordinal '${this.ordinal}' is already in use in this Section`);
             }
         }
     },
