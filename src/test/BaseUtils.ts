@@ -16,6 +16,7 @@ import Section from "../models/Section";
 import User from "../models/User";
 import {clearMapping} from "../oauth/OAuthMiddleware";
 import {hashPassword} from "../oauth/OAuthUtils";
+import * as Abridgers from "../test/Abridgers";
 
 // Public Objects ------------------------------------------------------------
 
@@ -67,22 +68,30 @@ export abstract class BaseUtils {
             }
         }
 
-        // If facilities are not requested, nothing else will be loaded
-        let facilities: Facility[] = [];
+        // Load Facilities with nested Sections and Categories as requested
         if (options.withFacilities) {
-            facilities = await loadFacilities(SeedData.FACILITIES);
+            const facilities: Facility[] = await loadFacilities(SeedData.FACILITIES);
+            //console.log("LOADED FACILITIES", Abridgers.FACILITIES(facilities));
             if (options.withSections) {
+                let sections: Partial<Section>[] = [];
                 facilities.forEach(async facility => {
-                    const sections = await loadSections(facility, SeedData.SECTIONS);
-                    if (options.withCategories) {
-                        sections.forEach(async section => {
-                            const categories = await loadCategories(section, SeedData.CATEGORIES);
-                        });
-                    }
+                    SeedData.SECTIONS.forEach(section => {
+                        sections.push({ ...section, facilityId: facility.id });
+                    });
                 });
+                sections = await loadSections(sections);
+                //console.log("LOADED SECTIONS", Abridgers.SECTIONS(sections));
+                if (options.withCategories) {
+                    let categories: Partial<Category>[] = [];
+                    sections.forEach(section => {
+                        SeedData.CATEGORIES.forEach(category => {
+                            categories.push({ ...category, sectionId: section.id });
+                        });
+                    });
+                    categories = await loadCategories(categories);
+                    //console.log("LOADED CATEGORIES", Abridgers.CATEGORIES(categories));
+                }
             }
-        } else {
-            return;
         }
 
     }
@@ -102,37 +111,35 @@ const loadAccessTokens
     accessTokens.forEach(accessToken => {
         accessToken.userId = user.id;
     });
-    let results: AccessToken[] = [];
     try {
         // @ts-ignore NOTE - did Typescript get tougher about Partial<M>?
-        results = await AccessToken.bulkCreate(accessTokens);
-        return results;
+        return await AccessToken.bulkCreate(accessTokens);
     } catch (error) {
         console.info(`  Reloading AccessTokens for User '${user.username}' ERROR`, error);
         throw error;
     }
 }
 
-const loadCategories = async (section: Section, categories: Partial<Category>[]): Promise<Section[]> => {
-    categories.forEach(category => {
-        category.sectionId = section.id;
-    });
-    // @ts-ignore NOTE - did Typescript get tougher about Partial<M>?
-    return await Category.bulkCreate(categories);
+const loadCategories = async (categories: Partial<Category>[]): Promise<Category[]> => {
+    try {
+        // @ts-ignore NOTE - did Typescript get tougher about Partial<M>?
+        return await Category.bulkCreate(categories, { returning: true });
+    } catch (error) {
+        console.info(`  Reloading Categories ERROR`, error);
+        throw error;
+    }
 }
 
 const loadFacilities
     = async (facilities: Partial<Facility>[]): Promise<Facility[]> =>
 {
-    let results: Facility[] = [];
     try {
         // @ts-ignore NOTE - did Typescript get tougher about Partial<M>?
-        results = await Facility.bulkCreate(facilities);
+        return await Facility.bulkCreate(facilities, { returning: true });
     } catch (error) {
         console.info("  Reloading Facilities ERROR", error);
         throw error;
     }
-    return results;
 }
 
 const loadRefreshTokens
@@ -140,23 +147,23 @@ const loadRefreshTokens
     refreshTokens.forEach(refreshToken => {
         refreshToken.userId = user.id;
     });
-    let results: RefreshToken[] = [];
     try {
         // @ts-ignore NOTE - did Typescript get tougher about Partial<M>?
-        results = await RefreshToken.bulkCreate(refreshTokens);
-        return results;
+        return await RefreshToken.bulkCreate(refreshTokens);
     } catch (error) {
         console.info(`  Reloading RefreshTokens for User '${user.username}' ERROR`, error);
         throw error;
     }
 }
 
-const loadSections = async (facility: Facility, sections: Partial<Section>[]): Promise<Section[]> => {
-    sections.forEach(section => {
-        section.facilityId = facility.id;
-    });
-    // @ts-ignore NOTE - did Typescript get tougher about Partial<M>?
-    return await Section.bulkCreate(sections);
+const loadSections = async (sections: Partial<Section>[]): Promise<Section[]> => {
+    try {
+        // @ts-ignore NOTE - did Typescript get tougher about Partial<M>?
+        return await Section.bulkCreate(sections, { returning: true });
+    } catch (error) {
+        console.info(`  Reloading Sections ERROR`, error);
+        throw error;
+    }
 }
 
 const loadUsers = async (users: Partial<User>[]): Promise<User[]> => {
@@ -168,7 +175,7 @@ const loadUsers = async (users: Partial<User>[]): Promise<User[]> => {
     }
     try {
         // @ts-ignore NOTE - did Typescript get tougher about Partial<M>?
-        return User.bulkCreate(users);
+        return User.bulkCreate(users, { returning: true });
     } catch (error) {
         console.info("  Reloading Users ERROR", error);
         throw error;
