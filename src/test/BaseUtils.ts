@@ -16,7 +16,7 @@ import Section from "../models/Section";
 import User from "../models/User";
 import {clearMapping} from "../oauth/OAuthMiddleware";
 import {hashPassword} from "../oauth/OAuthUtils";
-import * as Abridgers from "../test/Abridgers";
+//import * as Abridgers from "../test/Abridgers";
 
 // Public Objects ------------------------------------------------------------
 
@@ -74,7 +74,7 @@ export abstract class BaseUtils {
             //console.log("LOADED FACILITIES", Abridgers.FACILITIES(facilities));
             if (options.withSections) {
                 let sections: Partial<Section>[] = [];
-                facilities.forEach(async facility => {
+                facilities.forEach(facility => {
                     SeedData.SECTIONS.forEach(section => {
                         sections.push({ ...section, facilityId: facility.id });
                     });
