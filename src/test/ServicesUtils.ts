@@ -9,6 +9,7 @@ import {PasswordTokenRequest} from "@craigmcc/oauth-orchestrator";
 // Internal Modules ----------------------------------------------------------
 
 import BaseUtils, {OPTIONS} from "./BaseUtils"
+import Category from "../models/Category";
 import Facility from "../models/Facility";
 import Section from "../models/Section";
 import User from "../models/User";
@@ -59,6 +60,28 @@ export class ServicesUtils extends BaseUtils {
     }
 
     /**
+     * Look up and return the specified Category from the database.
+     *
+     * @param section                   Section this Category belongs to
+     * @param ordinal                   Ordinal of the requested Category
+     *
+     * @throws NotFound                 If no such Section exists
+     */
+    public async lookupCategory(section: Section, ordinal: number): Promise<Category> {
+        const result = await Category.findOne({
+            where: {
+                sectionId: section.id,
+                ordinal: ordinal,
+            }
+        });
+        if (result) {
+            return result;
+        } else {
+            throw new NotFound(`ordinal: Missing Category ${ordinal}`);
+        }
+    }
+
+    /**
      * Look up and return the specified Facility from the database.
      *
      * @param name                      Name of the requested Facility
@@ -76,6 +99,14 @@ export class ServicesUtils extends BaseUtils {
         }
     }
 
+    /**
+     * Look up and return the specified Section from the database.
+     *
+     * @param facility                  Facility this Section belongs to
+     * @param ordinal                   Ordinal of the requested Section
+     *
+     * @throws NotFound                 If no such Section exists
+     */
     public async lookupSection(facility: Facility, ordinal: number): Promise<Section> {
         const result = await Section.findOne({
             where: {

@@ -184,6 +184,75 @@ describe("CategoryServices Functional Tests", () => {
 
     });
 
+    describe("CategoryServices.find()", () => {
+
+        it("should fail on invalid category ID", async () => {
+
+            const FACILITY = await UTILS.lookupFacility(SeedData.FACILITY_NAME_FIRST);
+            const SECTION = await UTILS.lookupSection(FACILITY, SeedData.SECTION_ORDINAL_SECOND);
+            const INVALID_CATEGORY_ID = -1;
+
+            try {
+                await CategoryServices.find(SECTION.id, INVALID_CATEGORY_ID);
+                expect.fail("Should have thrown NotFound");
+            } catch (error) {
+                if (error instanceof NotFound) {
+                    expect(error.message).to.include(`categoryId: Missing Category ${INVALID_CATEGORY_ID}`);
+                } else {
+                    expect.fail(`Should not have thrown '${error}'`);
+                }
+            }
+
+        });
+
+        it("should fail on invalid section ID", async () => {
+
+            const INVALID_SECTION_ID = -1;
+
+            try {
+                await CategoryServices.find(INVALID_SECTION_ID, -1);
+                expect.fail("Should have thrown NotFound");
+            } catch (error) {
+                if (error instanceof NotFound) {
+                    expect(error.message).to.include(`sectionId: Missing Section ${INVALID_SECTION_ID}`);
+                } else {
+                    expect.fail(`Should not have thrown '${error}'`);
+                }
+            }
+
+        });
+
+        it("should pass on included parent", async () => {
+
+            const FACILITY = await UTILS.lookupFacility(SeedData.FACILITY_NAME_FIRST);
+            const SECTION = await UTILS.lookupSection(FACILITY, SeedData.SECTION_ORDINAL_SECOND);
+            const INPUTS = await CategoryServices.all(SECTION.id);
+
+            INPUTS.forEach(async INPUT => {
+                const OUTPUT = await CategoryServices.find(SECTION.id, INPUT.ordinal, {
+                    withSection: "",
+                });
+                expect(OUTPUT.section).to.exist;
+                expect(OUTPUT.section.id).to.equal(SECTION.id);
+            });
+
+        });
+
+        it("should pass on valid IDs", async () => {
+
+            const FACILITY = await UTILS.lookupFacility(SeedData.FACILITY_NAME_FIRST);
+            const SECTION = await UTILS.lookupSection(FACILITY, SeedData.SECTION_ORDINAL_SECOND);
+            const INPUTS = await CategoryServices.all(SECTION.id);
+
+            INPUTS.forEach(async INPUT => {
+                const OUTPUT = await CategoryServices.find(SECTION.id, INPUT.ordinal);
+                compareCategoryOld(OUTPUT, INPUT);
+            });
+
+        });
+
+    });
+
 });
 
 // Helper Objects ------------------------------------------------------------
