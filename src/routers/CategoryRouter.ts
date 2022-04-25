@@ -92,17 +92,3 @@ CategoryRouter.put("/:facilityId/:sectionId/:categoryId",
         ));
     });
 
-// Category-Details Relationships --------------------------------------------
-
-// GET /:facilityId/:sectionId/:categoryId/details - Find Details for this Category
-CategoryRouter.get("/:facilityId/:sectionId/:categoryId/details",
-    requireRegular,
-    async (req: Request, res: Response) => {
-        res.send(await CategoryServices.details(
-            parseInt(req.params.facilityId, 10),
-            parseInt(req.params.sectionId, 10),
-            parseInt(req.params.categoryId, 10),
-            req.query
-        ));
-    });
-

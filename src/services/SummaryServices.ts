@@ -315,67 +315,6 @@ class SummaryServices {
     }
 
     /**
-     * Accumulate the specified Sections (with nested Categories and Details)
-     * into Summaries, respecting whether dates should be trimmed to the first
-     * day of the month (for monthly totals) or not.
-     *
-     * These results will likely need to be sorted as desired.
-     *
-     * @param sections                  Sections (with nested Categories and Details)
-     * @param trim                      Trim dates to first day of the month?
-     */
-    private summaries(sections: Section[], trim: boolean): Summary[] {
-
-        // Produce a Summary for each date that has Categories with Details
-        const summaries: Map<string, Summary> = new Map(); // Key = sectionId|trimmedDate
-        sections.forEach(section => {
-            section.categories.forEach(category => {
-                category.details.forEach(detail => {
-                    const detailDate = Dates.fromObject(detail.date);
-                    let trimmedDate = trim
-                        ? detailDate.substr(0, 7) + "-01"
-                        : detailDate;
-                    const key = `${section.id}|${trimmedDate}`;
-                    const existing = summaries.get(key);
-                    const summary = existing ? existing : new Summary({
-                        date: trimmedDate,
-                        sectionId: section.id,
-                    });
-                    if (!existing) {
-                        summaries.set(key, summary);
-                    }
-                    if (summary.values[detail.categoryId] === undefined) {
-                        summary.values[detail.categoryId] = null;
-                    }
-                    if (detail.value || (detail.value === 0)) {
-                        let summaryValue = summary.values[detail.categoryId];
-                        if (summaryValue === null) {
-                            summaryValue = 0;
-                        }
-                        let detailValue = detail.value;
-                        if (!detailValue) {
-                            detailValue = 0;
-                        }
-                        summaryValue = summaryValue + Number(detailValue);
-                        summary.values[detail.categoryId] = summaryValue;
-                    }
-                });
-            });
-        });
-
-        // Return the accumulated results
-        const results: Summary[] = [];
-        for (const [key, value] of summaries.entries()) {
-            if (Object.keys(value.values).length > 0) {
-                results.push(value);
-
-            }
-        }
-        return results;
-
-    }
-
-    /**
      * Convert the specified parameters into a Daily object.
      *
      * @param summary                   Summary being converted
