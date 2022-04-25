@@ -12,10 +12,10 @@ const expect = chai.expect;
 import FacilityServices from "./FacilityServices";
 import Facility from "../models/Facility";
 import * as SeedData from "../test/SeedData";
-import ServiceUtils from "../test/ServicesUtils";
+import ServicesUtils from "../test/ServicesUtils";
 import {BadRequest, NotFound} from "../util/HttpErrors";
 
-const UTILS = new ServiceUtils();
+const UTILS = new ServicesUtils();
 
 // Test Specifications -------------------------------------------------------
 

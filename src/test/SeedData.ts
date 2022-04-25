@@ -9,6 +9,7 @@
 import AccessToken from "../models/AccessToken";
 import Facility from "../models/Facility";
 import RefreshToken from "../models/RefreshToken";
+import Section from "../models/Section";
 import User from "../models/User";
 
 // Seed Data -----------------------------------------------------------------
@@ -75,6 +76,39 @@ export const REFRESH_TOKENS_SUPERUSER: Partial<RefreshToken>[] = [
         expires: new Date(new Date().getTime() - ONE_DAY),
         token: "superuser_refresh_2",
         // userId must be seeded
+    },
+];
+
+// ----- Sections ------------------------------------------------------------
+
+export const SECTION_NAME_FIRST = "First Section";
+export const SECTION_NAME_SECOND = "Second Section";
+export const SECTION_NAME_THIRD = "Third Section";
+export const SECTION_SCOPE_FIRST = "first";
+export const SECTION_SCOPE_SECOND = "second";
+export const SECTION_SCOPE_THIRD = "third";
+
+export const SECTIONS: Partial<Section>[] = [
+    {
+        active: true,
+        ordinal: 1000,
+        scope: SECTION_SCOPE_FIRST,
+        slug: `${SECTION_NAME_FIRST}_Slug`,
+        title: `${SECTION_NAME_FIRST}_Title`,
+    },
+    {
+        active: false,
+        ordinal: 2000,
+        scope: SECTION_SCOPE_SECOND,
+        slug: `${SECTION_NAME_SECOND}_Slug`,
+        title: `${SECTION_NAME_SECOND}_Title`,
+    },
+    {
+        active: true,
+        ordinal: 3000,
+        scope: SECTION_SCOPE_THIRD,
+        slug: `${SECTION_NAME_THIRD}_Slug`,
+        title: `${SECTION_NAME_THIRD}_Title`,
     },
 ];
 

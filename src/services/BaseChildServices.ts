@@ -19,8 +19,8 @@ import {BadRequest, NotFound, NotUnique, ServerError} from "../util/HttpErrors";
 /**
  * Define standard CRUD operations for services of a parent Model class.
  *
- * @param M                             Constructor for Model class of the child being supported
- * @param C                             Constructor for Model class of the required parent
+ * @param C                             Constructor for Model class of the child being supported
+ * @param P                             Constructor for Model class of the required parent
  */
 abstract class BaseChildServices<C extends Model, P extends Model> extends BaseCommonServices<C> {
 
@@ -118,7 +118,7 @@ abstract class BaseChildServices<C extends Model, P extends Model> extends BaseC
                 [`${this.parentKey}`]: parentId, // No cheating
             };
             // @ts-ignore
-            return this.model.create(child, {
+            return await this.model.create(child, {
                 fields: this.fields,
             });
         } catch (error) {
