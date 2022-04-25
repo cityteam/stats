@@ -4,7 +4,7 @@
 
 // External Modules ----------------------------------------------------------
 
-import {BelongsTo, Column, DataType, ForeignKey, HasMany, Model, Table} from "sequelize-typescript";
+import {BelongsTo, Column, DataType, ForeignKey, Model, Table} from "sequelize-typescript";
 
 // Internal Modules ----------------------------------------------------------
 
@@ -14,7 +14,6 @@ import {
     validateSectionId,
 } from "../util/AsyncValidators";
 import {BadRequest} from "../util/HttpErrors";
-import Detail from "./Detail";
 
 // Public Objects ------------------------------------------------------------
 
@@ -83,13 +82,6 @@ class Category extends Model<Category> {
     })
     // Description of this Category
     description?: string;
-
-    @HasMany(() => Detail, {
-        onDelete: "CASCADE",
-        onUpdate: "CASCADE",
-    })
-    // Details that are reported by this Category
-    details!: Detail[];
 
     @Column({
         allowNull: true,

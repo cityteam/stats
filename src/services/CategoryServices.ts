@@ -10,14 +10,11 @@ import {FindOptions} from "sequelize";
 
 import BaseChildServices from "./BaseChildServices";
 import Category from "../models/Category";
-import Detail from "../models/Detail";
 import Section from "../models/Section";
 import {appendPaginationOptions} from "../util/QueryParameters";
 import * as SortOrder from "../util/SortOrder";
 import SectionServices from "./SectionServices";
 import {NotFound} from "../util/HttpErrors";
-import FacilityServices from "./FacilityServices";
-import DetailServices from "./DetailServices";
 
 // Public Classes ------------------------------------------------------------
 
@@ -37,16 +34,6 @@ class CategoryServices extends BaseChildServices<Category, Section> {
     }
 
     // Model-Specific Methods ------------------------------------------------
-
-    public async details(facilityId: number, sectionId: number, categoryId: number, query?: any): Promise<Detail[]> {
-        await FacilityServices.read("CategoryServices.details", facilityId);
-        await SectionServices.read("CategoryServices.details", facilityId, sectionId);
-        const category = await this.read("CategoryServices.details", sectionId, categoryId);
-        const options: FindOptions = DetailServices.appendMatchOptions({
-            order: SortOrder.DETAILS,
-        }, query);
-        return category.$get("details", options);
-    }
 
     public async exact(facilityId: number, sectionId: number, ordinal: number, query?: any): Promise<Category> {
         const section = await SectionServices.read("CategoryServices.exact", facilityId, sectionId);

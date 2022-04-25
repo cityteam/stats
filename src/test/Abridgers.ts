@@ -5,7 +5,6 @@
 // Internal Modules ----------------------------------------------------------
 
 import Category from "../models/Category";
-import Detail from "../models/Detail";
 import Facility from "../models/Facility";
 import Section from "../models/Section";
 import Summary from "../models/Summary";
@@ -16,8 +15,6 @@ import User from "../models/User";
 export const ANY = (model: object): object => {
     if (model instanceof Category) {
         return CATEGORY(model);
-    } else if (model instanceof Detail) {
-        return DETAIL(model);
     } else if (model instanceof Facility) {
         return FACILITY(model);
     } else if (model instanceof Section) {
@@ -43,22 +40,6 @@ export const CATEGORIES = (categories: Partial<Category>[]): object[] => {
     const results: object[] = [];
     categories.forEach(category => {
         results.push(CATEGORY(category));
-    });
-    return results;
-}
-
-export const DETAIL = (detail: Detail): object => {
-    return {
-        id: detail.id,
-        categoryId: detail.categoryId,
-        date: detail.date,
-    };
-}
-
-export const DETAILS = (details: Detail[]): object[] => {
-    const results: object[] = [];
-    details.forEach(detail => {
-        results.push(DETAIL(detail));
     });
     return results;
 }
