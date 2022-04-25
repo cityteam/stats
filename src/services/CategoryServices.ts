@@ -56,7 +56,7 @@ class CategoryServices extends BaseChildServices<Category, Section> {
         const results = await section.$get("categories", options);
         if (results.length !== 1) {
             throw new NotFound(
-                `ordinal: Missing Category '${ordinal}'`,
+                `ordinal: Missing Category ${ordinal}`,
                 "CategoryServices.exact"
             );
         }
@@ -99,7 +99,7 @@ class CategoryServices extends BaseChildServices<Category, Section> {
         if ("" === query.active) {
             where.active = true
         }
-        if ("" === query.ordinal) {
+        if (query.ordinal) {
             where.ordinal = Number(query.ordinal);
         }
         if (Object.keys(where).length > 0) {

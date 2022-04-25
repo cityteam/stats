@@ -71,8 +71,8 @@ describe('SectionServices Functional Tests', function () {
 
             expect(OUTPUTS.length).to.equal(SeedData.SECTIONS.length);
             OUTPUTS.forEach(OUTPUT => {
-                expect(OUTPUT.facilityId).to.exist;
-                expect(OUTPUT.facilityId).to.equal(FACILITY.id);
+                expect(OUTPUT.facility).to.exist;
+                expect(OUTPUT.facility.id).to.equal(FACILITY.id);
             });
 
         });
@@ -98,7 +98,7 @@ describe('SectionServices Functional Tests', function () {
             const OFFSET = 1;
             const OUTPUTS = await SectionServices.all(FACILITY.id, {
                 limit: LIMIT,
-                OFFSET: OFFSET,
+                offset: OFFSET,
             });
 
             expect(OUTPUTS.length).to.equal(LIMIT);
@@ -158,7 +158,7 @@ describe('SectionServices Functional Tests', function () {
                     withFacility: "",
                 });
                 expect(OUTPUT.facility).to.exist;
-                expect(OUTPUT.facilityId).to.equal(FACILITY.id);
+                expect(OUTPUT.facility.id).to.equal(FACILITY.id);
             });
 
         });

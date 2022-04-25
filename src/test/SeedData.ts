@@ -7,6 +7,7 @@
 // Internal Modules ----------------------------------------------------------
 
 import AccessToken from "../models/AccessToken";
+import Category from "../models/Category";
 import Facility from "../models/Facility";
 import RefreshToken from "../models/RefreshToken";
 import Section from "../models/Section";
@@ -30,6 +31,37 @@ export const ACCESS_TOKENS_SUPERUSER: Partial<AccessToken>[] = [
         scope: "superuser",
         token: "superuser_access_2",
         // userId must be seeded
+    },
+];
+
+// ----- Categories ----------------------------------------------------------
+
+export const CATEGORY_NAME_FIRST = "First Category";
+export const CATEGORY_NAME_SECOND = "Second Category";
+export const CATEGORY_NAME_THIRD = "Third Category";
+export const CATEGORY_ORDINAL_FIRST = 100;
+export const CATEGORY_ORDINAL_SECOND = 200;
+export const CATEGORY_ORDINAL_THIRD = 300;
+
+// Must fill in sectionId
+export const CATEGORIES: Partial<Category>[] = [
+    {
+        active: true,
+        ordinal: CATEGORY_ORDINAL_FIRST,
+        service: `${CATEGORY_NAME_FIRST} Service`,
+        slug: `${CATEGORY_NAME_FIRST} Slug`,
+    },
+    {
+        active: false,
+        ordinal: CATEGORY_ORDINAL_SECOND,
+        service: `${CATEGORY_NAME_SECOND} Service`,
+        slug: `${CATEGORY_NAME_SECOND} Slug`,
+    },
+    {
+        active: true,
+        ordinal: CATEGORY_ORDINAL_THIRD,
+        service: `${CATEGORY_NAME_THIRD} Service`,
+        slug: `${CATEGORY_NAME_THIRD} Slug`,
     },
 ];
 
@@ -84,31 +116,35 @@ export const REFRESH_TOKENS_SUPERUSER: Partial<RefreshToken>[] = [
 export const SECTION_NAME_FIRST = "First Section";
 export const SECTION_NAME_SECOND = "Second Section";
 export const SECTION_NAME_THIRD = "Third Section";
+export const SECTION_ORDINAL_FIRST = 1000;
+export const SECTION_ORDINAL_SECOND = 2000;
+export const SECTION_ORDINAL_THIRD = 3000;
 export const SECTION_SCOPE_FIRST = "first";
 export const SECTION_SCOPE_SECOND = "second";
 export const SECTION_SCOPE_THIRD = "third";
 
+// Must fill in facilityId
 export const SECTIONS: Partial<Section>[] = [
     {
         active: true,
-        ordinal: 1000,
+        ordinal: SECTION_ORDINAL_FIRST,
         scope: SECTION_SCOPE_FIRST,
-        slug: `${SECTION_NAME_FIRST}_Slug`,
-        title: `${SECTION_NAME_FIRST}_Title`,
+        slug: `${SECTION_NAME_FIRST} Slug`,
+        title: `${SECTION_NAME_FIRST} Title`,
     },
     {
         active: false,
-        ordinal: 2000,
+        ordinal: SECTION_ORDINAL_SECOND,
         scope: SECTION_SCOPE_SECOND,
-        slug: `${SECTION_NAME_SECOND}_Slug`,
-        title: `${SECTION_NAME_SECOND}_Title`,
+        slug: `${SECTION_NAME_SECOND} Slug`,
+        title: `${SECTION_NAME_SECOND} Title`,
     },
     {
         active: true,
-        ordinal: 3000,
+        ordinal: SECTION_ORDINAL_THIRD,
         scope: SECTION_SCOPE_THIRD,
-        slug: `${SECTION_NAME_THIRD}_Slug`,
-        title: `${SECTION_NAME_THIRD}_Title`,
+        slug: `${SECTION_NAME_THIRD} Slug`,
+        title: `${SECTION_NAME_THIRD} Title`,
     },
 ];
 

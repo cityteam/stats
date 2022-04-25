@@ -8,6 +8,7 @@
 
 import * as SeedData from "./SeedData";
 import AccessToken from "../models/AccessToken";
+import Category from "../models/Category";
 import Database from "../models/Database";
 import Facility from "../models/Facility";
 import RefreshToken from "../models/RefreshToken";
@@ -20,6 +21,7 @@ import {hashPassword} from "../oauth/OAuthUtils";
 
 export type OPTIONS = {
     withAccessTokens: boolean,
+    withCategories: boolean,
     withFacilities: boolean,
     withRefreshTokens: boolean,
     withSections: boolean,
@@ -70,8 +72,13 @@ export abstract class BaseUtils {
         if (options.withFacilities) {
             facilities = await loadFacilities(SeedData.FACILITIES);
             if (options.withSections) {
-                facilities.forEach(facility => {
-                    const sections = loadSections(facility, SeedData.SECTIONS);
+                facilities.forEach(async facility => {
+                    const sections = await loadSections(facility, SeedData.SECTIONS);
+                    if (options.withCategories) {
+                        sections.forEach(async section => {
+                            const categories = await loadCategories(section, SeedData.CATEGORIES);
+                        });
+                    }
                 });
             }
         } else {
@@ -104,6 +111,14 @@ const loadAccessTokens
         console.info(`  Reloading AccessTokens for User '${user.username}' ERROR`, error);
         throw error;
     }
+}
+
+const loadCategories = async (section: Section, categories: Partial<Category>[]): Promise<Section[]> => {
+    categories.forEach(category => {
+        category.sectionId = section.id;
+    });
+    // @ts-ignore NOTE - did Typescript get tougher about Partial<M>?
+    return await Category.bulkCreate(categories);
 }
 
 const loadFacilities

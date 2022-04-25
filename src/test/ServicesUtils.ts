@@ -10,6 +10,7 @@ import {PasswordTokenRequest} from "@craigmcc/oauth-orchestrator";
 
 import BaseUtils, {OPTIONS} from "./BaseUtils"
 import Facility from "../models/Facility";
+import Section from "../models/Section";
 import User from "../models/User";
 import OAuthOrchestrator from "../oauth/OAuthOrchestrator";
 import {NotFound} from "../util/HttpErrors";
@@ -72,6 +73,20 @@ export class ServicesUtils extends BaseUtils {
             return result;
         } else {
             throw new NotFound(`name: Missing Facility '${name}'`);
+        }
+    }
+
+    public async lookupSection(facility: Facility, ordinal: number): Promise<Section> {
+        const result = await Section.findOne({
+            where: {
+                facilityId: facility.id,
+                ordinal: ordinal,
+            }
+        });
+        if (result) {
+            return result;
+        } else {
+            throw new NotFound(`ordinal: Missing Section ${ordinal}`);
         }
     }
 
