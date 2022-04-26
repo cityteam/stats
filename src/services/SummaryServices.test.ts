@@ -6,6 +6,7 @@
 
 const chai = require("chai");
 const expect = chai.expect;
+import {Months} from "@craigmcc/shared-utils";
 
 // Internal Modules ----------------------------------------------------------
 
@@ -32,6 +33,106 @@ describe("SummaryServices Functional Tests", () => {
     });
 
     // Test Methods ----------------------------------------------------------
+
+    describe("SummaryServices.dailies()", () => {
+
+        it("can record and receive daily Summaries", async () => {
+
+            const FACILITY = await UTILS.lookupFacility(SeedData.FACILITY_NAME_THIRD);
+            const SECTION = await UTILS.lookupSection(FACILITY, SeedData.SECTION_ORDINAL_THIRD);
+            const CATEGORIES = await SectionServices.categories(FACILITY.id, SECTION.id);
+            const DATE1 = "2020-07-04";
+            const DATE2 = "2020-07-05";
+            const DATE_FROM = Months.start("2020-07");
+            const DATE_TO = Months.end("2020-07");
+            const INPUTS: Map<string, Summary> = new Map();
+            INPUTS.set(DATE1, {
+                date: DATE1,
+                sectionId: SECTION.id,
+                values: {
+                    [CATEGORIES[0].id]: 11,
+                    [CATEGORIES[1].id]: 22,
+                    [CATEGORIES[2].id]: 33,
+                },
+            });
+            INPUTS.set(DATE2, {
+                date: DATE2,
+                sectionId: SECTION.id,
+                values: {
+                    [CATEGORIES[0].id]: 44,
+                    [CATEGORIES[1].id]: 55,
+                    [CATEGORIES[2].id]: 66,
+                },
+            });
+            for (const INPUT of INPUTS.values()) {
+                await SummaryServices.write(FACILITY.id, SECTION.id, INPUT.date, INPUT);
+            }
+
+            const OUTPUTS = await SummaryServices.dailies(FACILITY.id, DATE_FROM, DATE_TO, false);
+            expect(OUTPUTS.length).to.equal(INPUTS.size);
+            OUTPUTS.forEach(OUTPUT => {
+                const INPUT = INPUTS.get(OUTPUT.date);
+                if (INPUT) {
+                    compareSummary(OUTPUT, INPUT);
+                } else {
+                    expect.fail(`Could not find INPUT for date '${OUTPUT.date}'`);
+                }
+            });
+
+        });
+
+    });
+
+    describe("SummaryServices.monthlies()", () => {
+
+        it("can record and receive monthly Summaries", async () => {
+
+            const FACILITY = await UTILS.lookupFacility(SeedData.FACILITY_NAME_SECOND);
+            const SECTION = await UTILS.lookupSection(FACILITY, SeedData.SECTION_ORDINAL_SECOND);
+            const CATEGORIES = await SectionServices.categories(FACILITY.id, SECTION.id);
+            const DATE1 = "2020-07-04";
+            const DATE2 = "2020-07-05";
+            const DATE_FROM = Months.start("2020-07");
+            const DATE_TO = Months.end("2020-07");
+            const INPUTS: Map<string, Summary> = new Map();
+            INPUTS.set(DATE1, {
+                date: DATE1,
+                sectionId: SECTION.id,
+                values: {
+                    [CATEGORIES[0].id]: 11,
+                    [CATEGORIES[1].id]: 22,
+                    [CATEGORIES[2].id]: 33,
+                },
+            });
+            INPUTS.set(DATE2, {
+                date: DATE2,
+                sectionId: SECTION.id,
+                values: {
+                    [CATEGORIES[0].id]: 44,
+                    [CATEGORIES[1].id]: 55,
+                    [CATEGORIES[2].id]: 66,
+                },
+            });
+            for (const INPUT of INPUTS.values()) {
+                await SummaryServices.write(FACILITY.id, SECTION.id, INPUT.date, INPUT);
+            }
+
+            const OUTPUTS = await SummaryServices.monthlies(FACILITY.id, DATE_FROM, DATE_TO, false);
+            expect(OUTPUTS.length).to.equal(1);
+            const INPUT: Summary = {
+                date: DATE_FROM,
+                sectionId: SECTION.id,
+                values: {
+                    [CATEGORIES[0].id]: 11 + 44,
+                    [CATEGORIES[1].id]: 22 + 55,
+                    [CATEGORIES[2].id]: 33 + 66,
+                }
+            }
+            compareSummary(OUTPUTS[0], INPUT);
+
+        });
+
+    });
 
     describe("SummaryServices.write()", () => {
 
