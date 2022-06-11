@@ -25,10 +25,11 @@ function Navigation() {
     return (
         <>
             <Navbar
-                bg="warning"
+                //bg="primary"
                 className="mb-3"
                 collapseOnSelect
                 sticky="top"
+                style={{backgroundColor: "rgb(69,154,185)"}}
                 variant="light"
             >
 
