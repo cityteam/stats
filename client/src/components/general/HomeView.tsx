@@ -23,7 +23,7 @@ const HomeView = () => {
             {(loginContext.data.loggedIn) ? (
                 <>
                     <p>Welcome user <strong>{loginContext.data.username}</strong>!</p>
-                    <p>Select the <strong>Entry</strong> link on the Navigation Bar
+                    <p>Select the <strong>Entries</strong> link on the Navigation Bar
                         above to begin recording statistics.
                     </p>
                 </>

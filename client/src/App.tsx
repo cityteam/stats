@@ -16,6 +16,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 import CategorySegment from "./components/categories/CategorySegment";
 import EntriesView from "./components/entries/EntriesView";
+import ExportView from "./components/reports/ExportView";
 import FacilitySegment from "./components/facilities/FacilitySegment";
 import HomeView from "./components/general/HomeView";
 import Navigation from "./components/general/Navigation";
@@ -65,6 +66,7 @@ function App () {
                               <Route path="admin-sections" element={<SectionSegment/>}/>
                               <Route path="admin-users" element={<UserSegment/>}/>
                               <Route path="entries" element={<EntriesView/>}/>
+                              <Route path="export" element={<ExportView/>}/>
                               {(notTestMode) ? (
                                   <Route path="chart-month" element={
                                       <Suspense fallback={<div>Loading MonthlyChart</div>}>
