@@ -12,12 +12,14 @@ import BaseParentServices from "./BaseParentServices";
 import Category from "../models/Category";
 import Facility from "../models/Facility";
 import Section from "../models/Section";
+import User from "../models/User";
 import {appendPaginationOptions} from "../util/QueryParameters";
 import * as SortOrder from "../util/SortOrder";
 import {NotFound} from "../util/HttpErrors";
 import StandardCategories from "../util/StandardCategories.json";
 import StandardSections from "../util/StandardSections.json";
 import SectionServices from "./SectionServices";
+import UserServices from "./UserServices";
 
 // Public Classes ------------------------------------------------------------
 
@@ -89,6 +91,53 @@ class FacilityServices extends BaseParentServices<Facility> {
             order: SortOrder.SECTIONS,
         }, query);
         return facility.$get("sections", options);
+    }
+
+    /**
+     * Return all users whose scope includes a scope value that starts with
+     * the scope prefix for this Facility.
+     *
+     * @param facilityId                ID of this Facility
+     * @param query                     Optional query options
+     */
+    public async users(facilityId: number, query?: any): Promise<User[]> {
+        const facility = await this.read("FacilityServices.users", facilityId);
+        const pattern = `${facility.scope}`;
+        const results = await UserServices.all();
+        const users: User[] = [];
+        results.forEach(result => {
+            let match = false;
+            const alloweds = result.scope.split(" ");
+            alloweds.forEach(allowed => {
+                if (allowed.startsWith(pattern)) {
+                    match = true;
+                }
+            });
+            if (match) {
+                users.push(result);
+            }
+        })
+        return users;
+    }
+
+    public async usersExact(facilityId: number, username: string, query?: any): Promise<User> {
+        await this.read("FacilityServices.usersExact", facilityId);
+        return UserServices.exact(username, query);
+    }
+
+    public async usersInsert(facilityId: number, user: User): Promise<User> {
+        await this.read("FacilityServices.usersInsert", facilityId);
+        return await UserServices.insert(user);
+    }
+
+    public async usersRemove(facilityId: number, userId: number): Promise<User> {
+        await this.read("FacilityServices.usersRemove", facilityId);
+        return await UserServices.remove(userId);
+    }
+
+    public async usersUpdate(facilityId: number, userId: number, user: User): Promise<User> {
+        await this.read("FacilityServices.usersUpdate", facilityId);
+        return await UserServices.update(userId, user);
     }
 
     // Public Helpers --------------------------------------------------------

@@ -100,3 +100,56 @@ FacilityRouter.post("/:facilityId/categories",
             parseInt(req.params.facilityId, 10)
         ));
     });
+
+// GET /:facilityId/users - Find matching Users for this Facility
+FacilityRouter.get("/:facilityId/users",
+    requireAdmin,
+    async (req, res) => {
+        res.send(await FacilityServices.users(
+            parseInt(req.params.facilityId, 10),
+            req.query
+        ));
+    });
+
+// POST /:facilityId/users - Insert new User for this Facility
+FacilityRouter.post("/:facilityId/users",
+    requireAdmin,
+    async (req, res) => {
+        res.send(await FacilityServices.usersInsert(
+            parseInt(req.params.facilityId, 10),
+            req.body
+        ));
+    });
+
+// DELETE /:facilityId/users/:userId - Remove existing User for this Facility
+FacilityRouter.delete("/:facilityId/users/:userId",
+    requireAdmin,
+    async (req, res) => {
+        res.send(await FacilityServices.usersRemove(
+            parseInt(req.params.facilityId, 10),
+            parseInt(req.params.userId, 10),
+        ));
+    });
+
+// PUT /:facilityId/users - Update existing User for this Facility
+FacilityRouter.put("/:facilityId/users/:userId",
+    requireAdmin,
+    async (req, res) => {
+        res.send(await FacilityServices.usersUpdate(
+            parseInt(req.params.facilityId, 10),
+            parseInt(req.params.userId, 10),
+            req.body
+        ));
+    });
+
+// GET /:facilityId/users/exact/:username - Find exactly matching User by username
+FacilityRouter.get("/:facilityId/users/exact/:username",
+    requireAdmin,
+    async (req, res) => {
+        res.send(await FacilityServices.usersExact(
+            parseInt(req.params.facilityId, 10),
+            req.params.username,
+            req.query
+        ));
+    });
+
