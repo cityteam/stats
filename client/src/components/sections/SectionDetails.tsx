@@ -12,14 +12,13 @@ import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import Row from "react-bootstrap/Row";
 import {SubmitHandler, useForm} from "react-hook-form";
+import {CheckBoxField, TextField} from "@craigmcc/shared-react";
 import {yupResolver} from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 
 // Internal Modules ----------------------------------------------------------
 
 import FacilityContext from "../facilities/FacilityContext";
-import CheckBoxField from "../general/CheckBoxField";
-import TextField from "../general/TextField";
 import {HandleAction, HandleSection} from "../../types";
 import Section from "../../models/Section";
 import SectionData from "../../models/SectionData";
@@ -138,7 +137,7 @@ const SectionDetails = (props: Props) => {
                         <TextField
                             autoFocus={(props.autoFocus !== undefined) ? props.autoFocus : undefined}
                             className="col-4"
-                            errors={errors}
+                            error={errors.ordinal}
                             label="Ordinal:"
                             name="ordinal"
                             register={register}
@@ -146,7 +145,7 @@ const SectionDetails = (props: Props) => {
                             valid="Unique number that determines the sort order for Sections."
                         />
                         <TextField
-                            errors={errors}
+                            error={errors.title}
                             label="Title:"
                             name="title"
                             register={register}
@@ -156,7 +155,7 @@ const SectionDetails = (props: Props) => {
 
                     <Row className="mb-3" id="notesRow">
                         <TextField
-                            errors={errors}
+                            error={errors.notes}
                             label="Notes:"
                             name="notes"
                             register={register}
@@ -166,14 +165,14 @@ const SectionDetails = (props: Props) => {
 
                     <Row className="mb-3" id="slugScopeRow">
                         <TextField
-                            errors={errors}
+                            error={errors.slug}
                             label="Slug:"
                             name="slug"
                             register={register}
                             valid="Abbreviated description for mobile devices."
                         />
                         <TextField
-                            errors={errors}
+                            error={errors.scope}
                             label="Scope:"
                             name="scope"
                             register={register}
@@ -183,7 +182,7 @@ const SectionDetails = (props: Props) => {
 
                     <Row className="mb-3" id="activeRow">
                         <CheckBoxField
-                            errors={errors}
+                            error={errors.active}
                             label="Active?"
                             name="active"
                             register={register}

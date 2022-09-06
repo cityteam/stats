@@ -11,14 +11,13 @@ import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import Row from "react-bootstrap/Row";
-import {SubmitHandler, useForm} from "react-hook-form"
+import {SubmitHandler, useForm} from "react-hook-form";
+import {CheckBoxField, TextField} from "@craigmcc/shared-react";
 import {yupResolver} from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 
 // Internal Modules ----------------------------------------------------------
 
-import CheckBoxField from "../general/CheckBoxField";
-import TextField from "../general/TextField";
 import {HandleAction, HandleFacility} from "../../types";
 import Facility from "../../models/Facility";
 import FacilityData from "../../models/FacilityData";
@@ -180,14 +179,14 @@ const FacilityDetails = (props: Props) => {
                         <TextField
                             autoFocus={(props.autoFocus !== undefined) ? props.autoFocus : undefined}
                             className="col-8"
-                            errors={errors}
+                            error={errors.name}
                             label="Name:"
                             name="name"
                             register={register}
                             valid="Name of this Facility."
                         />
                         <TextField
-                            errors={errors}
+                            error={errors.scope}
                             label="Scope:"
                             name="scope"
                             register={register}
@@ -197,13 +196,13 @@ const FacilityDetails = (props: Props) => {
 
                     <Row className="mb-3" id="addressRow">
                         <TextField
-                            errors={errors}
+                            error={errors.address1}
                             label="Address 1"
                             name="address1"
                             register={register}
                         />
                         <TextField
-                            errors={errors}
+                            error={errors.address2}
                             label="Address 2"
                             name="address2"
                             register={register}
@@ -213,21 +212,21 @@ const FacilityDetails = (props: Props) => {
                     <Row className="mb-3" id="cityStateZipRow">
                         <TextField
                             className="col-7"
-                            errors={errors}
+                            error={errors.city}
                             label="City"
                             name="city"
                             register={register}
                         />
                         <TextField
                             className="col-2"
-                            errors={errors}
+                            error={errors.state}
                             label="State:"
                             name="address2"
                             register={register}
                         />
                         <TextField
                             className="col-3"
-                            errors={errors}
+                            error={errors.zipCode}
                             label="Zip Code:"
                             name="zipCode"
                             register={register}
@@ -237,14 +236,14 @@ const FacilityDetails = (props: Props) => {
                     <Row className="mb-3" id="emailPhoneRow">
                         <TextField
                             className="col-8"
-                            errors={errors}
+                            error={errors.email}
                             label="Email Address:"
                             name="email"
                             register={register}
                         />
                         <TextField
                             className="col-4"
-                            errors={errors}
+                            error={errors.phone}
                             label="Phone Number:"
                             name="phone"
                             register={register}
@@ -253,7 +252,7 @@ const FacilityDetails = (props: Props) => {
 
                     <Row className="mb-3" id="activeRow">
                         <CheckBoxField
-                            errors={errors}
+                            error={errors.active}
                             label="Active?"
                             name="active"
                             register={register}

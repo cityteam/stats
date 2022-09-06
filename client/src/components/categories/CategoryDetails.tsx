@@ -12,14 +12,13 @@ import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import Row from "react-bootstrap/Row";
 import {SubmitHandler, useForm} from "react-hook-form";
+import {CheckBoxField, TextField} from "@craigmcc/shared-react";
 import {yupResolver} from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 
 // Internal Modules ----------------------------------------------------------
 
 import FacilityContext from "../facilities/FacilityContext";
-import CheckBoxField from "../general/CheckBoxField";
-import TextField from "../general/TextField";
 import {HandleAction, HandleCategory} from "../../types";
 import Category from "../../models/Category";
 import CategoryData from "../../models/CategoryData";
@@ -141,7 +140,7 @@ const CategoryDetails = (props: Props) => {
                         <TextField
                             autoFocus={(props.autoFocus !== undefined) ? props.autoFocus : undefined}
                             className="col-4"
-                            errors={errors}
+                            error={errors.ordinal}
                             label="Ordinal:"
                             name="ordinal"
                             register={register}
@@ -149,7 +148,7 @@ const CategoryDetails = (props: Props) => {
                             valid="Unique number that determines the sort order for Categories within a Section."
                         />
                         <TextField
-                            errors={errors}
+                            error={errors.service}
                             label="Service:"
                             name="service"
                             register={register}
@@ -159,7 +158,7 @@ const CategoryDetails = (props: Props) => {
 
                     <Row className="mb-3" id="notesRow">
                         <TextField
-                            errors={errors}
+                            error={errors.notes}
                             label="Notes:"
                             name="notes"
                             register={register}
@@ -169,21 +168,21 @@ const CategoryDetails = (props: Props) => {
 
                     <Row className="mb-3" id="slugActiveAccumulatedRow">
                         <TextField
-                            errors={errors}
+                            error={errors.slug}
                             label="Slug:"
                             name="slug"
                             register={register}
                             valid="Abbreviated description for mobile devices"
                         />
                         <CheckBoxField
-                            errors={errors}
+                            error={errors.active}
                             label="Active?"
                             name="active"
                             register={register}
                         />
 {/*
                         <CheckBoxField
-                            errors={errors}
+                            error={errors.accumulated}
                             label="Accumulated?"
                             name="accumulated"
                             register={register}

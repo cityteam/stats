@@ -12,13 +12,12 @@ import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import Row from "react-bootstrap/Row";
 import {SubmitHandler, useForm} from "react-hook-form"
+import {CheckBoxField, TextField} from "@craigmcc/shared-react";
 import {yupResolver} from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 
 // Internal Modules ----------------------------------------------------------
 
-import CheckBoxField from "../general/CheckBoxField";
-import TextField from "../general/TextField";
 import {HandleAction, HandleUser} from "../../types";
 import User from "../../models/User";
 import UserData from "../../models/UserData";
@@ -129,7 +128,7 @@ const UserDetails = (props: Props) => {
                     <Row className="mb-3" id="nameRow">
                         <TextField
                             autoFocus={(props.autoFocus !== undefined) ? props.autoFocus : undefined}
-                            errors={errors}
+                            error={errors.name}
                             label="Name:"
                             name="name"
                             register={register}
@@ -139,14 +138,14 @@ const UserDetails = (props: Props) => {
 
                     <Row className="mb-3" id="usernamePasswordRow">
                         <TextField
-                            errors={errors}
+                            error={errors.username}
                             label="Username:"
                             name="username"
                             register={register}
                             valid="Login username for this User (must be unique)."
                         />
                         <TextField
-                            errors={errors}
+                            error={errors.password}
                             label="Password:"
                             name="password"
                             register={register}
@@ -156,7 +155,7 @@ const UserDetails = (props: Props) => {
 
                     <Row className="mb-3" id="scopeRow">
                         <TextField
-                            errors={errors}
+                            error={errors.scope}
                             label="Scope:"
                             name="scope"
                             register={register}
@@ -166,7 +165,7 @@ const UserDetails = (props: Props) => {
 
                     <Row className="mb-3" id="activeRow">
                         <CheckBoxField
-                            errors={errors}
+                            error={errors.active}
                             label="Active?"
                             name="active"
                             register={register}

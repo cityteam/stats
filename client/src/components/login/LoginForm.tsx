@@ -11,12 +11,12 @@ import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import {SubmitHandler, useForm} from "react-hook-form";
+import {TextField} from "@craigmcc/shared-react";
 import {yupResolver} from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 
 // Internal Modules ----------------------------------------------------------
 
-import TextField from "../general/TextField";
 import Credentials from "../../models/Credentials";
 
 // Property Details ----------------------------------------------------------
@@ -60,7 +60,7 @@ export const LoginForm = (props: Props) => {
                     <Row id="usernameRow">
                         <TextField
                             autoFocus={(props.autoFocus !== undefined) ? props.autoFocus : undefined}
-                            errors={errors}
+                            error={errors.username}
                             label="Username:"
                             name="username"
                             register={register}
@@ -70,7 +70,7 @@ export const LoginForm = (props: Props) => {
 
                     <Row id="passwordRow">
                         <TextField
-                            errors={errors}
+                            error={errors.password}
                             label="Password:"
                             name="password"
                             register={register}
