@@ -1,7 +1,7 @@
-// CategoryOptions -------------------------------------------------------------
+// FacilityList -----------------------------------------------------------
 
-// List Categories that match search criteria, offering callbacks for adding,
-// editing, and removing Categories.
+// List Facilities that match search criteria, offering callbacks for adding,
+// editing, and removing Facilities.
 
 // External Modules ----------------------------------------------------------
 
@@ -14,101 +14,83 @@ import Table from "react-bootstrap/Table";
 
 // Internal Modules ----------------------------------------------------------
 
-import FacilityContext from "../facilities/FacilityContext";
+import FacilityContext from "./FacilityContext";
 import CheckBox from "../general/CheckBox";
 import FetchingProgress from "../general/FetchingProgress";
 import LoginContext from "../login/LoginContext";
-import SectionSelector from "../sections/SectionSelector";
-import {HandleAction, HandleBoolean, HandleCategory, HandleSection} from "../../types";
-import useFetchCategories from "../../hooks/useFetchCategories";
-import Section from "../../models/Section";
-import * as Abridgers from "../../util/Abridgers";
+import {HandleAction, HandleBoolean, HandleFacility, Scope} from "../../types";
+import Facility from "../../models/Facility";
+import useFetchFacilities from "../../hooks/useFetchFacilities";
 import logger from "../../util/ClientLogger";
 import {listValue} from "../../util/Transformations";
 
 // Incoming Properties -------------------------------------------------------
 
 export interface Props {
-    handleAdd?: HandleAction;           // Handle request to add a Category [not allowed]
-    handleEdit?: HandleCategory;        // Handle request to edit a Category [not allowed]
-    handleSection: HandleSection;       // Handle request to select a Section
+    handleAdd?: HandleAction;           // Handle request to add a Facility [not allowed]
+    handleEdit?: HandleFacility;        // Handle request to select a Facility [not allowed]
 }
 
 // Component Details ---------------------------------------------------------
 
-const CategoryOptions = (props: Props) => {
+const FacilityList = (props: Props) => {
 
     const facilityContext = useContext(FacilityContext);
     const loginContext = useContext(LoginContext);
 
     const [active, setActive] = useState<boolean>(false);
-    const [section, setSection] = useState<Section>(new Section());
+    const [availables, setAvailables] = useState<Facility[]>([]);
 
-    const fetchCategories = useFetchCategories({
+    const fetchFacilities = useFetchFacilities({
         active: active,
         alertPopup: false,
-        section: section,
     });
 
     useEffect(() => {
+
         logger.debug({
-            context: "CategoryOptions.useEffect",
-            facility: Abridgers.FACILITY(facilityContext.facility),
-            section: Abridgers.SECTION(section),
-            active: active,
+            context: "FacilityList.useEffect"
         });
-    }, [facilityContext.facility, facilityContext.facility.id,
-        loginContext.data.loggedIn,
-        active, section,
-        fetchCategories.categories]);
+
+        const isSuperuser = loginContext.validateScope(Scope.SUPERUSER);
+        if (isSuperuser) {
+            setAvailables(fetchFacilities.facilities);
+        } else {
+            setAvailables(facilityContext.facilities);
+        }
+
+    }, [facilityContext.facilities, fetchFacilities.facilities, loginContext]);
 
     const handleActive: HandleBoolean = (theActive) => {
         setActive(theActive);
     }
 
-    const handleEdit: HandleCategory = (theCategory) => {
+    const handleEdit: HandleFacility = (theFacility) => {
         if (props.handleEdit) {
-            props.handleEdit(theCategory);
+            props.handleEdit(theFacility);
         }
     }
 
-    const handleSection: HandleSection = (theSection) => {
-        logger.debug({
-            context: "CategoryOptions.handleSection",
-            section: Abridgers.SECTION(theSection),
-        })
-        setSection(theSection);
-        props.handleSection(theSection);
-    }
-
     return (
-        <Container fluid id="CategoryOptions">
+        <Container fluid id="FacilityList">
 
             <FetchingProgress
-                error={fetchCategories.error}
-                loading={fetchCategories.loading}
-                message="Fetching selected Categories"
+                error={fetchFacilities.error}
+                loading={fetchFacilities.loading}
+                message="Fetching selected Facilities"
             />
 
             <Row className="mb-3 ms-1 me-1">
                 <Col className="text-start">
-                    <span><strong>Manage Categories for Facility:&nbsp;</strong></span>
-                    <span className="text-info"><strong>{facilityContext.facility.name}</strong></span>
+                    <span><strong>Manage Facilities</strong></span>
                 </Col>
             </Row>
 
             <Row className="mb-3 ms-1 me-1">
-                <Col className="col-6">
-                    <SectionSelector
-                        active={active}
-                        handleSection={handleSection}
-                        label="Categories for Section:"
-                    />
-                </Col>
-                <Col>
+                <Col className="text-start">
                     <CheckBox
                         handleChange={handleActive}
-                        label="Active Categories Only?"
+                        label="Active Facilities Only?"
                         name="activeOnly"
                         value={active}
                     />
@@ -133,51 +115,35 @@ const CategoryOptions = (props: Props) => {
 
                     <thead>
                     <tr className="table-secondary">
-                        <th scope="col">Ordinal</th>
+                        <th scope="col">Name</th>
                         <th scope="col">Active</th>
-{/*
-                        <th scope="col">Accumulated</th>
-*/}
-                        <th scope="col">Service</th>
-{/*
-                        <th scope="col">Description</th>
-*/}
-                        <th scope="col">Notes</th>
-                        <th scope="col">Slug</th>
+                        <th scope="col">City</th>
+                        <th scope="col">State</th>
+                        <th scope="col">Scope</th>
                     </tr>
                     </thead>
 
                     <tbody>
-                    {fetchCategories.categories.map((category, rowIndex) => (
+                    {availables.map((facility, rowIndex) => (
                         <tr
                             className="table-default"
                             key={1000 + (rowIndex * 100)}
-                            onClick={props.handleEdit ? (() => handleEdit(category)) : undefined}
+                            onClick={props.handleEdit ? (() => handleEdit(facility)) : undefined}
                         >
                             <td key={1000 + (rowIndex * 100) + 1}>
-                                {category.ordinal}
+                                {facility.name}
                             </td>
                             <td key={1000 + (rowIndex * 100) + 2}>
-                                {listValue(category.active)}
+                                {listValue(facility.active)}
                             </td>
-{/*
                             <td key={1000 + (rowIndex * 100) + 3}>
-                                {listValue(category.accumulated)}
+                                {facility.city}
                             </td>
-*/}
                             <td key={1000 + (rowIndex * 100) + 4}>
-                                {category.service}
+                                {facility.state}
                             </td>
-{/*
                             <td key={1000 + (rowIndex * 100) + 5}>
-                                {category.description}
-                            </td>
-*/}
-                            <td key={1000 + (rowIndex * 100) + 6}>
-                                {category.notes}
-                            </td>
-                            <td key={1000 + (rowIndex * 100) + 7}>
-                                {category.slug}
+                                {facility.scope}
                             </td>
                         </tr>
                     ))}
@@ -202,4 +168,4 @@ const CategoryOptions = (props: Props) => {
 
 }
 
-export default CategoryOptions;
+export default FacilityList;

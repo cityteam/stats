@@ -1,4 +1,4 @@
-// SectionOptions ------------------------------------------------------------
+// SectionList ------------------------------------------------------------
 
 // List Sections that match search criteria, offering callbacks for adding,
 // editing, and removing Sections.
@@ -33,7 +33,7 @@ export interface Props {
 
 // Component Details ---------------------------------------------------------
 
-const SectionOptions = (props: Props) => {
+const SectionList = (props: Props) => {
 
     const facilityContext = useContext(FacilityContext);
     const loginContext = useContext(LoginContext);
@@ -47,7 +47,7 @@ const SectionOptions = (props: Props) => {
 
     useEffect(() => {
         logger.debug({
-            context: "SectionOptions.useEffect",
+            context: "SectionList.useEffect",
             facility: Abridgers.FACILITY(facilityContext.facility),
             active: active,
         });
@@ -67,7 +67,7 @@ const SectionOptions = (props: Props) => {
     }
 
     return (
-        <Container fluid id="SectionOptions">
+        <Container fluid id="SectionList">
 
             <FetchingProgress
                 error={fetchSections.error}
@@ -168,4 +168,4 @@ const SectionOptions = (props: Props) => {
 
 }
 
-export default SectionOptions;
+export default SectionList;

@@ -1,4 +1,4 @@
-// UserDetails ---------------------------------------------------------------
+// UserForm ---------------------------------------------------------------
 
 // Detail editing form for User objects.
 
@@ -37,7 +37,7 @@ export interface Props {
 
 // Component Details ---------------------------------------------------------
 
-const UserDetails = (props: Props) => {
+const UserForm = (props: Props) => {
 
     const [adding] = useState<boolean>(props.user.id < 0);
     const [showConfirm, setShowConfirm] = useState<boolean>(false);
@@ -117,10 +117,10 @@ const UserDetails = (props: Props) => {
         <>
 
             {/* Details Form */}
-            <Container id="UserDetails">
+            <Container id="UserForm">
 
                 <Form
-                    id="UserDetailsForm"
+                    id="UserFormForm"
                     noValidate
                     onSubmit={handleSubmit(onSubmit)}
                 >
@@ -247,4 +247,4 @@ const UserDetails = (props: Props) => {
     )
 }
 
-export default UserDetails;
+export default UserForm;

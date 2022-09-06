@@ -1,4 +1,4 @@
-// CategorySegment -----------------------------------------------------------
+// CategoryView -----------------------------------------------------------
 
 // Top-level view for managing Category objects.
 
@@ -8,8 +8,8 @@ import React, {useContext, useEffect, useState} from "react";
 
 // Internal Modules ----------------------------------------------------------
 
-import CategoryDetails from "./CategoryDetails";
-import CategoryOptions from "./CategoryOptions";
+import CategoryDetails from "./CategoryForm";
+import CategoryList from "./CategoryList";
 import FacilityContext from "../facilities/FacilityContext";
 import MutatingProgress from "../general/MutatingProgress";
 import LoginContext from "../login/LoginContext";
@@ -27,7 +27,7 @@ enum View {
     OPTIONS = "Options",
 }
 
-const CategorySegment = () => {
+const CategoryView = () => {
 
     const facilityContext = useContext(FacilityContext);
     const loginContext = useContext(LoginContext);
@@ -48,7 +48,7 @@ const CategorySegment = () => {
     useEffect(() => {
 
         logger.debug({
-            context: "CategorySegment.useEffect",
+            context: "CategoryView.useEffect",
             facility: Abridgers.FACILITY(facilityContext.facility),
             section: Abridgers.SECTION(section),
             category: Abridgers.CATEGORY(category),
@@ -77,7 +77,7 @@ const CategorySegment = () => {
             slug: null,
         });
         logger.debug({
-            context: "CategorySegment.handleAdd",
+            context: "CategoryView.handleAdd",
             category: category,
         });
         setCategory(theCategory);
@@ -92,7 +92,7 @@ const CategorySegment = () => {
     // Handle selection of a Category to edit details
     const handleEdit: HandleCategory = (theCategory) => {
         logger.debug({
-            context: "CategorySegment.handleEdit",
+            context: "CategoryView.handleEdit",
             category: Abridgers.CATEGORY(theCategory),
         })
         setCategory(theCategory);
@@ -104,7 +104,7 @@ const CategorySegment = () => {
         setMessage(`Inserting Category '${theCategory.service}'`);
         const inserted = await mutateCategory.insert(theCategory);
         logger.debug({
-            context: "CategorySegment.handleInsert",
+            context: "CategoryView.handleInsert",
             category: Abridgers.CATEGORY(inserted),
         });
         setView(View.OPTIONS);
@@ -115,7 +115,7 @@ const CategorySegment = () => {
         setMessage(`Removing Category '${theCategory.service}'`);
         const removed = await mutateCategory.remove(theCategory);
         logger.debug({
-            context: "CategorySegment.handleRemove",
+            context: "CategoryView.handleRemove",
             category: Abridgers.CATEGORY(removed),
         });
         setView(View.OPTIONS);
@@ -124,7 +124,7 @@ const CategorySegment = () => {
     // Handle request to select a specific Section
     const handleSection: HandleSection = (theSection) => {
         logger.debug({
-            context: "CategorySegment.handleSection",
+            context: "CategoryView.handleSection",
             section: Abridgers.SECTION(theSection),
         });
         setSection(theSection);
@@ -135,7 +135,7 @@ const CategorySegment = () => {
         setMessage(`Updating Category '${theCategory.service}'`);
         const updated = await mutateCategory.update(theCategory);
         logger.debug({
-            context: "CategorySegment.handleUpdate",
+            context: "CategoryView.handleUpdate",
             category: Abridgers.CATEGORY(updated),
         });
         setView(View.OPTIONS);
@@ -163,7 +163,7 @@ const CategorySegment = () => {
             ) : null }
 
             {(view === View.OPTIONS) ? (
-                <CategoryOptions
+                <CategoryList
                     handleAdd={canInsert ? handleAdd : undefined}
                     handleEdit={canUpdate ? handleEdit : undefined}
                     handleSection={handleSection}
@@ -175,4 +175,4 @@ const CategorySegment = () => {
 
 }
 
-export default CategorySegment;
+export default CategoryView;

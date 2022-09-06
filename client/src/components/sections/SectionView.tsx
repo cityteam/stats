@@ -1,4 +1,4 @@
-// SectionSegment ------------------------------------------------------------
+// SectionView ------------------------------------------------------------
 
 // Top-level view for managing Section objects.
 
@@ -8,8 +8,8 @@ import React, {useContext, useEffect, useState} from "react";
 
 // Internal Modules ----------------------------------------------------------
 
-import SectionDetails from "./SectionDetails";
-import SectionOptions from "./SectionOptions";
+import SectionForm from "./SectionForm";
+import SectionList from "./SectionList";
 import FacilityContext from "../facilities/FacilityContext";
 import MutatingProgress from "../general/MutatingProgress";
 import LoginContext from "../login/LoginContext";
@@ -26,7 +26,7 @@ enum View {
     OPTIONS = "Options",
 }
 
-const SectionSegment = () => {
+const SectionView = () => {
 
     const facilityContext = useContext(FacilityContext);
     const loginContext = useContext(LoginContext);
@@ -45,7 +45,7 @@ const SectionSegment = () => {
     useEffect(() => {
 
         logger.debug({
-            context: "SectionSegment.useEffect",
+            context: "SectionView.useEffect",
             facility: Abridgers.FACILITY(facilityContext.facility),
             section: Abridgers.SECTION(section),
             view: view.toString(),
@@ -72,7 +72,7 @@ const SectionSegment = () => {
             title: null,
         });
         logger.debug({
-            context: "SectionSegment.handleAdd",
+            context: "SectionView.handleAdd",
             section: theSection,
         });
         setSection(theSection);
@@ -87,7 +87,7 @@ const SectionSegment = () => {
     // Handle selection of a Section to edit details
     const handleEdit: HandleSection = (theSection) => {
         logger.debug({
-            context: "SectionSegment.handleEdit",
+            context: "SectionView.handleEdit",
             section: Abridgers.SECTION(theSection),
         });
         setSection(theSection);
@@ -99,7 +99,7 @@ const SectionSegment = () => {
         setMessage(`Inserting Section '${theSection.title}'`);
         const inserted = await mutateSection.insert(theSection);
         logger.debug({
-            context: "SectionSegment.handleInsert",
+            context: "SectionView.handleInsert",
             section: Abridgers.SECTION(inserted),
         });
         setView(View.OPTIONS);
@@ -110,7 +110,7 @@ const SectionSegment = () => {
         setMessage(`Removing Section '${theSection.title}'`);
         const removed = await mutateSection.remove(theSection);
         logger.debug({
-            context: "SectionSegment.handleRemove",
+            context: "SectionView.handleRemove",
             section: Abridgers.SECTION(removed),
         });
         setView(View.OPTIONS);
@@ -121,7 +121,7 @@ const SectionSegment = () => {
         setMessage(`Updating Section '${theSection.title}'`);
         const updated = await mutateSection.update(theSection);
         logger.debug({
-            context: "SectionSegment.handleUpdate",
+            context: "SectionView.handleUpdate",
             section: Abridgers.SECTION(updated),
         });
         setView(View.OPTIONS);
@@ -137,7 +137,7 @@ const SectionSegment = () => {
             />
 
             {(view === View.DETAILS) ? (
-                <SectionDetails
+                <SectionForm
                     autoFocus
                     handleBack={handleBack}
                     handleInsert={canInsert ? handleInsert : undefined}
@@ -148,7 +148,7 @@ const SectionSegment = () => {
             ) : null }
 
             {(view === View.OPTIONS) ? (
-                <SectionOptions
+                <SectionList
                     handleAdd={canInsert ? handleAdd : undefined}
                     handleEdit={canUpdate ? handleEdit : undefined}
                 />
@@ -159,4 +159,4 @@ const SectionSegment = () => {
 
 }
 
-export default SectionSegment;
+export default SectionView;

@@ -1,6 +1,6 @@
-// CategoryDetails --------------------------------------------------------------
+// SectionForm --------------------------------------------------------------
 
-// Detail editing form for Category objects.
+// Detail editing form for Section objects.
 
 // External Modules ----------------------------------------------------------
 
@@ -19,33 +19,31 @@ import * as Yup from "yup";
 // Internal Modules ----------------------------------------------------------
 
 import FacilityContext from "../facilities/FacilityContext";
-import {HandleAction, HandleCategory} from "../../types";
-import Category from "../../models/Category";
-import CategoryData from "../../models/CategoryData";
+import {HandleAction, HandleSection} from "../../types";
 import Section from "../../models/Section";
-import {validateCategoryOrdinal} from "../../util/ApplicationValidators";
-import {validateCategoryOrdinalUnique} from "../../util/AsyncValidators";
+import SectionData from "../../models/SectionData";
+import {validateSectionOrdinal} from "../../util/ApplicationValidators";
+import {validateSectionOrdinalUnique} from "../../util/AsyncValidators";
 import * as ToModel from "../../util/ToModel";
 
 // Incoming Properties -------------------------------------------------------
 
 export interface Props {
     autoFocus?: boolean;                // First element receive autoFocus? [false]
-    category: Category;                 // Initial values (id < 0 for adding)
     handleBack: HandleAction;           // Handle return to previous view
-    handleInsert?: HandleCategory;      // Handle Category insert request [not allowed]
-    handleRemove?: HandleCategory;      // Handle Category remove request [not allowed]
-    handleUpdate?: HandleCategory;      // Handle Category update request [not allowed]
-    section: Section;                   // Section that owns this Category
+    handleInsert?: HandleSection;       // Handle Section insert request [not allowed]
+    handleRemove?: HandleSection;       // Handle Section remove request [not allowed]
+    handleUpdate?: HandleSection;       // Handle Section update request [not allowed]
+    section: Section;                   // Initial values (id < 0 for adding)
 }
 
 // Component Details ---------------------------------------------------------
 
-const CategoryDetails = (props: Props) => {
+const SectionForm = (props: Props) => {
 
     const facilityContext = useContext(FacilityContext);
 
-    const [adding] = useState<boolean>(props.category.id < 0);
+    const [adding] = useState<boolean>(props.section.id < 0);
     const [showConfirm, setShowConfirm] = useState<boolean>(false);
 
     const onConfirm = (): void => {
@@ -59,46 +57,45 @@ const CategoryDetails = (props: Props) => {
     const onConfirmPositive = (): void => {
         setShowConfirm(false);
         if (props.handleRemove) {
-            props.handleRemove(props.category);
+            props.handleRemove(props.section);
         }
     }
 
-    const onSubmit: SubmitHandler<CategoryData> = (values) => {
-        const theCategory = new Category({
-            ...props.category,
+    const onSubmit: SubmitHandler<SectionData> = (values) => {
+        const theSection = new Section({
+            ...props.section,
             ...values,
         });
         if (adding && props.handleInsert) {
-            props.handleInsert(theCategory);
+            props.handleInsert(theSection);
         } else if (!adding && props.handleUpdate) {
-            props.handleUpdate(theCategory);
+            props.handleUpdate(theSection);
         }
     }
 
     const validationSchema = Yup.object().shape({
-//        accumulated: Yup.boolean(),
         active: Yup.boolean(),
-//        description: Yup.string(),
-        notes: Yup.string()
-            .nullable(),
+//            notes: Yup.string(),
         ordinal: Yup.number()
             .required("Ordinal is required")
             .test("unique-ordinal",
-                "That ordinal is already in use within this Section",
+                "That ordinal is already in use within this Facility",
                 async function (this) {
-                    if (!validateCategoryOrdinal(this.parent.ordinal)) {
+                    if (!validateSectionOrdinal(this.parent.ordinal)) {
                         return false;
                     }
-                    return validateCategoryOrdinalUnique(facilityContext.facility, ToModel.CATEGORY(this.parent));
+                    return validateSectionOrdinalUnique(ToModel.SECTION(this.parent));
                 }),
-        service: Yup.string()
-            .required("Service is required"),
+        scope: Yup.string()
+            .required("Scope is required"),
         slug: Yup.string()
-            .required("Slug is required")
+            .required("Slug is required"),
+        title: Yup.string()
+            .required("Title is required")
     });
 
-    const {formState: {errors}, handleSubmit, register} = useForm<CategoryData>({
-        defaultValues: new CategoryData(props.category),
+    const {formState: {errors}, handleSubmit, register} = useForm<SectionData>({
+        defaultValues: new SectionData(props.section),
         mode: "onBlur",
         resolver: yupResolver(validationSchema),
     });
@@ -108,17 +105,17 @@ const CategoryDetails = (props: Props) => {
         <>
 
             {/* Details Form */}
-            <Container id="CategoryDetails">
+            <Container id="SectionForm">
 
-                <Row className="mb-3 ms-1 me-1">
+                <Row className="mb-3">
                     <Col className="text-start">
                         {(adding) ? (
                             <span><strong>Add New</strong></span>
                         ) : (
                             <span><strong>Edit Existing</strong></span>
                         )}
-                        <span><strong>&nbsp;Category for Section:&nbsp;</strong></span>
-                        <span className="text-info"><strong>{props.section.title}</strong></span>
+                        <span><strong>&nbsp;Section for Facility:&nbsp;</strong></span>
+                        <span className="text-info"><strong>{facilityContext.facility.name}</strong></span>
                     </Col>
                     <Col className="text-end">
                         <Button
@@ -131,12 +128,12 @@ const CategoryDetails = (props: Props) => {
                 </Row>
 
                 <Form
-                    id="CategoryDetailsForm"
+                    id="SectionFormForm"
                     noValidate
                     onSubmit={handleSubmit(onSubmit)}
                 >
 
-                    <Row className="mb-3" id="ordinalServiceRow">
+                    <Row className="mb-3" id="ordinalTitleRow">
                         <TextField
                             autoFocus={(props.autoFocus !== undefined) ? props.autoFocus : undefined}
                             className="col-4"
@@ -145,14 +142,14 @@ const CategoryDetails = (props: Props) => {
                             name="ordinal"
                             register={register}
                             type="number"
-                            valid="Unique number that determines the sort order for Categories within a Section."
+                            valid="Unique number that determines the sort order for Sections."
                         />
                         <TextField
-                            error={errors.service}
-                            label="Service:"
-                            name="service"
+                            error={errors.title}
+                            label="Title:"
+                            name="title"
                             register={register}
-                            valid="General service category."
+                            valid="Report title for this section."
                         />
                     </Row>
 
@@ -162,32 +159,34 @@ const CategoryDetails = (props: Props) => {
                             label="Notes:"
                             name="notes"
                             register={register}
-                            valid="Miscellaneous notes about this Category."
+                            valid="Miscellaneous notes about this Section."
                         />
                     </Row>
 
-                    <Row className="mb-3" id="slugActiveAccumulatedRow">
+                    <Row className="mb-3" id="slugScopeRow">
                         <TextField
                             error={errors.slug}
                             label="Slug:"
                             name="slug"
                             register={register}
-                            valid="Abbreviated description for mobile devices"
+                            valid="Abbreviated description for mobile devices."
                         />
+                        <TextField
+                            error={errors.scope}
+                            label="Scope:"
+                            name="scope"
+                            register={register}
+                            valid="Permission scope required to enter data in this Section."
+                        />
+                    </Row>
+
+                    <Row className="mb-3" id="activeRow">
                         <CheckBoxField
                             error={errors.active}
                             label="Active?"
                             name="active"
                             register={register}
                         />
-{/*
-                        <CheckBoxField
-                            error={errors.accumulated}
-                            label="Accumulated?"
-                            name="accumulated"
-                            register={register}
-                        />
-*/}
                     </Row>
 
                     <Row className="mb-3">
@@ -229,12 +228,12 @@ const CategoryDetails = (props: Props) => {
                 </Modal.Header>
                 <Modal.Body>
                     <p>
-                        Removing this Category is not reversible, and
+                        Removing this Section is not reversible, and
                         <strong>
                             &nbsp;will also remove ALL related information.
                         </strong>.
                     </p>
-                    <p>Consider marking this Category as inactive instead.</p>
+                    <p>Consider marking this Section as inactive instead.</p>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button
@@ -262,4 +261,4 @@ const CategoryDetails = (props: Props) => {
 
 }
 
-export default CategoryDetails;
+export default SectionForm;

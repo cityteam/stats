@@ -1,4 +1,4 @@
-// FacilityDetails -----------------------------------------------------------
+// FacilityForm -----------------------------------------------------------
 
 // Detail editing form for Facility objects.
 
@@ -47,7 +47,7 @@ export interface Props {
 
 // Component Details ---------------------------------------------------------
 
-const FacilityDetails = (props: Props) => {
+const FacilityForm = (props: Props) => {
 
     const [adding] = useState<boolean>(props.facility.id < 0);
     const [showConfirm, setShowConfirm] = useState<boolean>(false);
@@ -148,7 +148,7 @@ const FacilityDetails = (props: Props) => {
         <>
 
             {/* Details Form */}
-            <Container id="FacilityDetails">
+            <Container id="FacilityForm">
 
                 <Row className="mb-3">
                     <Col className="text-start">
@@ -170,7 +170,7 @@ const FacilityDetails = (props: Props) => {
                 </Row>
 
                 <Form
-                    id="FacilityDetailsForm"
+                    id="FacilityFormForm"
                     noValidate
                     onSubmit={handleSubmit(onSubmit)}
                 >
@@ -330,4 +330,4 @@ const FacilityDetails = (props: Props) => {
     )
 }
 
-export default FacilityDetails;
+export default FacilityForm;

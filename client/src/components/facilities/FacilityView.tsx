@@ -1,4 +1,4 @@
-// FacilitySegment -----------------------------------------------------------
+// FacilityView -----------------------------------------------------------
 
 // Top-level view for managing Facility objects.
 
@@ -9,8 +9,8 @@ import React, {useContext, useEffect, useState} from "react";
 // Internal Modules ----------------------------------------------------------
 
 import FacilityContext from "./FacilityContext";
-import FacilityDetails from "./FacilityDetails";
-import FacilityOptions from "./FacilityOptions";
+import FacilityForm from "./FacilityForm";
+import FacilityList from "./FacilityList";
 import MutatingProgress from "../general/MutatingProgress";
 import LoginContext from "../login/LoginContext";
 import {HandleAction, HandleFacility, Scope} from "../../types";
@@ -26,7 +26,7 @@ enum View {
     OPTIONS = "Options",
 }
 
-const FacilitySegment = () => {
+const FacilityView = () => {
 
     const facilityContext = useContext(FacilityContext);
     const loginContext = useContext(LoginContext);
@@ -45,7 +45,7 @@ const FacilitySegment = () => {
     useEffect(() => {
 
         logger.info({
-            context: "FacilitySegment.useEffect",
+            context: "FacilityView.useEffect",
             facility: Abridgers.FACILITY(facility),
             view: view.toString(),
         });
@@ -73,7 +73,7 @@ const FacilitySegment = () => {
             zipCode: null,
         });
         logger.info({
-            context: "FacilitySegment.handleAdd",
+            context: "FacilityView.handleAdd",
             facility: theFacility,
         });
         setFacility(theFacility);
@@ -88,7 +88,7 @@ const FacilitySegment = () => {
     // Handle selection of a Facility to edit details
     const handleEdit: HandleFacility = (theFacility) => {
         logger.info({
-            context: "FacilitySegment.handleEdit",
+            context: "FacilityView.handleEdit",
             facility: Abridgers.FACILITY(theFacility),
         });
         setFacility(theFacility);
@@ -100,7 +100,7 @@ const FacilitySegment = () => {
         setMessage(`Inserting Facility '${theFacility.name}'`);
         const inserted = await mutateFacility.insert(theFacility);
         logger.info({
-            context: "FacilitySegment.handleInsert",
+            context: "FacilityView.handleInsert",
             facility: Abridgers.FACILITY(inserted),
         });
         facilityContext.handleRefresh();
@@ -112,7 +112,7 @@ const FacilitySegment = () => {
         setMessage(`Removing Facility '${theFacility.name}'`);
         const removed = await mutateFacility.remove(theFacility);
         logger.info({
-            context: "FacilitySegment.handleRemove",
+            context: "FacilityView.handleRemove",
             facility: Abridgers.FACILITY(removed),
         });
         facilityContext.handleRefresh();
@@ -124,7 +124,7 @@ const FacilitySegment = () => {
         setMessage(`Updating Facility '${theFacility.name}'`);
         const updated = await mutateFacility.update(theFacility);
         logger.info({
-            context: "FacilitySegment.handleUpdate",
+            context: "FacilityView.handleUpdate",
             facility: Abridgers.FACILITY(updated),
         });
         facilityContext.handleRefresh();
@@ -142,7 +142,7 @@ const FacilitySegment = () => {
             />
 
             {(view === View.DETAILS) ? (
-                <FacilityDetails
+                <FacilityForm
                     facility={facility}
                     handleBack={handleBack}
                     handleInsert={canInsert ? handleInsert : undefined}
@@ -152,7 +152,7 @@ const FacilitySegment = () => {
             ) : null }
 
             {(view === View.OPTIONS) ? (
-                <FacilityOptions
+                <FacilityList
                     handleAdd={canInsert ? handleAdd: undefined}
                     handleEdit={canUpdate ? handleEdit : undefined}
                 />
@@ -164,4 +164,4 @@ const FacilitySegment = () => {
 
 }
 
-export default FacilitySegment;
+export default FacilityView;

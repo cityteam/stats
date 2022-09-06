@@ -1,4 +1,4 @@
-// UserSegment -----------------------------------------------------------------
+// UserView -----------------------------------------------------------------
 
 // Top-level view for managing User objects.
 
@@ -8,8 +8,8 @@ import React, {useContext, useEffect, useState} from "react";
 
 // Internal Modules ----------------------------------------------------------
 
-import UserDetails from "./UserDetails";
-import UserOptions from "./UserOptions";
+import UserForm from "./UserForm";
+import UserList from "./UserList";
 import MutatingProgress from "../general/MutatingProgress";
 import LoginContext from "../login/LoginContext";
 import {HandleAction, HandleUser, Scope} from "../../types";
@@ -25,7 +25,7 @@ enum View {
     OPTIONS = "Options",
 }
 
-const UserSegment = () => {
+const UserView = () => {
 
     const loginContext = useContext(LoginContext);
 
@@ -43,7 +43,7 @@ const UserSegment = () => {
     useEffect(() => {
 
         logger.info({
-            context: "UserSegment.useEffect",
+            context: "UserView.useEffect",
             view: view.toString(),
         });
 
@@ -65,7 +65,7 @@ const UserSegment = () => {
             username: null,
         });
         logger.info({
-            context: "UserSegment.handleAdd",
+            context: "UserView.handleAdd",
             user: theUser,
         });
         setUser(theUser);
@@ -80,7 +80,7 @@ const UserSegment = () => {
     // Handle selection of a User to edit details
     const handleEdit: HandleUser = (theUser) => {
         logger.info({
-            context: "UserSegment.handleEdit",
+            context: "UserView.handleEdit",
             user: Abridgers.USER(theUser),
         });
         setUser(theUser);
@@ -92,7 +92,7 @@ const UserSegment = () => {
         setMessage(`Inserting User '${theUser.username}'`);
         const inserted = await mutateUser.insert(theUser);
         logger.info({
-            context: "UserSegment.handleInsert",
+            context: "UserView.handleInsert",
             user: Abridgers.USER(inserted),
         });
         setView(View.OPTIONS);
@@ -103,7 +103,7 @@ const UserSegment = () => {
         setMessage(`Removing User '${theUser.username}'`);
         const removed = await mutateUser.remove(theUser);
         logger.info({
-            context: "UserSegment.handleRemove",
+            context: "UserView.handleRemove",
             user: Abridgers.USER(removed),
         });
         setView(View.OPTIONS);
@@ -114,7 +114,7 @@ const UserSegment = () => {
         setMessage(`Updating User '${theUser.username}'`);
         const updated = await mutateUser.update(theUser);
         logger.info({
-            context: "UserSegment.handleUpdate",
+            context: "UserView.handleUpdate",
             user: Abridgers.USER(updated),
         });
         setView(View.OPTIONS);
@@ -130,7 +130,7 @@ const UserSegment = () => {
             />
 
             {(view === View.DETAILS) ? (
-                <UserDetails
+                <UserForm
                     handleBack={handleBack}
                     handleInsert={canInsert ? handleInsert : undefined}
                     handleRemove={canRemove ? handleRemove : undefined}
@@ -140,7 +140,7 @@ const UserSegment = () => {
             ) : null }
 
             {(view === View.OPTIONS) ? (
-                <UserOptions
+                <UserList
                     handleAdd={canInsert ? handleAdd : undefined}
                     handleEdit={canUpdate ? handleEdit : undefined}
                 />
@@ -151,5 +151,5 @@ const UserSegment = () => {
 
 }
 
-export default UserSegment;
+export default UserView;
 
