@@ -52,6 +52,7 @@ export const FacilityContextProvider = (props: any) => {
         active: active,
         currentPage: 1,
         pageSize: 1000,
+        withSections: true,         // Required for permissions grants in UserForm!
     })
 
     useEffect(() => {

@@ -6,18 +6,19 @@
 // External Modules ----------------------------------------------------------
 
 import React, {useContext, useEffect, useState} from "react";
-import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Table from "react-bootstrap/Table";
+import {PlusCircleFill} from "react-bootstrap-icons";
+import {CheckBox, Pagination, SearchBar} from "@craigmcc/shared-react";
 
 // Internal Modules ----------------------------------------------------------
 
+import FacilityContext from "../facilities/FacilityContext";
 import LoginContext from "../login/LoginContext";
-import CheckBox from "../general/CheckBox";
 import FetchingProgress from "../general/FetchingProgress";
-import {HandleAction, HandleBoolean, HandleUser, Scope} from "../../types";
+import {HandleAction, HandleBoolean, HandleUser, HandleValue, Scope} from "../../types";
 import useFetchUsers from "../../hooks/useFetchUsers";
 import User from "../../models/User";
 import logger from "../../util/ClientLogger";
@@ -34,14 +35,21 @@ export interface Props {
 
 const UserList = (props: Props) => {
 
+    const facilityContext = useContext(FacilityContext);
     const loginContext = useContext(LoginContext);
 
     const [active, setActive] = useState<boolean>(false);
     const [availables, setAvailables] = useState<User[]>([]);
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const pageSize = 100;
+    const [searchText, setSearchText] = useState<string>("");
 
     const fetchUsers = useFetchUsers({
         active: active,
         alertPopup: false,
+        currentPage: currentPage,
+        pageSize: pageSize,
+        username: (searchText.length > 0) ? searchText : undefined,
     });
 
     useEffect(() => {
@@ -49,27 +57,47 @@ const UserList = (props: Props) => {
         logger.debug({
             context: "UserList.useEffect",
             active: active,
+            searchText: searchText,
         });
 
         const isSuperuser = loginContext.validateScope(Scope.SUPERUSER);
-        if (isSuperuser) {
+        const isAdmin = loginContext.validateFacility(facilityContext.facility, Scope.ADMIN);
+        if (isSuperuser || isAdmin) {
             setAvailables(fetchUsers.users);
         } else {
             setAvailables([]);
         }
 
-    }, [loginContext,
-        active,
+    }, [facilityContext.facility, loginContext, loginContext.data.loggedIn,
+        active, searchText,
         fetchUsers.users]);
 
     const handleActive: HandleBoolean = (theActive) => {
         setActive(theActive);
     }
 
+    const handleAdd: HandleAction = () => {
+        if (props.handleAdd) {
+            props.handleAdd();
+        }
+    }
+
+    const handleChange: HandleValue = (theSearchText) => {
+        setSearchText(theSearchText);
+    }
+
     const handleEdit: HandleUser = (theUser) => {
         if (props.handleEdit) {
             props.handleEdit(theUser);
         }
+    }
+
+    const handleNext: HandleAction = () => {
+        setCurrentPage(currentPage + 1);
+    }
+
+    const handlePrevious: HandleAction = () => {
+        setCurrentPage(currentPage - 1);
     }
 
     return (
@@ -82,8 +110,14 @@ const UserList = (props: Props) => {
             />
 
             <Row className="mb-3 ms-1 me-1">
-                <Col className="text-start">
-                    <span><strong>Manage Users</strong></span>
+                <Col className="col-6">
+                    <SearchBar
+                        autoFocus
+                        handleChange={handleChange}
+                        htmlSize={50}
+                        label="Search For Users:"
+                        placeholder="Search by all or part of username"
+                    />
                 </Col>
                 <Col>
                     <CheckBox
@@ -94,12 +128,22 @@ const UserList = (props: Props) => {
                     />
                 </Col>
                 <Col className="text-end">
-                    <Button
-                        disabled={!props.handleAdd}
-                        onClick={props.handleAdd}
-                        size="sm"
-                        variant="primary"
-                    >Add</Button>
+                    <Pagination
+                        currentPage={currentPage}
+                        handleNext={handleNext}
+                        handlePrevious={handlePrevious}
+                        lastPage={(availables.length === 0) ||
+                            (availables.length < pageSize)}
+                        variant="secondary"
+                    />
+                </Col>
+                <Col className="text-end">
+                    <PlusCircleFill
+                        color="primary"
+                        data-testid="add0"
+                        onClick={(loginContext.data.loggedIn && props.handleAdd) ? handleAdd : undefined}
+                        size={32}
+                    />
                 </Col>
             </Row>
 
@@ -148,12 +192,12 @@ const UserList = (props: Props) => {
 
             <Row className="mb-3 ms-1 me-1">
                 <Col className="text-end">
-                    <Button
-                        disabled={!props.handleAdd}
-                        onClick={props.handleAdd}
-                        size="sm"
-                        variant="primary"
-                    >Add</Button>
+                    <PlusCircleFill
+                        color="primary"
+                        data-testid="add1"
+                        onClick={(loginContext.data.loggedIn && props.handleAdd) ? handleAdd : undefined}
+                        size={32}
+                    />
                 </Col>
             </Row>
 

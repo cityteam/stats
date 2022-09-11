@@ -10,6 +10,7 @@ import React, {useContext, useEffect, useState} from "react";
 
 import UserForm from "./UserForm";
 import UserList from "./UserList";
+import FacilityContext from "../facilities/FacilityContext";
 import MutatingProgress from "../general/MutatingProgress";
 import LoginContext from "../login/LoginContext";
 import {HandleAction, HandleUser, Scope} from "../../types";
@@ -27,6 +28,7 @@ enum View {
 
 const UserView = () => {
 
+    const facilityContext = useContext(FacilityContext);
     const loginContext = useContext(LoginContext);
 
     const [canInsert, setCanInsert] = useState<boolean>(false);
@@ -42,18 +44,20 @@ const UserView = () => {
 
     useEffect(() => {
 
-        logger.info({
+        const isSuperuser = loginContext.validateScope(Scope.SUPERUSER);
+        const isAdmin = loginContext.validateFacility(facilityContext.facility, Scope.ADMIN);
+        setCanInsert(isSuperuser || isAdmin);
+        setCanRemove(isSuperuser);
+        setCanUpdate(isSuperuser || isAdmin);
+
+        logger.debug({
             context: "UserView.useEffect",
             view: view.toString(),
         });
 
-        const isSuperuser = loginContext.validateScope(Scope.SUPERUSER);
-        setCanInsert(isSuperuser);
-        setCanRemove(isSuperuser);
-        setCanUpdate(isSuperuser);
-
-    }, [loginContext,
-        view]);
+    }, [facilityContext.facility,
+        loginContext, loginContext.data.loggedIn,
+        user, view]);
 
     // Create an empty User to be added
     const handleAdd: HandleAction = () => {
@@ -61,10 +65,10 @@ const UserView = () => {
             active: true,
             name: null,
             password: null,
-            scope: null,
+            scope: `${facilityContext.facility.scope}:regular log:info`,
             username: null,
         });
-        logger.info({
+        logger.debug({
             context: "UserView.handleAdd",
             user: theUser,
         });
@@ -72,14 +76,9 @@ const UserView = () => {
         setView(View.DETAILS);
     }
 
-    // Handle returning to the previous view
-    const handleBack: HandleAction = () => {
-        setView(View.OPTIONS);
-    }
-
     // Handle selection of a User to edit details
     const handleEdit: HandleUser = (theUser) => {
-        logger.info({
+        logger.debug({
             context: "UserView.handleEdit",
             user: Abridgers.USER(theUser),
         });
@@ -91,7 +90,7 @@ const UserView = () => {
     const handleInsert: HandleUser = async (theUser) => {
         setMessage(`Inserting User '${theUser.username}'`);
         const inserted = await mutateUser.insert(theUser);
-        logger.info({
+        logger.debug({
             context: "UserView.handleInsert",
             user: Abridgers.USER(inserted),
         });
@@ -102,9 +101,17 @@ const UserView = () => {
     const handleRemove: HandleUser = async (theUser) => {
         setMessage(`Removing User '${theUser.username}'`);
         const removed = await mutateUser.remove(theUser);
-        logger.info({
+        logger.debug({
             context: "UserView.handleRemove",
             user: Abridgers.USER(removed),
+        });
+        setView(View.OPTIONS);
+    }
+
+    // Handle return from View.DETAILS to redisplay View.OPTIONS
+    const handleReturn: HandleAction = () => {
+        logger.debug({
+            context: "UserView.handleReturn",
         });
         setView(View.OPTIONS);
     }
@@ -113,7 +120,7 @@ const UserView = () => {
     const handleUpdate: HandleUser = async (theUser) => {
         setMessage(`Updating User '${theUser.username}'`);
         const updated = await mutateUser.update(theUser);
-        logger.info({
+        logger.debug({
             context: "UserView.handleUpdate",
             user: Abridgers.USER(updated),
         });
@@ -131,9 +138,10 @@ const UserView = () => {
 
             {(view === View.DETAILS) ? (
                 <UserForm
-                    handleBack={handleBack}
+                    autoFocus
                     handleInsert={canInsert ? handleInsert : undefined}
                     handleRemove={canRemove ? handleRemove : undefined}
+                    handleReturn={handleReturn}
                     handleUpdate={canUpdate ? handleUpdate : undefined}
                     user={user}
                 />

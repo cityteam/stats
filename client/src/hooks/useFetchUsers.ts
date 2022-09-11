@@ -4,11 +4,14 @@
 
 // External Modules ----------------------------------------------------------
 
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 
 // Internal Modules ----------------------------------------------------------
 
+import {Scope} from "../types";
 import Api from "../clients/Api";
+import FacilityContext from "../components/facilities/FacilityContext";
+import LoginContext from "../components/login/LoginContext";
 import User, {USERS_BASE} from "../models/User";
 import * as Abridgers from "../util/Abridgers";
 import logger from "../util/ClientLogger";
@@ -16,6 +19,7 @@ import {queryParameters} from "../util/QueryParameters";
 import ReportError from "../util/ReportError";
 import * as Sorters from "../util/Sorters";
 import * as ToModel from "../util/ToModel";
+import {FACILITIES_BASE} from "../models/Facility";
 
 // Incoming Properties and Outgoing State ------------------------------------
 
@@ -38,6 +42,9 @@ export interface State {
 // Hook Details --------------------------------------------------------------
 
 const useFetchUsers = (props: Props): State => {
+
+    const facilityContext = useContext(FacilityContext);
+    const loginContext = useContext(LoginContext);
 
     const [alertPopup] = useState<boolean>((props.alertPopup !== undefined) ? props.alertPopup : true);
     const [error, setError] = useState<Error | null>(null);
@@ -62,28 +69,37 @@ const useFetchUsers = (props: Props): State => {
                 withAccessTokens: props.withAccessTokens ? "" : undefined,
                 withRefreshTokens: props.withRefreshTokens ? "" : undefined,
             };
-            const url = USERS_BASE
-                + `${queryParameters(parameters)}`;
+            let url = "";
 
             try {
-                theUsers = ToModel.USERS((await Api.get(url)).data);
-                theUsers.forEach(theUser => {
-                    if (theUser.accessTokens && (theUser.accessTokens.length > 0)) {
-                        theUser.accessTokens = Sorters.ACCESS_TOKENS(theUser.accessTokens);
+                if (loginContext.data.loggedIn) {
+                    const isSuperuser = loginContext.validateScope(Scope.SUPERUSER);
+                    const isAdmin = loginContext.validateFacility(facilityContext.facility, Scope.ADMIN);
+                    if (isSuperuser) {
+                        url = `${USERS_BASE}${queryParameters(parameters)}`;
+                    } else if (isAdmin) {
+                        url = `${FACILITIES_BASE}/${facilityContext.facility.id}/users${queryParameters(parameters)}`;
                     }
-                    if (theUser.refreshTokens && (theUser.refreshTokens.length > 0)) {
-                        theUser.refreshTokens = Sorters.REFRESH_TOKENS(theUser.refreshTokens);
+                    if (url !== "") {
+                        theUsers = ToModel.USERS((await Api.get(url)).data);
+                        theUsers.forEach(theUser => {
+                            if (theUser.accessTokens && (theUser.accessTokens.length > 0)) {
+                                theUser.accessTokens = Sorters.ACCESS_TOKENS(theUser.accessTokens);
+                            }
+                            if (theUser.refreshTokens && (theUser.refreshTokens.length > 0)) {
+                                theUser.refreshTokens = Sorters.REFRESH_TOKENS(theUser.refreshTokens);
+                            }
+                            logger.debug({
+                                context: "useFetchUsers.fetchUsers",
+                                url: url,
+                                users: Abridgers.USERS(theUsers),
+                            });
+                        });
                     }
-                });
-                logger.debug({
-                    context: "useFetchUsers.fetchUsers",
-                    url: url,
-                    users: Abridgers.USERS(theUsers),
-                });
-
-            } catch (e) {
-                setError(e as Error);
-                ReportError("useFetchUsers.fetchUsers", e, {
+                }
+            } catch (anError) {
+                setError(anError as Error);
+                ReportError("useFetchUsers.fetchUsers", anError, {
                     url: url,
                 }, alertPopup);
             }
@@ -95,9 +111,10 @@ const useFetchUsers = (props: Props): State => {
 
         fetchUsers();
 
-    }, [props.active, props.currentPage, props.pageSize, props.username,
-        props.withAccessTokens, props.withRefreshTokens,
-        alertPopup]);
+    }, [props.active, props.currentPage, props.pageSize,
+        props.username, props.withAccessTokens, props.withRefreshTokens,
+        alertPopup,
+        facilityContext.facility, loginContext, loginContext.data.loggedIn]);
 
     return {
         error: error ? error : null,

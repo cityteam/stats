@@ -23,6 +23,7 @@ export interface Props {
     active?: boolean;                   // Select only active Facilities? [false]
     alertPopup?: boolean;               // Pop up browser alert on error? [true]
     currentPage?: number;               // One-relative current page number [1]
+    facilityIds?: number[];             // List of Facility IDs to be retrieved [none]
     pageSize?: number;                  // Number of entries per page [25]
     name?: string;                      // Select Facilities matching pattern [none]
     withSections?: boolean;             // Include child Sections? [false]
@@ -55,6 +56,7 @@ const useFetchFacilities = (props: Props): State => {
             const offset = props.currentPage ? (limit * (props.currentPage - 1)) : 0;
             const parameters = {
                 active: props.active ? "" : undefined,
+                facilityIds: props.facilityIds ? props.facilityIds.join(",") : undefined,
                 limit: limit,
                 offset: offset,
                 name: props.name ? props.name : undefined,
@@ -89,7 +91,7 @@ const useFetchFacilities = (props: Props): State => {
 
         fetchFacilities();
 
-    }, [props.active, props.currentPage,
+    }, [props.active, props.currentPage, props.facilityIds,
         props.pageSize, props.name, props.withSections,
         alertPopup]);
 

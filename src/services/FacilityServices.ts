@@ -164,6 +164,7 @@ class FacilityServices extends BaseParentServices<Facility> {
     /**
      * Support match query parameters:
      * * active                         Select active Facilities
+     * * facilityIds                    Comma-delimited list of Facility IDs to select
      * * name={wildcard}                Select Facilities with name matching {wildcard}
      * * scope={scope}                  Select Facilities with scope equalling {scope}
      */
@@ -175,6 +176,11 @@ class FacilityServices extends BaseParentServices<Facility> {
         const where: any = options.where ? options.where : {};
         if ("" === query.active) {
             where.active = true
+        }
+        if (query.facilityIds && (query.facilityIds.length > 0)) {
+            console.log("FACILITY IDS:", query.facilityIds);
+            const facilityIds: string[] = query.facilityIds.split(",");
+            where.id = { [Op.in]: facilityIds }
         }
         if (query.name) {
             where.name = { [Op.iLike]: `%${query.name}%` };

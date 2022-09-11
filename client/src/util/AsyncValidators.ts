@@ -95,3 +95,18 @@ export const validateUserUsernameUnique = async (user: User): Promise<boolean> =
         return true;
     }
 }
+
+export const validateUserUsernameFacilityUnique = async (user: User, facility: Facility): Promise<boolean> => {
+    if (user && user.username) {
+        try {
+            const result = (await Api.get(FACILITIES_BASE
+                + `/${facility.id}/users/exact/${user.username}`)).data;
+            return (result.id === user.id);
+        } catch (error) {
+            return true; // Definitely unique
+        }
+    } else {
+        return true;
+    }
+}
+
