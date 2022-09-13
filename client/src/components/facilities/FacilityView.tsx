@@ -80,11 +80,6 @@ const FacilityView = () => {
         setView(View.DETAILS);
     }
 
-    // Handle returning to the previous view
-    const handleBack: HandleAction = () => {
-        setView(View.OPTIONS);
-    }
-
     // Handle selection of a Facility to edit details
     const handleEdit: HandleFacility = (theFacility) => {
         logger.info({
@@ -119,6 +114,11 @@ const FacilityView = () => {
         setView(View.OPTIONS);
     }
 
+    // Handle returning to the previous view
+    const handleReturn: HandleAction = () => {
+        setView(View.OPTIONS);
+    }
+
     // Handle update of an existing Facility
     const handleUpdate: HandleFacility = async (theFacility) => {
         setMessage(`Updating Facility '${theFacility.name}'`);
@@ -144,9 +144,9 @@ const FacilityView = () => {
             {(view === View.DETAILS) ? (
                 <FacilityForm
                     facility={facility}
-                    handleBack={handleBack}
                     handleInsert={canInsert ? handleInsert : undefined}
                     handleRemove={canRemove ? handleRemove : undefined}
+                    handleReturn={handleReturn}
                     handleUpdate={canUpdate ? handleUpdate : undefined}
                 />
             ) : null }

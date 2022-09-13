@@ -84,11 +84,6 @@ const CategoryView = () => {
         setView(View.DETAILS);
     }
 
-    // Handle returning to the previous view
-    const handleBack: HandleAction = () => {
-        setView(View.OPTIONS);
-    }
-
     // Handle selection of a Category to edit details
     const handleEdit: HandleCategory = (theCategory) => {
         logger.debug({
@@ -118,6 +113,11 @@ const CategoryView = () => {
             context: "CategoryView.handleRemove",
             category: Abridgers.CATEGORY(removed),
         });
+        setView(View.OPTIONS);
+    }
+
+    // Handle returning to the previous view
+    const handleReturn: HandleAction = () => {
         setView(View.OPTIONS);
     }
 
@@ -154,9 +154,9 @@ const CategoryView = () => {
                 <CategoryDetails
                     autoFocus
                     category={category}
-                    handleBack={handleBack}
                     handleInsert={canInsert ? handleInsert : undefined}
                     handleRemove={canRemove ? handleRemove : undefined}
+                    handleReturn={handleReturn}
                     handleUpdate={canUpdate ? handleUpdate : undefined}
                     section={section}
                 />

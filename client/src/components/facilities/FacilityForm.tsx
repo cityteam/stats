@@ -11,6 +11,7 @@ import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import Row from "react-bootstrap/Row";
+import {CaretLeftSquare} from "react-bootstrap-icons";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {CheckBoxField, TextField} from "@craigmcc/shared-react";
 import {yupResolver} from "@hookform/resolvers/yup";
@@ -38,9 +39,9 @@ import {
 
 export interface Props {
     autoFocus?: boolean;                // First element receive autoFocus? [false]
-    handleBack: HandleAction;           // Handle return to previous view
     handleInsert?: HandleFacility;      // Handle Facility insert request [not allowed]
     handleRemove?: HandleFacility;      // Handle Facility remove request [not allowed]
+    handleReturn: HandleAction;         // Handle return to previous view
     handleUpdate?: HandleFacility;      // Handle Facility update request [not allowed]
     facility: Facility;                 // Initial values (id < 0 for adding)
 }
@@ -152,6 +153,13 @@ const FacilityForm = (props: Props) => {
 
                 <Row className="mb-3">
                     <Col className="text-start">
+                        <CaretLeftSquare
+                            data-testid="back"
+                            onClick={props.handleReturn}
+                            size={32}
+                        />
+                    </Col>
+                    <Col className="text-center">
                         {(adding) ? (
                             <span><strong>Add New</strong></span>
                         ) : (
@@ -160,12 +168,6 @@ const FacilityForm = (props: Props) => {
                         <span><strong>&nbsp;Facility</strong></span>
                     </Col>
                     <Col className="text-end">
-                        <Button
-                            onClick={props.handleBack}
-                            size="sm"
-                            type="button"
-                            variant="secondary"
-                        >Back</Button>
                     </Col>
                 </Row>
 

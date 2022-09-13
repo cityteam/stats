@@ -79,11 +79,6 @@ const SectionView = () => {
         setView(View.DETAILS);
     }
 
-    // Handle returning to the previous view
-    const handleBack: HandleAction = () => {
-        setView(View.OPTIONS);
-    }
-
     // Handle selection of a Section to edit details
     const handleEdit: HandleSection = (theSection) => {
         logger.debug({
@@ -116,6 +111,11 @@ const SectionView = () => {
         setView(View.OPTIONS);
     }
 
+    // Handle returning to the previous view
+    const handleReturn: HandleAction = () => {
+        setView(View.OPTIONS);
+    }
+
     // Handle update of an existing Section
     const handleUpdate: HandleSection = async (theSection) => {
         setMessage(`Updating Section '${theSection.title}'`);
@@ -139,9 +139,9 @@ const SectionView = () => {
             {(view === View.DETAILS) ? (
                 <SectionForm
                     autoFocus
-                    handleBack={handleBack}
                     handleInsert={canInsert ? handleInsert : undefined}
                     handleRemove={canRemove ? handleRemove : undefined}
+                    handleReturn={handleReturn}
                     handleUpdate={canUpdate ? handleUpdate : undefined}
                     section={section}
                 />

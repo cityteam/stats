@@ -9,12 +9,12 @@ import React, {useContext, useEffect, useState} from "react";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
+import {CheckBox} from "@craigmcc/shared-react";
 
 // Internal Modules ----------------------------------------------------------
 
 import EntriesSection from "./EntriesSection";
 import FacilityContext from "../facilities/FacilityContext";
-import CheckBox from "../general/CheckBox";
 import DateSelector from "../general/DateSelector";
 import useFetchSections from "../../hooks/useFetchSections";
 import * as Abridgers from "../../util/Abridgers";

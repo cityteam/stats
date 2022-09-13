@@ -11,12 +11,12 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
+import {CheckBox} from "@craigmcc/shared-react";
 
 // Internal Modules ----------------------------------------------------------
 
 import MonthlyChartSection from "./MonthlyChartSection";
 import FacilityContext from "../facilities/FacilityContext";
-import CheckBox from "../general/CheckBox";
 import FetchingProgress from "../general/FetchingProgress";
 import MonthSelector from "../general/MonthSelector";
 import {HandleBoolean, HandleMonth} from "../../types";
