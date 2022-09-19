@@ -11,6 +11,9 @@ import Row from "react-bootstrap/Row";
 
 // Internal Modules ----------------------------------------------------------
 
+import HelpAdminFacilities from "./HelpAdminFacilities";
+import HelpAdminOverview from "./HelpAdminOverview";
+import HelpAdminSections from "./HelpAdminSections";
 import HelpEnteringData from "./HelpEnteringData";
 import HelpGettingStarted from "./HelpGettingStarted";
 import HelpLoggingIn from "./HelpLoggingIn";
@@ -29,27 +32,23 @@ const HelpView = () => {
         { name: "Getting Started", component: HelpGettingStarted},
         { name: "Logging In", component: HelpLoggingIn},
         { name: "Entering Data", component: HelpEnteringData},
-    ]
+    ];
+
+    const ALL_ADMIN_SELECTIONS: Selection[] = [
+        { name: "Overview", component: HelpAdminOverview },
+        { name: "Manage Facilities", component: HelpAdminFacilities },
+        { name: "Manage Sections", component: HelpAdminSections },
+    ];
 
     const [selection, setSelection] = useState<Selection>({
         name: "Welcome",
         component: HelpWelcome,
     });
 
-/*
-    const ADMIN_USERS_SECTIONS = [
-        "Admin Concepts",
-        "Manage Users",
-        "Manage Facilities",
-        "Manage Sections",
-        "Manage Categories",
-    ];
-*/
-
     let Component = selection.component;
 
     return(
-        <Container fluid id="HelpView">
+        <Container fluid="md" id="HelpView">
             <Row>
                 <Col className="bg-light col-2">
 
@@ -61,14 +60,14 @@ const HelpView = () => {
                     )) }
 
                     <div><strong>Admin Users</strong></div>
-{/*
-                    {ADMIN_USERS_SECTIONS.map(section => (
-                        <li onClick={() => setSection(section)}>
-                            {section}
+                    {ALL_ADMIN_SELECTIONS.map(selection => (
+                        <li onClick={() => setSelection(selection)}>
+                            {selection.name}
                         </li>
                     )) }
-*/}
+
                     <div><strong>Reports and Graphs</strong></div>
+
                 </Col>
                 <Col>
                     <Component/>
