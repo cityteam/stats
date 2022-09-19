@@ -5,7 +5,6 @@
 // External Modules ----------------------------------------------------------
 
 import React from "react";
-import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 
@@ -26,7 +25,8 @@ const HelpLoggingIn = () => {
             <Row>
                 <p>
                     Each time you wish to start using the application,
-                    click or touch the <img src="/helptext/button-login-top.png"/>
+                    click or touch the
+                    <img src="/helptext/button-login-top.png" alt="Log In"/>
                     &nbsp;button at the top of the screen.
                 </p>
                 <p><img src="/helptext/login.png" alt="Login Form"/></p>

@@ -5,7 +5,6 @@
 // External Modules ----------------------------------------------------------
 
 import React from "react";
-import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 
@@ -25,8 +24,8 @@ const HelpWelcome = () => {
             </Row>
             <Row>
                 <p>
-                    <a href="https://cityteam.org" target="_blank">CityTeam</a>&nbsp;
-                    offers programs for outreacth to, and support of, homeless
+                    <a href="https://cityteam.org" target="_blank" rel="noreferrer">CityTeam</a>&nbsp;
+                    offers programs for outreach to, and support of, homeless
                     communities, as well as recovery from addiction, in several
                     US cities.  See their website for more information.
                 </p>
