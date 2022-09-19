@@ -18,6 +18,7 @@ import CategoryView from "./components/categories/CategoryView";
 import EntriesView from "./components/entries/EntriesView";
 import ExportView from "./components/reports/ExportView";
 import FacilityView from "./components/facilities/FacilityView";
+import HelpView from "./components/help/HelpView";
 import HomeView from "./components/general/HomeView";
 import Navigation from "./components/general/Navigation";
 import ConfigurationReport from "./components/reports/ConfigurationReport";
@@ -67,6 +68,7 @@ function App () {
                               <Route path="admin-users" element={<UserView/>}/>
                               <Route path="entries" element={<EntriesView/>}/>
                               <Route path="export" element={<ExportView/>}/>
+                              <Route path="help" element={<HelpView/>}/>
                               {(notTestMode) ? (
                                   <Route path="chart-month" element={
                                       <Suspense fallback={<div>Loading MonthlyChart</div>}>

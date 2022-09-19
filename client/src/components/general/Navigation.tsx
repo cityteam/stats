@@ -74,6 +74,7 @@ function Navigation() {
                                         <NavLink className="nav-link" to="/admin-users">Users</NavLink>
                                     </NavDropdown.Item>
                                 </NavDropdown>
+                                <NavLink className="nav-link" to="/help">Help</NavLink>
                             </>
                         ) : (
                             <>
