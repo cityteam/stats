@@ -10,12 +10,12 @@ import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Table from "react-bootstrap/Table";
-import {PlusCircleFill} from "react-bootstrap-icons";
 import {CheckBox, Pagination, SearchBar} from "@craigmcc/shared-react";
 
 // Internal Modules ----------------------------------------------------------
 
 import FacilityContext from "../facilities/FacilityContext";
+import AddButton from "../general/AddButton";
 import LoginContext from "../login/LoginContext";
 import FetchingProgress from "../general/FetchingProgress";
 import {HandleAction, HandleBoolean, HandleUser, HandleValue, Scope} from "../../types";
@@ -51,6 +51,8 @@ const UserList = (props: Props) => {
         pageSize: pageSize,
         username: (searchText.length > 0) ? searchText : undefined,
     });
+
+    const canAdd = loginContext.data.loggedIn && props.handleAdd;
 
     useEffect(() => {
 
@@ -138,11 +140,10 @@ const UserList = (props: Props) => {
                     />
                 </Col>
                 <Col className="text-end">
-                    <PlusCircleFill
-                        color="primary"
-                        data-testid="add0"
-                        onClick={(loginContext.data.loggedIn && props.handleAdd) ? handleAdd : undefined}
-                        size={32}
+                    <AddButton
+                        disabled={!canAdd}
+                        handleAdd={props.handleAdd ? props.handleAdd : undefined}
+                        testId="add0"
                     />
                 </Col>
             </Row>
@@ -192,11 +193,10 @@ const UserList = (props: Props) => {
 
             <Row className="mb-3 ms-1 me-1">
                 <Col className="text-end">
-                    <PlusCircleFill
-                        color="primary"
-                        data-testid="add1"
-                        onClick={(loginContext.data.loggedIn && props.handleAdd) ? handleAdd : undefined}
-                        size={32}
+                    <AddButton
+                        disabled={!canAdd}
+                        handleAdd={props.handleAdd ? props.handleAdd : undefined}
+                        testId="add1"
                     />
                 </Col>
             </Row>

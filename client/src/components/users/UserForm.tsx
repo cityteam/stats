@@ -12,7 +12,6 @@ import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import Row from "react-bootstrap/Row";
 import Table from "react-bootstrap/Table";
-import {CaretLeftSquare} from "react-bootstrap-icons";
 import {SubmitHandler, useForm} from "react-hook-form"
 import {yupResolver} from "@hookform/resolvers/yup";
 import * as Yup from "yup";
@@ -21,6 +20,7 @@ import {CheckBoxField, SelectField, SelectOption, TextField} from "@craigmcc/sha
 // Internal Modules ----------------------------------------------------------
 
 import FacilityContext from "../facilities/FacilityContext";
+import BackButton from "../general/BackButton";
 import {HandleAction, HandleUser} from "../../types";
 import User from "../../models/User";
 import UserData from "../../models/UserData";
@@ -259,10 +259,8 @@ const UserForm = (props: Props) => {
 
                 <Row className="mb-3">
                     <Col className="text-start">
-                        <CaretLeftSquare
-                            data-testid="back"
-                            onClick={props.handleReturn}
-                            size={32}
+                        <BackButton
+                            handleBack={props.handleReturn}
                         />
                     </Col>
                     <Col className="text-center">

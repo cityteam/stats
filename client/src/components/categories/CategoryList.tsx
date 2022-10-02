@@ -10,12 +10,12 @@ import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Table from "react-bootstrap/Table";
-import {PlusCircleFill} from "react-bootstrap-icons";
 import {CheckBox} from "@craigmcc/shared-react";
 
 // Internal Modules ----------------------------------------------------------
 
 import FacilityContext from "../facilities/FacilityContext";
+import AddButton from "../general/AddButton";
 import FetchingProgress from "../general/FetchingProgress";
 import LoginContext from "../login/LoginContext";
 import SectionSelector from "../sections/SectionSelector";
@@ -49,6 +49,8 @@ const CategoryList = (props: Props) => {
         alertPopup: false,
         section: section,
     });
+
+    const canAdd = loginContext.data.loggedIn && props.handleAdd;
 
     useEffect(() => {
         logger.debug({
@@ -114,11 +116,10 @@ const CategoryList = (props: Props) => {
                     />
                 </Col>
                 <Col className="text-end">
-                    <PlusCircleFill
-                        color="primary"
-                        data-testid="add0"
-                        onClick={(loginContext.data.loggedIn && props.handleAdd) ? props.handleAdd : undefined}
-                        size={32}
+                    <AddButton
+                        disabled={!canAdd}
+                        handleAdd={props.handleAdd ? props.handleAdd : undefined}
+                        testId="add0"
                     />
                 </Col>
             </Row>
@@ -188,11 +189,10 @@ const CategoryList = (props: Props) => {
 
             <Row className="mb-3 ms-1 me-1">
                 <Col className="text-end">
-                    <PlusCircleFill
-                        color="primary"
-                        data-testid="add1"
-                        onClick={(loginContext.data.loggedIn && props.handleAdd) ? props.handleAdd : undefined}
-                        size={32}
+                    <AddButton
+                        disabled={!canAdd}
+                        handleAdd={props.handleAdd ? props.handleAdd : undefined}
+                        testId="add1"
                     />
                 </Col>
             </Row>

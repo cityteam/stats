@@ -11,7 +11,6 @@ import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import Row from "react-bootstrap/Row";
-import {CaretLeftSquare} from "react-bootstrap-icons";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {CheckBoxField, TextField} from "@craigmcc/shared-react";
 import {yupResolver} from "@hookform/resolvers/yup";
@@ -20,6 +19,7 @@ import * as Yup from "yup";
 // Internal Modules ----------------------------------------------------------
 
 import FacilityContext from "../facilities/FacilityContext";
+import BackButton from "../general/BackButton";
 import {HandleAction, HandleSection} from "../../types";
 import Section from "../../models/Section";
 import SectionData from "../../models/SectionData";
@@ -110,10 +110,8 @@ const SectionForm = (props: Props) => {
 
                 <Row className="mb-3">
                     <Col className="text-start">
-                        <CaretLeftSquare
-                            data-testid="back"
-                            onClick={props.handleReturn}
-                            size={32}
+                        <BackButton
+                            handleBack={props.handleReturn}
                         />
                     </Col>
                     <Col className="text-center">
