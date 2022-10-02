@@ -78,12 +78,6 @@ const UserList = (props: Props) => {
         setActive(theActive);
     }
 
-    const handleAdd: HandleAction = () => {
-        if (props.handleAdd) {
-            props.handleAdd();
-        }
-    }
-
     const handleChange: HandleValue = (theSearchText) => {
         setSearchText(theSearchText);
     }
