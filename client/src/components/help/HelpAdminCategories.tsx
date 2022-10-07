@@ -1,6 +1,6 @@
-// HelpAdminSections ---------------------------------------------------------
+// HelpAdminCategories ---------------------------------------------------------
 
-// Admin Sections help page.
+// Admin Categories help page.
 
 // External Modules ----------------------------------------------------------
 
@@ -14,13 +14,13 @@ import Table from "react-bootstrap/Table";
 
 // Component Details --------------------------------------------------------
 
-const HelpAdminSections = () => {
+const HelpAdminCategories = () => {
 
     return (
         <Container fluid>
             <Row className="text-center">
                 <span className="text-info"><strong>
-                    Manage Sections
+                    Manage Categories
                 </strong></span>
                 <hr/>
             </Row>
@@ -28,36 +28,37 @@ const HelpAdminSections = () => {
 
                 <h3>Introduction</h3>
                 <p>
-                    A <strong>Section</strong> is a group of related&nbsp;
-                    <strong>Categories</strong> for which daily statistics
-                    will be gathered.  For example, a "Meals Provided"&nbsp;
-                    <strong>Section</strong> might have "Breakfasts",
-                    "Lunches", and "Dinners" as <strong>Categories</strong>&nbsp;
-                    underneath it.
+                    A <strong>Category</strong> is an individual statistic
+                    that a CityTeam <strong>Facility</strong> wishes to have
+                    recorded on a daily basis.  <strong>Categories</strong> belong
+                    to a <strong>Section</strong>, and all of the
+                    <strong>Categories</strong> for a <strong>Section</strong>&nbsp;
+                    are grouped together on the data entry screen.
                 </p>
                 <p>
                     In the data entry screen, and also in graphs and reports,&nbsp;
-                    <strong>Sections</strong> will be listed in the order of their
+                    <strong>Categories</strong> will be listed in the order of their
                     "ordinal" values.  Thus, you can rearrange the ordering by
                     changing the ordinal value for one particular&nbsp;
-                    <strong>Section</strong> to be between the values for two
-                    other <strong>Sections</strong>.  When setting things up
+                    <strong>Category</strong> to be between the values for two
+                    other <strong>Categories</strong>.  When setting things up
                     initially, it is a good idea to separate the initial
                     ordinal values by a large amount (say, 1000).
                 </p>
 
                 <h3>List View</h3>
                 <p>
-                    When you select the <em>Admin</em> -&gt; <em>Sections</em> view,
-                    you will see a list of all defined <strong>Sections</strong>&nbsp;
-                    for the currently selected <strong>Facility</strong>, sorted by
+                    When you select the <em>Admin</em> -&gt; <em>Categories</em> view,
+                    you will see a list of all defined <strong>Categories</strong>&nbsp;
+                    for the currently selected <strong>Facility</strong> and the
+                    currently selected <strong>Section</strong>, sorted by
                     their ordinal values.
                 </p>
                 <p>
                     <Image
-                        alt="Sections List"
+                        alt="Categories List"
                         fluid
-                        src="/helptext/sections-first.png"
+                        src="/helptext/categories-first.png"
                         style={{border: "1px solid"}}
                     />
                 </p>
@@ -66,18 +67,18 @@ const HelpAdminSections = () => {
                 <p>
                     If you are the superuser user, or an administrator for the
                     currently selected <strong>Facility</strong>, you will be
-                    able to add new <strong>Sections</strong> (by clicking on
+                    able to add new <strong>Categories</strong> (by clicking on
                     the <em>Add</em> button), or edit an existing one (by
-                    clicking anywhere on the row for that <strong>Section</strong>).
+                    clicking anywhere on the row for that <strong>Category</strong>).
                 </p>
                 <p>
                     <Image
-                        alt="Section Details"
+                        alt="Category Details"
                         fluid
-                        src="/helptext/sections-second.png"
+                        src="/helptext/categories-second.png"
                         style={{border: "1px solid"}}
                     />
-               </p>
+                </p>
                 <p>
                     The <em>Back Arrow</em> in the upper left corner
                     will return you to the List View without making
@@ -102,17 +103,17 @@ const HelpAdminSections = () => {
                     <tr>
                         <td>Ordinal</td>
                         <td>Yes</td>
-                        <td>Unique number that determines the sort order for Sections.</td>
+                        <td>Unique number that determines the sort order for Categories.</td>
                     </tr>
                     <tr>
-                        <td>Title</td>
+                        <td>Service</td>
                         <td>Yes</td>
                         <td>OBSOLETE - NO LONGER USED</td>
                     </tr>
                     <tr>
                         <td>Notes</td>
                         <td>No</td>
-                        <td>Any miscellaneous notes you want to make about this Section.</td>
+                        <td>Any miscellaneous notes you want to make about this Category.</td>
                     </tr>
                     <tr>
                         <td>Slug</td>
@@ -120,19 +121,9 @@ const HelpAdminSections = () => {
                         <td>Title used on all pages, reports, and charts.</td>
                     </tr>
                     <tr>
-                        <td>Scope</td>
-                        <td>Yes</td>
-                        <td>
-                            Suffix for permission scopes for this Section.
-                            All Sections with the same scope will be visible
-                            to users who have the appropriate permission.
-                            See the Manage Users page for more information.
-                        </td>
-                    </tr>
-                    <tr>
                         <td>Active</td>
                         <td>Yes</td>
-                        <td>Flag indicating whether this Section is active or not.</td>
+                        <td>Flag indicating whether this Category is active or not.</td>
                     </tr>
                     </tbody>
                 </Table>
@@ -143,4 +134,4 @@ const HelpAdminSections = () => {
 
 }
 
-export default HelpAdminSections;
+export default HelpAdminCategories;

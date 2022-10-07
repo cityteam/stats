@@ -11,6 +11,7 @@ import Row from "react-bootstrap/Row";
 
 // Internal Modules ----------------------------------------------------------
 
+import HelpAdminCategories from "./HelpAdminCategories";
 import HelpAdminFacilities from "./HelpAdminFacilities";
 import HelpAdminOverview from "./HelpAdminOverview";
 import HelpAdminSections from "./HelpAdminSections";
@@ -38,6 +39,7 @@ const HelpView = () => {
         { name: "Overview", component: HelpAdminOverview },
         { name: "Manage Facilities", component: HelpAdminFacilities },
         { name: "Manage Sections", component: HelpAdminSections },
+        { name: "Manage Categories", component: HelpAdminCategories },
     ];
 
     const [selection, setSelection] = useState<Selection>({
@@ -50,7 +52,7 @@ const HelpView = () => {
     return(
         <Container fluid="md" id="HelpView">
             <Row>
-                <Col className="bg-light col-2">
+                <Col className="bg-light col-3">
 
                     <div><strong>All Users</strong></div>
                     {ALL_USERS_SELECTIONS.map(selection => (
