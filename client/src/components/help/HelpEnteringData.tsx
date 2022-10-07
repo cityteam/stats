@@ -6,6 +6,7 @@
 
 import React from "react";
 import Container from "react-bootstrap/Container";
+import Image from "react-bootstrap/Image";
 import Row from "react-bootstrap/Row";
 
 // Internal Modules ---------------------------------------------------------
@@ -30,9 +31,12 @@ const HelpEnteringData = () => {
                     You will be directed to a data entry form like this:
                 </p>
                 <p>
-                    <img src="/helptext/entering-first.png"
-                         style={{border: "1px solid"}}
-                         alt="Entering Data Form"/>
+                    <Image
+                        alt="Entering Data Form"
+                        fluid
+                        src="/helptext/entering-first.png"
+                        style={{border: "1px solid"}}
+                    />
                 </p>
                 <h3>Make sure the <em>Entries for Date</em> value is correct</h3>
                 <p>
@@ -45,17 +49,17 @@ const HelpEnteringData = () => {
                 <h3>What numbers can I enter?</h3>
                 <p>
                     The information you can enter is organized
-                    into <em>Sections</em>, each of which includes
-                    one or more <em>Categories</em> of statistics
+                    into <strong>Sections</strong>, each of which includes
+                    one or more <strong>Categories</strong> of statistics
                     that you can enter.
-                    Only the <em>Sections</em> you are authorized
+                    Only the <strong>Sections</strong> you are authorized
                     to enter information for will be shown.
                 </p>
                 <h3>Enter numbers for the relevant Categories</h3>
                 <p>
-                    Enter the values for the <em>Categories</em> you
+                    Enter the values for the <strong>Categories</strong> you
                     are responsible for.  If there was no information
-                    for a particular <em>Category</em> on this date,
+                    for a particular <strong>Category</strong> on this date,
                     leave that field blank.
                 </p>
                 <p>
@@ -63,9 +67,12 @@ const HelpEnteringData = () => {
                     your screen might look like this:
                 </p>
                 <p>
-                    <img src="/helptext/entering-second.png"
-                         style={{border: "1px solid"}}
-                         alt="Values Entered but not yet Saved"/>
+                    <Image
+                        alt="Entered but not yet Saved"
+                        fluid
+                        src="/helptext/entering-second.png"
+                        style={{border: "1px solid"}}
+                    />
                 </p>
                 <h3>Save your work!</h3>
                 <p>

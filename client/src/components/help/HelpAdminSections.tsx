@@ -6,6 +6,7 @@
 
 import React from "react";
 import Container from "react-bootstrap/Container";
+import Image from "react-bootstrap/Image";
 import Row from "react-bootstrap/Row";
 import Table from "react-bootstrap/Table";
 
@@ -53,9 +54,12 @@ const HelpAdminSections = () => {
                     their ordinal values.
                 </p>
                 <p>
-                    <img src="/helptext/sections-first.png"
-                         style={{border: "1px solid"}}
-                         alt="Sections List"/>
+                    <Image
+                        alt="Sections List"
+                        fluid
+                        src="/helptext/sections-first.png"
+                        style={{border: "1px solid"}}
+                    />
                 </p>
 
                 <h3>Details View</h3>
@@ -67,10 +71,13 @@ const HelpAdminSections = () => {
                     clicking anywhere on the row for that <strong>Section</strong>).
                 </p>
                 <p>
-                    <img src="/helptext/sections-second.png"
-                         style={{border: "1px solid"}}
-                         alt="Sections List"/>
-                </p>
+                    <Image
+                        alt="Section Details"
+                        fluid
+                        src="/helptext/sections-second.png"
+                        style={{border: "1px solid"}}
+                    />
+               </p>
                 <p>
                     The <em>Back Arrow</em> in the upper left corner
                     will return you to the List View without making
@@ -110,7 +117,7 @@ const HelpAdminSections = () => {
                     <tr>
                         <td>Slug</td>
                         <td>Yes</td>
-                        <td>Title used on all pages, reports, and chart.</td>
+                        <td>Title used on all pages, reports, and charts.</td>
                     </tr>
                     <tr>
                         <td>Scope</td>

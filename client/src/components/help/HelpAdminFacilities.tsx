@@ -6,6 +6,7 @@
 
 import React from "react";
 import Container from "react-bootstrap/Container";
+import Image from "react-bootstrap/Image";
 import Row from "react-bootstrap/Row";
 import Table from "react-bootstrap/Table";
 
@@ -45,9 +46,12 @@ const HelpAdminFacilities = () => {
                     or remove <strong>Facilities</strong>.
                 </p>
                 <p>
-                    <img src="/helptext/facilities-first.png"
-                         style={{border: "1px solid"}}
-                         alt="Facilities List"/>
+                    <Image
+                        alt="Facilities List"
+                        fluid
+                        src="/helptext/facilities-first.png"
+                        style={{border: "1px solid"}}
+                    />
                 </p>
                 <p>
                     The database has been preloaded with information about all
@@ -63,9 +67,12 @@ const HelpAdminFacilities = () => {
                     clicking anywhere on it's row.  It will look like this:
                 </p>
                 <p>
-                    <img src="/helptext/facilities-second.png"
-                         style={{border: "1px solid"}}
-                         alt="Facility Details"/>
+                    <Image
+                        alt="Facility Details"
+                        fluid
+                        src="/helptext/facilities-second.png"
+                        style={{border: "1px solid"}}
+                    />
                 </p>
                 <p>
                     The <em>Back Arrow</em> in the upper left corner

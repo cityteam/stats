@@ -6,6 +6,7 @@
 
 import React from "react";
 import Container from "react-bootstrap/Container";
+import Image from "react-bootstrap/Image";
 import Row from "react-bootstrap/Row";
 
 // Internal Modules ---------------------------------------------------------
@@ -52,9 +53,12 @@ const HelpAdminOverview = () => {
                     will have it's own individual page that covers the details.
                 </p>
                 <p>
-                    <img src="/helptext/overview-first.png"
-                         style={{border: "1px solid"}}
-                         alt="Sections List"/>
+                    <Image
+                        alt="Sections List"
+                        fluid
+                        src="/helptext/sections-first.png"
+                        style={{border: "1px solid"}}
+                    />
                 </p>
                 <p>
                     At the top of the page, you will typically see:
@@ -90,9 +94,12 @@ const HelpAdminOverview = () => {
                     for that item displayed, like this:
                 </p>
                 <p>
-                    <img src="/helptext/overview-second.png"
-                         style={{border: "1px solid"}}
-                         alt="Sections List"/>
+                    <Image
+                        alt="Section Details"
+                        fluid
+                        src="/helptext/sections-second.png"
+                        style={{border: "1px solid"}}
+                    />
                 </p>
                 <p>
                     Below each field, you will see explanatory notes on what kind of
