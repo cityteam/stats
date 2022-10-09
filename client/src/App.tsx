@@ -21,6 +21,7 @@ import FacilityView from "./components/facilities/FacilityView";
 import HelpAdminCategories from "./components/help/HelpAdminCategories";
 import HelpAdminFacilities from "./components/help/HelpAdminFacilities";
 import HelpAdminSections from "./components/help/HelpAdminSections";
+import HelpAdminUsers from "./components/help/HelpAdminUsers";
 import HelpEnteringData from "./components/help/HelpEnteringData";
 import HelpGettingStarted from "./components/help/HelpGettingStarted";
 import HelpLoggingIn from "./components/help/HelpLoggingIn";
@@ -80,6 +81,7 @@ function App () {
                               <Route path="help-admin-facilities" element={<HelpAdminFacilities/>}/>
                               <Route path="help-admin-overview" element={<HelpAdminOverview/>}/>
                               <Route path="help-admin-sections" element={<HelpAdminSections/>}/>
+                              <Route path="help-admin-users" element={<HelpAdminUsers/>}/>
                               <Route path="help-entering-data" element={<HelpEnteringData/>}/>
                               <Route path="help-getting-started" element={<HelpGettingStarted/>}/>
                               <Route path="help-logging-in" element={<HelpLoggingIn/>}/>

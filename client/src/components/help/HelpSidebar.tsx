@@ -31,6 +31,7 @@ const HelpSidebar = () => {
         { name: "Manage Facilities",    to: "/help-admin-facilities" },
         { name: "Manage Sections",      to: "/help-admin-sections" },
         { name: "Manage Categories",    to: "/help-admin-categories" },
+        { name: "Manage Users",         to: "/help-admin-users" },
     ];
 
     return (
