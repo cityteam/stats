@@ -13,6 +13,8 @@ import HelpSidebar from "./HelpSidebar";
 
 // Internal Modules ---------------------------------------------------------
 
+import Callout from "../general/Callout";
+
 // Component Details --------------------------------------------------------
 
 const HelpEnteringData = () => {
@@ -88,11 +90,11 @@ const HelpEnteringData = () => {
                             the <strong>Save</strong> button to cause the values
                             for this <em>Section</em> to be recorded.
                         </p>
-                        <p>
+                        <Callout title="Correcting Errors" variant="info">
                             If you need to correct a mistake, just go back to the
                             field you need to change, correct the value, and then
                             click or touch the <strong>Save</strong> button again.
-                        </p>
+                        </Callout>
                     </Row>
                 </Col>
             </Row>

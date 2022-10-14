@@ -120,8 +120,8 @@ const HelpAdminOverview = () => {
                             (or try to leave a required field blank), the explanatory comment
                             will be replaced with an error message describing what is wrong,
                             as soon as you advance to the next field.  You must correct any
-                            and all errors before you will be able to click or touch
-                            <em>Save</em> in order to add a new item, or update an existing
+                            and all errors before you will be able to click or touch&nbsp;
+                            <strong>Save</strong> in order to add a new item, or update an existing
                             item.
                         </p>
                         <p>

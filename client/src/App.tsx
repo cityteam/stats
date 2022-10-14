@@ -22,9 +22,11 @@ import HelpAdminCategories from "./components/help/HelpAdminCategories";
 import HelpAdminFacilities from "./components/help/HelpAdminFacilities";
 import HelpAdminSections from "./components/help/HelpAdminSections";
 import HelpAdminUsers from "./components/help/HelpAdminUsers";
+import HelpCharts from "./components/help/HelpCharts";
 import HelpEnteringData from "./components/help/HelpEnteringData";
 import HelpGettingStarted from "./components/help/HelpGettingStarted";
 import HelpLoggingIn from "./components/help/HelpLoggingIn";
+import HelpReports from "./components/help/HelpReports";
 import HelpWelcome from "./components/help/HelpWelcome";
 import HomeView from "./components/general/HomeView";
 import Navigation from "./components/general/Navigation";
@@ -82,9 +84,11 @@ function App () {
                               <Route path="help-admin-overview" element={<HelpAdminOverview/>}/>
                               <Route path="help-admin-sections" element={<HelpAdminSections/>}/>
                               <Route path="help-admin-users" element={<HelpAdminUsers/>}/>
+                              <Route path="help-charts" element={<HelpCharts/>}/>
                               <Route path="help-entering-data" element={<HelpEnteringData/>}/>
                               <Route path="help-getting-started" element={<HelpGettingStarted/>}/>
                               <Route path="help-logging-in" element={<HelpLoggingIn/>}/>
+                              <Route path="help-reports" element={<HelpReports/>}/>
                               {(notTestMode) ? (
                                   <Route path="chart-month" element={
                                       <Suspense fallback={<div>Loading MonthlyChart</div>}>

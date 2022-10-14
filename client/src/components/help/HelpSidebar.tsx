@@ -34,6 +34,11 @@ const HelpSidebar = () => {
         { name: "Manage Users",         to: "/help-admin-users" },
     ];
 
+    const ALL_REPORTS_SELECTIONS: Selection[] = [
+        { name: "Reports",              to: "/help-reports" },
+        { name: "Charts",               to: "/help-charts" },
+    ]
+
     return (
         <Container className="bg-light  navbar navbar-nav" fluid id="helpSidebar">
             <Row>
@@ -49,6 +54,15 @@ const HelpSidebar = () => {
                 <div><strong>Admin Users:</strong></div>
             </Row>
             {ALL_ADMIN_SELECTIONS.map((selection) => (
+                <NavLink className="nav-link" to={selection.to}>{selection.name}</NavLink>
+            ))}
+            <Row>
+                <span>&nbsp;</span>
+            </Row>
+            <Row>
+                <div><strong>Reports and Charts:</strong></div>
+            </Row>
+            {ALL_REPORTS_SELECTIONS.map((selection) => (
                 <NavLink className="nav-link" to={selection.to}>{selection.name}</NavLink>
             ))}
         </Container>

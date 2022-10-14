@@ -14,6 +14,8 @@ import HelpSidebar from "./HelpSidebar";
 
 // Internal Modules ---------------------------------------------------------
 
+import Callout from "../general/Callout";
+
 // Component Details --------------------------------------------------------
 
 const HelpAdminUsers = () => {
@@ -165,8 +167,10 @@ const HelpAdminUsers = () => {
                             </li>
                         </ul>
                         <p>
-                            WARNING:  YOU MUST SELECT AT LEAST ONE OF THESE PERMISSIONS
-                            IN ORDER TO MANAGE THIS USER.
+                            <Callout title="Be Careful!" variant="warning">
+                                If you do not check at least one of these permissions,
+                                you will lose the ability to manage this <strong>User</strong>.
+                            </Callout>
                         </p>
                         <p>
                             Separately, select the <strong>Sections</strong> that this&nbsp;
