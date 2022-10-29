@@ -1,3 +1,5 @@
+[Home](./index.md)
+
 # Install Development Environment Locally
 
 This document describes installing this application locally so that you can
@@ -9,7 +11,7 @@ adequate gigabytes of disk storage
 
 As you go through the installation process, you will be deciding on several
 configuration settings (such as usernames and passwords).  A convenient way
-to record these decisions is to print a copy of the [Cheat Sheet](./CHEATSHEET.md)
+to record these decisions is to print a copy of the [Cheat Sheet](../CHEATSHEET.md)
 and write them down as you choose appropriate values.  These values will be
 used later in the installation to set up *Environment Files* for each runtime
 mode (development, test, production).  These values are sensitive information,

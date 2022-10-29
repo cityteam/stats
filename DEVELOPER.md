@@ -15,7 +15,7 @@ privileges that lets you install the required prerequisite
 software pieces.
 
 In general, a developer will follow all of the steps in
-[Installation Documentation](./INSTALLATION.md), while installing
+[Installation Documentation](docs/INSTALLATION.md), while installing
 both the *Database Environment* and *Application Environment* on
 your laptop.  There are some additional useful tools for development
 that are highly recommended, and are discussed below.

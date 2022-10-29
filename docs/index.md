@@ -8,21 +8,25 @@ reported to the Home Office periodically.
 support of homeless communities, as well as recovery from addition,
 in several US cities.  See their website for more information.
 
-The information covered is targeted for different user types, with
-separate pages customized to your needs:
-* [I need to enter statistics](./USER.md).  You can operate the
-  application through a standard web browser, or (on a table or mobile
-  phone) by downloading an application from the Amazon Appstore.
-* [I need to administer the statistics being recorded](./ADMIN.md).  Your
-  username and password will provide access to additional features that
-  let you set the required statistics for your CityTeam Facility.
-* [I need to install the application locally](./INSTALL.md).  Our facility
-  prefers to run the application on our local network, instead of using
-  the version on the Internet.  See also an empty
-  [Cheat Sheet](./CHEATSHEET.md) on which you can record configuration
-  information as you perform the installation.
-* [I need to work on the software that drives this application](./DEVELOP.md).
-  The source code for the entire application is open source, and available
-  [at GitHub](https://cityteam.github.com/stats).  You will need to install
-  a local version (see the [installation instructions](./INSTALL.md) and
-  then the extra information found here.
+## End User Information
+
+This application is deployed at [https://cityteam-stats.herokuapp.com](https://cityteam-stats.herokuapp.com).
+
+The application has documentation for both regular users and administrators
+via the *Help* menu option found there.
+
+## Developer Information
+
+The following pages describe information useful to developers who wish to
+develop or maintain the application itself, as well as deploy an updated version.
+* [Install Development Environment Locally](INSTALLATION.md)
+* [Deploying To Heroku](DEPLOYMENT.md)
+
+Background information on various aspects of the application design are spread
+across a number of pages:
+* [Background information](DESIGN-BACKGROUND.md)
+* [Database tables and relationships](DESIGN-DATABASE.md)
+* [User Authentication](DESIGN-AUTHENTICATION.md)
+* [REST APIs](DESIGN-REST.md)
+* [Anatomy of the server application](DESIGN-SERVER.md)
+* [Anatomy of the client application](DESIGN-CLIENT.md)

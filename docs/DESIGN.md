@@ -40,7 +40,7 @@ describing the technology used).
 
 ### Entity-Relationship Diagram
 
-![Entity Relationship Diagram](./CityTeamStats.png)
+![Entity Relationship Diagram](../CityTeamStats.png)
 
 In the diagram, the following conventions are used:
 * **PK** Primary key.  For the *dailies* table, the primary key is a combination of fields.

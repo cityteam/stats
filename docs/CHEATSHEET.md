@@ -1,9 +1,9 @@
 [Home](./index.md)
-[Installation](./INSTALL.md)
+[Installation](./INSTALLATION.md)
 
 # Configuration Cheat Sheet
 
-This document provides a convenient place to record all of the configuration
+This document provides a convenient place to record the configuration
 settings you use, such as usernames and passwords, URLs for the database and
 log files, and so on.  We suggest that you print out this sheet, record the
 values as they are created, and **keep the printed copy in a secure place**
@@ -29,7 +29,7 @@ DEVELOPER NOTE:  These values contain sensitive information, and should
 | Placeholder  | Description                                                            | Your Configured Value |
 |--------------|------------------------------------------------------------------------|-----------------------|
 | {APPHOST}    | Network name of the application host ("localhost" for a local install) |                       |
-| {APPPORT}    | Network port of the application host (typically 8080 for development)  |                       |
+| {APPPORT}    | Network port of the application host (typically 8082 for development)  |                       |
 | {SUPASSWORD} | Application password for the superuser user (MUST be configured)       |                       |
 | {SUUSERNAME} | Application username for the superuser user (MUST be configured)       |                       |
 
