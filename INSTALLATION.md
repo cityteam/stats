@@ -1,95 +1,61 @@
-# Installation Documentation
+# Install Development Environment Locally
 
-This document describes installing this application into an operational
-environment.  Many of these tasks will apply to a developer setting up
-their own environment as well -- see [Developer Documentation](./DEVELOPER.md)
-for the details specific to that scenario.
+This document describes installing this application locally so that you can
+operate it, test it, and update it.  You can use any operating system that
+supports the required tools (such as Linux, MacOS, and Windows).  You will
+need to have a user account that is entitled to install system level software,
+as well as at least 8gb of main memory (16gb is preferable) along with
+adequate gigabytes of disk storage
 
-## Planning
+As you go through the installation process, you will be deciding on several
+configuration settings (such as usernames and passwords).  A convenient way
+to record these decisions is to print a copy of the [Cheat Sheet](./CHEATSHEET.md)
+and write them down as you choose appropriate values.  These values will be
+used later in the installation to set up *Environment Files* for each runtime
+mode (development, test, production).  These values are sensitive information,
+and are different for each developer, so these environment files should
+**NEVER** be checked in to a Git repository.
 
-Fundamentally, there are two overall environments that need to be deployed:
-* *Database Environment* - where the Postgres database containing the application data runs.
-* *Application Environment* - where the server application (which is also where the client application is loaded from) runs.
+## (Optional) HTTPS Support Installation
 
-Both of these environments *could* be installed on the same computer,
-and have no problems with connectivity.  If they are installed on different
-computers:
-* The *Database Environment* must support inbound network connections from the *Application Environment*.
-* The *Application Environment* must support outbound network connections to the *Database Environment*, and inbound network connections from user browsers.
+TODO - document [Let's Encrypt](https://letsencrypt.org) info.
 
-You will need to have a user account that allows you to install privileged
-applications (typically called an "Administrator" account) to successfully
-install the required software.
+## Developer Tools Installation
 
-Users only need a modern web browser (Microsoft Edge, Chrome, Firefox,
-Safari etc.), and can operate on either the same machine as one or both
-of these environments, or on a separate system somewhere else.  They
-must have network connectivity to the Application Environment.
+### Interactive Developer Environment
 
-Developers will generally set up both environments (and operate a web
-browser) locally, to facilitate development and debugging, and avoiding
-any chance of corrupting data in the production database.  In addition,
-setting up such a development environment is a prerequisite for installing
-the application on a cloud environment like [Heroku](https://heroku.com).
+An interactive development environment (IDE) that deeply understands
+technologies like Typescript, React, and so on will tremendously improve
+your productivity as a developer.  The primary author of this application
+uses [IntelliJ IDEA Ultimate](https://jetbrains.com/idea/download), which
+is extremely capable, but does cost an annual subscription fee.
 
-Once the development environment is set up, there are specific steps
-for a Heroku deployment.  See [Installation on Heroku](./INSTALLATION-HEROKU.md)
-for more information.
+A free tool like [Visual Studio Code](https://code.visualstudio.com) would
+make an excellent alternative.  It runs on any of the popular platforms,
+and has a wide variety of plugin extensions that feature support for the
+technologies used here.
 
-## Cheat Sheets
+### HTTP Development Tool
 
-As you go through the installation process, you will be choosing critically
-important values that will be required later on.  The cheat sheets below
-offer you a convenient place to write them down, if you print these
-instructions and then keep them.  Each value is represented by a "placeholder"
-(such as {DBHOST}) in the configuration steps below.  When you see those
-placeholders in a configuration file, replace them with the value you have
-recorded for name.
+[Postman](https://postman.com/downloads) is an incredibly useful tool
+for exercising HTTP transactions against the server portion of this
+application, independent of whether the client portion is
+actually sending the correct inputs (or if that client support
+has even been implemented yet).
 
-**NOTE:  These values are sensitive information, and should never be recorded
-in a source code control system like Git, or shared indiscriminately!**
-
-### Database Environment Values
-
-| Placeholder  | Description                                                         | Your Configured Value |
-|--------------|---------------------------------------------------------------------|-----------------------|
-| {DBHOST}     | Network name of the Postgres host ("localhost" for a local install) |                       | 
-| {DBNAME}     | Postgres database name you have selected (normally same as the app) |                       |
-| {DBPASSWORD} | Application database password you have selected                     |                       |
-| {DBPORT}     | Network port number Postgres is running on (normally 5432)          |                       |
-| {DBUSERNAME} | Application database username you have selected                     |                       |
-| {PGPASSWORD} | Postgres system *database superuser* password (MUST be configured)  |                       |
-| {PGUSERNAME} | Postgres system username (normally "postgres")                      |                       |
-
-### Application Environment Values
-
-| Placeholder  | Description                                                            | Your Configured Value |
-|--------------|------------------------------------------------------------------------|-----------------------|
-| {APPHOST}    | Network name of the application host ("localhost" for a local install) |                       |
-| {APPPORT}    | Network port of the application host (typically 8080 for development)  |                       |
-| {SUPASSWORD} | Application password for the superuser user (MUST be configured)       |                       |
-| {SUUSERNAME} | Application username for the superuser user (MUST be configured)       |                       |
 
 ## Database Environment Installation
 
-These steps must take place on the host computer selected for the
-*Database Environment*.
+### Install Postgres and Utilities
 
-NOTE:  The procedures are different when deploying the production
-application to Heroku.  However, a developer will still need to install
-these tools locally, as described below.
-
-### Install PostgreSQL (Postgres) and Utilities
-
-Download the latest release of [PostgreSQL](https://www.postgresql.org/download/) for
-your platform, and install it.  Installation notes:
-* When choosing components to be installed, omit the Stack Builder.  Everything else is required.
-* When you enter a password for the *database superuser*, be sure to record it in the **{PGPASSWORD}** entry above.
-* Add the directory containing the Postgres command line tools to the **PATH** environment variable in your shell.  On a MacOS system, this will be a directory named like **/Library/PostgreSQL/13/bin**.
+If you do not already have Postgres installed, download the
+[Latest Production Version](https://postgresql.org/downloads)
+for your operating system, and execute the installer.  Installation Notes:
+* When choosing the components to be installed, omit the Stack Builder.  Everything else is required.
+* When you enter a password for the *database superuser*, record it as the `{PGPASSWORD}` value on the Cheat Sheet.
+* Add the directory containing the Postgres command line tools to the **PATH** environment variable for your shell.  On a MacOS system, this will be in a directory named something like `/Library/PostgreSQL/13/bin`.
 * You may need to restart your command line window after making this change.
-* Verify that the command line tools by executing *psql --version* and observing the version number response.
-
-Verify successful installation by executing the following command in a command line window:
+* Verify successful installation by executing the following shell command:
 
 ```shell
 psql --version
@@ -107,7 +73,7 @@ createuser --pwprompt {DBUSERNAME}
 You will be prompted to enter the value you wish to use, which will be the
 {DBPASSWORD} value you selected earlier.
 
-### Create Application Database (and Shadow)
+### Create Application Database (and Test Version)
 
 Next, select (and write down) a name for the database to be created.  It is
 common for the database name to be the same as the application name, but
@@ -117,14 +83,7 @@ that is up to you.  Create the database like this:
 createdb --owner={DBUSERNAME} {DBNAME}
 ```
 
-The database configuration tool we will be using later (graphile-migrate)
-also requires a shadow database it can use when tables are created:
-
-```shell
-createdb --owner={DBUSERNAME} {DBNAME}_shadow
-```
-
-In a development environment **only** you will also need a database that can
+In a development environment, you will also need a database that can
 be used during testing.  This database will be completely erased and reloaded
 during testing, so we do not want tests to be used against a "real" database.
 
@@ -144,38 +103,19 @@ and then shown a prompt that includes the database name.  Enter **\q** and
 press *Enter* to exit this application.
 
 At this point, we have successfully created empty databases.  The required
-table structures and initial data will be installed later, as part of the
-*Application Environment* setup.
-
-## Application Environment Installation
-
-These steps must take place on the host computer selected for the
-*Application Environment*.
-
-### Install Database Command Line Tools
-
-If the *Database Environment* and *Application Environment* are installed on
-different computers, you will need to install the database command line tools
-locally on the *Application Environment* computer as well.
-
-Download the latest release of [PostgreSQL](https://www.postgresql.org/download/) for
-your platform, and install it.  Installation notes:
-* When choosing components to be installed, select only *Command Line Tools*.
-* Add the directory containing the Postgres command line tools to the **PATH** environment variable in your shell.  On a MacOS system, this will be a directory named like **/Library/PostgreSQL/13/bin**.
-* You may need to restart your command line window after making this change.
-* Verify that the command line tools by executing *psql --version* and observing the version number response.
+table structures and initial data will be created the first time that the
+server application is started, later on.
 
 ### Install Git Command Line Tools
 
 *Git* is a source code control management application that records changes
-(as you make them) to the source code.  It is required even on a production
-install, because it is needed to download and build the application itself.
+(as you make them) to the source code.
 
-Pick the most recent binary release for your platform at
-[Git](https://git-scm.com/downloads) and install it.  You may need to
-restart your command line window after installation to pick up the PATH changes.
-After successful installation, verify the required tools are available
-as follows:
+If you do not have Git installed already, pick the most recent binary release
+for your platform at [Git](https://git-scm.com/downloads) and install it.
+You may need to restart your command line window after installation to pick
+up the PATH changes.  After successful installation, verify the required tools
+are available as follows:
 
 ```shell
 git --version
@@ -184,8 +124,8 @@ git --version
 ### Install Node.JS Environment
 
 *Node.JS* is the runtime environment that supports execution of Javascript
-and Typescript based applications outside of a web browser.  The server portion
-of this system is such an application.
+and Typescript based applications directly from the command line.
+The server portion of this system is such an application.
 
 Pick the most recent Long Term Support (LTS) release for your platform at
 [Node.JS](https://nodejs.org/en) and install it.  You will need to restart
@@ -198,42 +138,24 @@ node --version
 npm --version
 ```
 
-### Install Node Global Dependencies
-
-Several Node-based technologies must be installed globally, because
-they add executable commands we will need later.  Execute the following
-commands from the command line.
-
-The [graphile-migrate](https://github.com/graphile/migrate) is used to
-manage changes to the database, remembering what changes have been done
-previously on any particular database.  Consult the documentation there
-for how it operates.
-
-```shell
-npm install -g graphile-migrate
-graphile-migrate --version
-graphile-migrate init
-```
-
 ### Install Application Source and Executables
 
 The source code for this application is stored in a repository on
 [GitHub](https://github.com), a very popular location for both open
 source and closed source development projects.  Each application
-is stored in it's own location with its own URL.
+is stored in a separate repository with its own URL.
 
 Navigate to the directory within which you want to install the
 application (typically the home directory for the user under which
-the application will run), and execute a command like this (where
-the */cityteam/stats* portion is unique to this application):
+the application will run), and execute a command like this:
 
 ```shell
 git clone https://github.com/cityteam/stats.git
 ```
 
 This will download the relevant source code into a subdirectory
-(named "stats" in this case).  Change your current directory to
-the subdirectory for the next steps.
+(named "stats").  Change your current directory to the new
+subdirectory for the next steps.
 
 ### Build Application Components
 
@@ -250,55 +172,11 @@ npm run build
 cd ..
 ```
 
-### Seed Database Table Structure
-
-NOTE:  These steps are different on a Heroku installation -- see
-[Heroku Installation](./INSTALLATION-HEROKU.md) for details.
-
-Next, we will execute "migration" utilities that will change our empty database
-into one that contains the table structures required by this application.
-In order to do this, we must first set up some environment variables.
-
-In a command line window, issue the following commands (on a Windows platform,
-use the "set" command instead of "export"), replacing the placeholders with
-the values you previously recorded:
-
-```shell
-export DATABASE_URL="postgres://{DBUSERNAME}:{DBPASSWORD}@{DBHOST}:{DBPORT}/{DBNAME}"
-export SHADOW_DATABASE_URL="postgres://{DBUSERNAME}:{DBPASSWORD}@{DBHOST}:{DBPORT}/{DBNAME}_shadow"
-export ROOT_DATABASE_URL="postgres://{PGUSERNAME}:{PGPASSWORD}@{DBHOST}:{DBPORT}/postgres"
-```
-
-Now, execute the following command to perform the defined migrations (steps that
-are executed in order to bring the database up to the latest state):
-
-```shell
-graphile-migrate migrate
-```
-
-You can verify that everything worked by using the Postgres *psql* tool:
-
-```shell
-$ psql --username={DBUSERNAME} {DBNAME}
-{DBNAME}=# \dt
-```
-
-You can investigate the details of how any particular table is set up,
-including indexes and foreign key relationships, by running the command
-
-```sql
-\dt {tablename}
-```
-
 ### Set Up Execution Configuration
 
-NOTE:  These steps are different on a Heroku installation -- see
-[Heroku Installation](./INSTALLATION-HEROKU.md) for details.
-
 Next, we will set up "environment variable" configurations that define
-how the application will execute.  In a production installation,
-only the *production* environment needs to be defined.  A developer,
-on the other hand, will require all three.
+how the application will execute.  Which environment configuration is
+actually used will depend on how you start the server, as we will see later.
 
 **WARNING:  THESE FILES WILL CONTAIN SENSITIVE INFORMATION
 LIKE PASSWORDS, AND SHOULD *NEVER* BE CHECKED IN TO GIT!
@@ -312,14 +190,13 @@ FILE IN THE TOP LEVEL DIRECTORY OF THE APPLICATION!**
 | test           | .env.test               | Configuration for running tests (use the test dataqbase!)                              |
 | (none)         | .env                    | Should be a copy of the test configuration due to limitations in configuration support |
 
-The variables that may be set in these environment configurations
-will vary depending on the actual application, but the following
-will be typical:
+The variables that may be set in these environment configurations will be as follows:
 
 | Environment Variable | Description                                                                                                 |
 |----------------------|-------------------------------------------------------------------------------------------------------------|
 | ACCESS_LOG           | Destination for HTTP style access logs (filename, stdout, stderr, or none)                                  |
 | CLIENT_LOG           | Destination for application logs from the client (filename, stdout, stderr, or none)                        |
+| DATABASE_TOKEN       | Arbitrary token that serves to authenticate database backup requests                                        |
 | DATABASE_URL         | postgres://{DBUSERNAME}:{DBPASSWORD}@{DBHOST}:{DBPORT}/{DBNAME}                                             |
 | HTTPS_CERT           | Pathname to the HTTPS certificate *fullchain.pem* file (if HTTPS supported)                                 |
 | HTTPS_KEY            | Pathname to the HTTPS private key *privkey.pem* file (if HTTPS supported)                                   |
@@ -329,47 +206,63 @@ will be typical:
 | SERVER_LOG           | Destination for application logs from the server (filename, stdout, stderr, or none)                        |
 | SUPERUSER_SCOPE      | OAuth scope that provides "superuser" access (typically "superuser")                                        |
 
-If this is a development environment, in test mode point your DATABASE_URL
+In a development environment, for test mode point your DATABASE_URL
 at the test database by appending "_test" after {DBNAME}.  Do this in both
 *.env.test* and *.env*.
 
+For the OAUTH_ENABLED value, I like to set this to true in *.env.production* and false
+in *.env.development*.  The effect of this value is to choose whether the server should
+enforce OAuth-based permissions or not.  It is sometimes easier to initially develop
+a new set of REST endpoints without enforcing these restrictions, but you should always
+make sure your new logic works in production mode before checking code in.
+
 For log file settings, a filename will cause a file with that name to be
 created in the *log* subdirectory, and the files will be rotated daily to
-a filename that includes the date and time of the rotation.
+a filename that includes the date and time of the rotation.  As a developer,
+I like to use "stdout" for all three, so everything will be merged into the
+runtime output in my IDE.
 
-As a developer, my personal preference is to set all three log configurations
-to "stdout" in development and test modes, and setting OAUTH_ENABLED to false
-in development mode (but true in test mode).  However, you can configure them
-as you like based on your own preferences.
+### Configure IDE Shortcuts for Server Side
 
-Setting up HTTPS support requires acquiring an HTTPS certificate, as
-well as keeping it up to date when it expires.  Detailed instructions are
-beyond the scope of this document, but [Let's Encrypt](https://letsencrypt.org)
-is a good source of zero-cost certificates for developers.
+In your IDE, set up shortcuts to execute the following server side
+NPM scripts (from the top level *package.json* file):
+* **develop:dev** -- Start the server in development mode (i.e. using the *.env.development* configuration).
+* **develop:prod** -- Start the server in production mode (i.e. using the *.env.production* configuration).
+* **test** -- Run all the server side tests (using the *.env.test* configuration).
+* **test:coverage** -- Run all the server side tests, and report code coverage for every file.
 
-### Seed A Superuser User
+Typically, an IDE will support starting either of these scripts normally,
+or with debugging enabled.  The latter will allow you to set breakpoints
+anywhere within the server code, step through the server logic, and
+evaluate expressions.  As an added benefit, these shortcuts will watch
+for changes to server source code, and automatically restart the server
+to pick up those changes.
 
-When the database was initially set up in the previous steps, all of the
+### Configure IDE Shortcuts for Client Side
+
+In your IDE, set up shortcuts to execute the following client side
+NPM scripts (from the *client/package.json* file):
+* **build** -- Build a runtime version of the client (which will be served when you point your browser at http://{APPHOST}:{APPPORT}).
+* **start** -- Start a development version of the client, on port 3000, that will notice client side code changes and pick them up incrementally.
+
+You can consult the documentation for your IDE to understand how to integrate
+debugging of client side applications (which are running inside your browser).
+
+## Seeding Database Table Structure
+
+### Start Server Application For The First Time
+
+When the server application is started for the first time (with an empty database),
+it will automatically create all the required tables, but they will all be empty.
+* Execute the IDE shortcut **develop:dev** that you created earlier.
+
+### Create a Superuser User
+
+When the database was initially set up in the previous steps, all the
 tables, including the table of valid users, are empty.  We need to add
 a superuser user account, in order to set up things like other users, and
 all other operations that are restricted to require superuser access.  We
-will remedy that deficiency manually:
-
-#### Start the server in development mode
-
-In a command line window, execute the following command:
-
-```shell
-npm run start:dev
-```
-
-This will start the server using the *.env.development* configuration file's
-values.  If you followed the recommended pattern, you would have included
-*OAUTH_ENABLED=false* in these settings.  That is mission critical here,
-because we cannot get permissions for the calling user to perform the next
-task, when there are no valid users.
-
-#### Use an HTTP tool to create the superuser user:
+will remedy that deficiency manually, by using Postman.
 
 Using Postman (or, you can do this with command line tools like *curl* if you wish),
 set up a POST transaction to *http://{APPHOST}:{APPPORT}/api/users* with
@@ -378,7 +271,7 @@ a body content type of *application/json* and the following contents:
 ```json
 {
   "name": "Superuser User",
-  "scope": "{SUPERUSER_SCOPE}",
+  "scope": "superuser",
   "username": "{SUUSERNAME}",
   "password": "{SUPASSWORD}"
 }
@@ -396,21 +289,97 @@ you add later, as well.  The hashing that took place works only in one direction
 -- there is no way to translate back to the original password, so be sure you
 remember the password that has been set!
 
-### Verify Client Application Works
+### Seed a Facility Object
 
-While the server is still running, open a browser tab and navigate to
-*http://{APPHOST}:{APPPORT}* there.  You should see the application's
-user interface, including a *Log In* button.  Click that button, and use
-the superuser username and password that were just set up to log in.
+You will also need to create a CityTeam *Facility* to use for testing.  You can
+again use Postman (or curl) to set up a POST transaction to *http://{APPHOST}:{APPPORT}/api/facilities*
+with a body content type of *application/json* and the following contents:
 
-If you run into problems, you can use *psql* to delete the database row
-previously set up for the superuser user, and repeat the previous step
-to create a new one.
+```json
+{
+  "name": "Test Facility",
+  "scope": "test"
+}
+```
 
-When you are through, use Control+C in the server's command line window
-to terminate it.
+Send this command to the server, and you should get a 201 CREATED response,
+which will include an *id* assigned to the new facility (probably 1).
 
-### Prepare Application To Run Permanently
+If you use *psql* to look inside the database, and do a *select * from facilities;*,
+you will see that the new Facility has been created.
 
-TODO - details about "pm2" in Windows, or equivalent capabilities on
-Mac or Linux.
+### Set Up Sections and Categories
+
+Continuing our use of Postman or curl, set up a POST transaction to
+*http://{APPHOST}:{APPPORT}/api/facilities/1/categories* with a body
+content type of *application/json* and the following contents:
+
+```json
+{
+}
+```
+
+This will configure a standard set of Sections and Categories for your
+test Facility.
+
+## Get The Client Running
+
+### Start The Client Application
+
+Use the *start* IDE shortcut that you set up earlier to start the client.
+This will compile the client side code, and open a tab in your browser
+pointing at **http://localhost:3000** which should be running the application.
+A very nice feature is that the *start* script will be watching for changes
+you have made in the client side code, and automatically update what you see
+in the browser.
+
+### Log In
+
+Click the **Log In** button in the navigation bar, and you will be asked
+for your credentials.  Use the {SUUSERNAME} and {SUPASSWORD} values that
+you used when creating the Superuser user.
+
+After logging in, use the *Facility* dropdown to select the Test Facility
+that was created earlier.
+
+### Set Up Test Users
+
+You will want to set up at least two users -- one with administrative
+capabilities for your test Facility, and one with regular capabilities
+for one or more sections related to the test Facility.
+
+Use the *Admin -> Users* menu option to navigate to the list of all Users
+that exist in the system.  The only one that will be there now is the
+superuser user that we created earlier.
+
+Click either **Add** button to create a new admin user:
+* I like to use a username of "ta" and password of "ta" for this, because they are easy to type.
+* Under the *Permissions* heading, click the "admin" option and unclick the "regular" option.
+* Click the **Save** button to save this user.
+* When returned to the list, you should now see two users.
+
+Click either **Add** button again, to create a new regular User:
+* I like to use a username of "tr" and a password of "tr" for this, because they are easy to type.
+* Under the *Permissions* heading, leave the "admin" option unchecked, and the "regular" option checked.
+* Under the *Sections* heading, you are choosing which sections that this User has access to in the rest of the application.  Select a couple of them (say "clothing" and "kitchen").
+* Click the **Save** button to save this user.
+* When returned to the list, you should now see three users.
+
+### Verify Limited Access for the Regular User
+
+Log off of the superuser username, and log in with the credentials for the regular
+User that you just created.
+* Choose the *Entries* menu option from the navigation bar.
+* You should see that only the Sections that you authorized for this User are displayed.
+
+### Verify Unlimited Access for the Admin User
+
+Log off the regular user username, and log in with the credentials for the admin
+User that you created earlier.
+* Choose the *Entries* menu option from the navigation bar.
+* You should see all the defined Sections, because the admin User can use all of them.
+
+### Explore The Help Information
+
+Select the *Help* menu option from the navigation bar, and you can explore
+the user focused documentation of how to operate the application.
