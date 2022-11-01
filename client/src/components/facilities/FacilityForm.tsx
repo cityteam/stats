@@ -12,13 +12,12 @@ import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import Row from "react-bootstrap/Row";
 import {SubmitHandler, useForm} from "react-hook-form";
-import {CheckBoxField, TextField} from "@craigmcc/shared-react";
+import {BackButton, CheckBoxField, TextField} from "@craigmcc/shared-react";
 import {yupResolver} from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 
 // Internal Modules ----------------------------------------------------------
 
-import BackButton from "../general/BackButton";
 import {HandleAction, HandleFacility} from "../../types";
 import Facility from "../../models/Facility";
 import FacilityData from "../../models/FacilityData";

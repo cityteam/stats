@@ -9,11 +9,11 @@ import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Image from "react-bootstrap/Image";
 import Row from "react-bootstrap/Row";
-import HelpSidebar from "./HelpSidebar";
+import {Callout} from "@craigmcc/shared-react";
 
 // Internal Modules ---------------------------------------------------------
 
-import Callout from "../general/Callout";
+import HelpSidebar from "./HelpSidebar";
 
 // Component Details --------------------------------------------------------
 

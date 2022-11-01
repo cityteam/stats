@@ -10,12 +10,11 @@ import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Table from "react-bootstrap/Table";
-import {CheckBox} from "@craigmcc/shared-react";
+import {AddButton, CheckBox} from "@craigmcc/shared-react";
 
 // Internal Modules ----------------------------------------------------------
 
 import FacilityContext from "../facilities/FacilityContext";
-import AddButton from "../general/AddButton";
 import FetchingProgress from "../general/FetchingProgress";
 import LoginContext from "../login/LoginContext";
 import {HandleAction, HandleBoolean, HandleSection} from "../../types";
