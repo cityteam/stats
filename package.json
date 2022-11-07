@@ -1,6 +1,6 @@
 {
   "name": "@cityteam/stats",
-  "version": "2.0.0-20220310",
+  "version": "2.0.0-20221107",
   "description": "Daily statistics collection for CityTeam Facilities",
   "main": "dist/server.js",
   "engines": {
