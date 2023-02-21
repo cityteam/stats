@@ -5,7 +5,7 @@
   "private": true,
   "dependencies": {
     "@craigmcc/shared-react": "^2.1.0",
-    "@hookform/resolvers": "^2.9.10",
+    "@hookform/resolvers": "^2.9.11",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",
