@@ -4,7 +4,7 @@
   "proxy": "http://localhost:8082",
   "private": true,
   "dependencies": {
-    "@craigmcc/shared-react": "^2.1.0",
+    "@craigmcc/shared-react": "^2.2.1",
     "@hookform/resolvers": "^3.0.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
